@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const isDashboardPath = pathname.startsWith('/dashboard');
     
     if (!user && isDashboardPath) {
-      router.push('/');
-    } else if (user && pathname === '/') {
+      router.push('/auth/login');
+    } else if (user && (pathname === '/auth/login' || pathname === '/auth/register')) {
       // Redirect to correct dashboard based on role
       router.push(`/dashboard/${user.role.toLowerCase()}`);
     } else if (user && isDashboardPath) {
