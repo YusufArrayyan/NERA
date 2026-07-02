@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: #E5E0D8;
+  --color-input: #E5E0D8;
+  --color-ring: #8FAD71;
+  
+  --color-background: #FCFAF8;
+  --color-foreground: #4A3728;
+
+  /* Moss Green */
+  --color-primary: #8FAD71;
+  --color-primary-foreground: #FFFFFF;
+
+  /* Chocolate Brown */
+  --color-secondary: #4A3728;
+  --color-secondary-foreground: #FFFFFF;
+
+  /* Soft Orange */
+  --color-accent: #F4A261;
+  --color-accent-foreground: #FFFFFF;
+
+  --color-muted: #F2EFE9;
+  --color-muted-foreground: #9C948A;
+
+  --color-card: #FFFFFF;
+  --color-card-foreground: #4A3728;
+
+  --radius-lg: 1.5rem; /* 24px */
+  --radius-md: 1rem;
+  --radius-sm: 0.5rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Remove the techy dark mode gradients */
+  }
+
+  /* Force light mode since the design is exclusively light/warm */
+  :root {
+    color-scheme: light;
+  }
+}
+
+/* Organic UI Utilities */
+.organic-card {
+  @apply bg-card rounded-3xl shadow-[0_4px_20px_rgba(74,55,40,0.05)] border border-border/40;
+}
+
+.organic-button-primary {
+  @apply bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity px-6 py-3 flex items-center justify-center;
+}
+
+.organic-button-secondary {
+  @apply bg-secondary text-secondary-foreground rounded-full font-medium hover:opacity-90 transition-opacity px-6 py-3 flex items-center justify-center;
+}
+
+/* Hide scrollbar for clean mobile look */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

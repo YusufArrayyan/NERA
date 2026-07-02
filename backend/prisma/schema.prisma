@@ -1,0 +1,593 @@
+// ──────────────────────────────────────────────
+// Neuro-Adaptive Cloud Learning — Prisma Schema
+// ──────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ──────────────────────────────────
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  COUNSELOR
+  PARENT
+  ADMIN
+}
+
+enum SessionStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum LearningMode {
+  VISUAL
+  AUDITORY
+  INTERACTIVE
+}
+
+enum FocusCategory {
+  LOW
+  MODERATE
+  HIGH
+}
+
+enum ContentType {
+  VISUAL
+  AUDITORY
+  INTERACTIVE
+  TEXT
+  VIDEO
+  QUIZ
+}
+
+enum NotificationType {
+  STUDY_REMINDER
+  BREAK_REMINDER
+  STRESS_ALERT
+  ACHIEVEMENT
+  INTERVENTION
+  SYSTEM
+  AI_RECOMMENDATION
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  PUSH
+}
+
+enum InterventionPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum InterventionStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  DISMISSED
+}
+
+enum RewardType {
+  DAILY
+  WEEKLY
+  SESSION
+  ACHIEVEMENT
+  MISSION
+}
+
+enum AnalyticsPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum SimulatorPattern {
+  HIGH_FOCUS
+  MODERATE_FOCUS
+  LOW_FOCUS
+  STRESS
+  FATIGUE
+  RELAX
+  CUSTOM
+}
+
+enum DeviceType {
+  SIMULATOR
+  HEADBAND
+}
+
+enum MoodType {
+  VERY_HAPPY
+  HAPPY
+  NEUTRAL
+  SAD
+  VERY_SAD
+  STRESSED
+  TIRED
+  ENERGETIC
+}
+
+// ─── USER & AUTH ────────────────────────────
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+  email           String    @unique
+  passwordHash    String
+  name            String
+  avatar          String?
+  role            UserRole  @default(STUDENT)
+  isVerified      Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  locale          String    @default("id") // "id" or "en"
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  // Relations
+  refreshTokens   RefreshToken[]
+  sessions        Session[]
+  journals        Journal[]
+  achievements    UserAchievement[]
+  gamification    Gamification?
+  rewards         Reward[]
+  notifications   Notification[]
+  activityLogs    ActivityLog[]
+  recommendations Recommendation[]
+
+  // Teacher/Counselor relations
+  sentInterventions     Intervention[] @relation("InterventionFrom")
+  receivedInterventions Intervention[] @relation("InterventionTo")
+
+  // Parent-Child
+  parentLinks  ParentChild[] @relation("ParentRelation")
+  childLinks   ParentChild[] @relation("ChildRelation")
+
+  // Teacher monitoring
+  monitoredBy   TeacherStudent[] @relation("MonitoredStudent")
+  monitoring    TeacherStudent[] @relation("MonitoringTeacher")
+
+  @@index([email])
+  @@index([role])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique
+  userId    String   @db.Uuid
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model ParentChild {
+  id        String   @id @default(uuid()) @db.Uuid
+  parentId  String   @db.Uuid
+  childId   String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  parent User @relation("ParentRelation", fields: [parentId], references: [id], onDelete: Cascade)
+  child  User @relation("ChildRelation", fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([parentId, childId])
+  @@map("parent_children")
+}
+
+model TeacherStudent {
+  id        String   @id @default(uuid()) @db.Uuid
+  teacherId String   @db.Uuid
+  studentId String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  teacher User @relation("MonitoringTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  student User @relation("MonitoredStudent", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([teacherId, studentId])
+  @@map("teacher_students")
+}
+
+// ─── ROLES & PERMISSIONS ───────────────────
+
+model Permission {
+  id        String   @id @default(uuid()) @db.Uuid
+  role      UserRole
+  action    String   // e.g. "read", "write", "delete", "manage"
+  resource  String   // e.g. "users", "sessions", "analytics"
+  createdAt DateTime @default(now())
+
+  @@unique([role, action, resource])
+  @@map("permissions")
+}
+
+// ─── EEG & SESSIONS ────────────────────────
+
+model Session {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @db.Uuid
+  status        SessionStatus @default(ACTIVE)
+  learningMode  LearningMode  @default(VISUAL)
+  focusCategory FocusCategory?
+  contentId     String?       @db.Uuid
+  startTime     DateTime      @default(now())
+  endTime       DateTime?
+  duration      Int?          // seconds
+  avgFocus      Float?
+  avgStress     Float?
+  avgAttention  Float?
+  xpEarned      Int           @default(0)
+  coinsEarned   Int           @default(0)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content         LearningContent?  @relation(fields: [contentId], references: [id])
+  eegLogs         EegLog[]
+  eegProcessed    EegProcessed[]
+  recommendations Recommendation[]
+  rewards         Reward[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([startTime])
+  @@index([deletedAt])
+  @@map("sessions")
+}
+
+model EegLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  sessionId     String   @db.Uuid
+  alpha         Float    // µV² power
+  beta          Float
+  theta         Float
+  gamma         Float?
+  attention     Float    // 0-100
+  meditation    Float    // 0-100
+  signalQuality Float    // 0-100
+  timestamp     DateTime @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([timestamp])
+  @@map("eeg_logs")
+}
+
+model EegProcessed {
+  id            String        @id @default(uuid()) @db.Uuid
+  sessionId     String        @db.Uuid
+  focusIndex    Float         // 0-100
+  stressIndex   Float         // 0-100
+  fRatio        Float         // P_beta / (P_alpha + P_theta)
+  focusCategory FocusCategory
+  attentionScore Float        // 0-100
+  qualityScore  Float         // 0-100
+  bandPowers    Json          // { delta, theta, alpha, beta, gamma }
+  features      Json?         // Extracted features
+  timestamp     DateTime      @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([timestamp])
+  @@map("eeg_processed")
+}
+
+// ─── DEVICE & SIMULATOR ────────────────────
+
+model DeviceProvider {
+  id        String     @id @default(uuid()) @db.Uuid
+  name      String
+  type      DeviceType @default(SIMULATOR)
+  config    Json       @default("{}")
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("device_providers")
+}
+
+model SimulatorConfig {
+  id           String           @id @default(uuid()) @db.Uuid
+  name         String
+  pattern      SimulatorPattern @default(MODERATE_FOCUS)
+  samplingRate Int              @default(256) // Hz
+  noiseLevel   Float            @default(0.1)
+  duration     Int?             // seconds, null = infinite
+  customParams Json?
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@map("simulator_configs")
+}
+
+// ─── LEARNING CONTENT ──────────────────────
+
+model LearningContent {
+  id          String      @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  type        ContentType @default(TEXT)
+  content     Json        // Flexible content structure
+  difficulty  Int         @default(1) // 1-5
+  duration    Int?        // estimated minutes
+  tags        String[]
+  thumbnail   String?
+  isPublished Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  sessions Session[]
+
+  @@index([type])
+  @@index([difficulty])
+  @@index([deletedAt])
+  @@map("learning_contents")
+}
+
+// ─── AI & RECOMMENDATIONS ──────────────────
+
+model Recommendation {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  sessionId  String?  @db.Uuid
+  type       String   // "learning", "break", "study_tip", "focus_improvement", "stress_relief"
+  title      String
+  content    String
+  priority   Int      @default(1) // 1-5
+  isRead     Boolean  @default(false)
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session Session? @relation(fields: [sessionId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+  @@map("recommendations")
+}
+
+// ─── JOURNAL ───────────────────────────────
+
+model Journal {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @db.Uuid
+  mood        MoodType?
+  title       String?
+  content     String
+  eegSummary  Json?     // AI-generated summary of day's EEG data
+  aiGenerated Boolean   @default(false)
+  tags        String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("journals")
+}
+
+// ─── GAMIFICATION ──────────────────────────
+
+model Achievement {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String
+  icon        String   @default("🏆")
+  criteria    Json     // { type: "sessions_completed", threshold: 10 }
+  xpReward    Int      @default(100)
+  coinReward  Int      @default(50)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  users UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @db.Uuid
+  achievementId String   @db.Uuid
+  earnedAt      DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model Gamification {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @unique @db.Uuid
+  xp         Int      @default(0)
+  coins      Int      @default(0)
+  level      Int      @default(1)
+  streak     Int      @default(0)
+  longestStreak Int   @default(0)
+  lastActiveDate DateTime?
+  rafflesScore   Int  @default(0) // Custom metric from research
+  freudScore     Int  @default(0) // Custom metric from research
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("gamification")
+}
+
+model Reward {
+  id        String     @id @default(uuid()) @db.Uuid
+  userId    String     @db.Uuid
+  sessionId String?    @db.Uuid
+  type      RewardType
+  xpAmount  Int        @default(0)
+  coinAmount Int       @default(0)
+  reason    String?
+  createdAt DateTime   @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session Session? @relation(fields: [sessionId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+  @@map("rewards")
+}
+
+model Mission {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  criteria    Json     // { type: "focus_minutes", threshold: 30 }
+  xpReward    Int      @default(200)
+  coinReward  Int      @default(100)
+  isDaily     Boolean  @default(false)
+  isWeekly    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("missions")
+}
+
+// ─── NOTIFICATIONS ─────────────────────────
+
+model Notification {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String              @db.Uuid
+  type      NotificationType
+  channel   NotificationChannel @default(IN_APP)
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean             @default(false)
+  readAt    DateTime?
+  createdAt DateTime            @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ─── INTERVENTIONS ─────────────────────────
+
+model Intervention {
+  id         String               @id @default(uuid()) @db.Uuid
+  fromUserId String               @db.Uuid
+  toUserId   String               @db.Uuid
+  type       String               // "recommendation", "warning", "support", "counseling"
+  title      String
+  notes      String
+  priority   InterventionPriority @default(MEDIUM)
+  status     InterventionStatus   @default(PENDING)
+  metadata   Json?
+  resolvedAt DateTime?
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+
+  fromUser User @relation("InterventionFrom", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser   User @relation("InterventionTo", fields: [toUserId], references: [id], onDelete: Cascade)
+
+  @@index([fromUserId])
+  @@index([toUserId])
+  @@index([status])
+  @@map("interventions")
+}
+
+// ─── ANALYTICS ─────────────────────────────
+
+model Analytics {
+  id        String          @id @default(uuid()) @db.Uuid
+  userId    String          @db.Uuid
+  period    AnalyticsPeriod
+  date      DateTime        // Period start date
+  metrics   Json            // Flexible metrics object
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([userId, period, date])
+  @@index([userId])
+  @@index([period])
+  @@map("analytics")
+}
+
+// ─── LOGS ──────────────────────────────────
+
+model ActivityLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  action    String   // "login", "session_start", "page_view", etc.
+  resource  String?
+  metadata  Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  action    String
+  resource  String
+  oldValue  Json?
+  newValue  Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ─── SETTINGS ──────────────────────────────
+
+model Setting {
+  id        String   @id @default(uuid()) @db.Uuid
+  key       String   @unique
+  value     Json
+  category  String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@map("settings")
+}
