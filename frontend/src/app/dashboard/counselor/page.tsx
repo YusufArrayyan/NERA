@@ -1,119 +1,117 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchApi } from "@/lib/api";
-import { HeartHandshake, ShieldAlert, CheckCircle2, Bell, Settings, MessageCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { AlertOctagon, Brain, Search, Send, TrendingUp, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function CounselorDashboard() {
+export default function CounselorOverview() {
   const { user } = useAuth();
-  const router = useRouter();
-  const [interventions, setInterventions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await fetchApi('/interventions');
-        setInterventions(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadData();
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
   }, []);
 
-  const pendingInterventions = interventions.filter(i => i.status === 'PENDING' || i.status === 'IN_PROGRESS');
-  const completedInterventions = interventions.filter(i => i.status === 'RESOLVED');
-
-  if (loading) return <div className="animate-pulse p-4">Memuat data konseling...</div>;
+  if (loading) return <div className="animate-pulse p-4">Memuat data konseling sekolah...</div>;
 
   return (
-    <div className="space-y-6 max-w-md md:max-w-3xl mx-auto pb-6">
-      {/* Top Navigation Row */}
-      <div className="flex justify-between items-center mb-2">
-        <button 
-          onClick={() => alert("Tidak ada notifikasi.")}
-          className="w-10 h-10 rounded-full bg-card flex items-center justify-center shadow-sm border border-border/40 text-secondary hover:bg-muted transition-colors"
-        >
-          <Bell className="w-5 h-5" />
-        </button>
-        <h2 className="font-bold text-secondary text-lg">Portal Konselor</h2>
-        <button className="w-10 h-10 rounded-full bg-card flex items-center justify-center shadow-sm border border-border/40 text-secondary hover:bg-muted transition-colors">
-          <Settings className="w-5 h-5" />
-        </button>
+    <div className="space-y-6 max-w-md md:max-w-4xl mx-auto pb-24">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex-1"></div>
+        <h2 className="font-bold text-secondary text-lg">Kasus Perhatian Khusus</h2>
+        <div className="flex-1 flex justify-end">
+          <div className="w-10 h-10 rounded-full bg-card flex items-center justify-center shadow-sm border border-border/40 text-secondary">
+            <Search className="w-5 h-5" />
+          </div>
+        </div>
       </div>
 
-      {/* Main Intro Card */}
-      <div className="bg-accent rounded-[32px] p-8 text-accent-foreground relative overflow-hidden shadow-lg">
-        <div className="absolute top-[-50px] right-[-50px] w-[150px] h-[150px] bg-white/10 rounded-full blur-2xl"></div>
-        <div className="relative z-10 flex justify-between items-center">
-          <div>
-            <h3 className="font-semibold text-accent-foreground/90 mb-1">Kasus Membutuhkan Perhatian</h3>
-            <div className="text-5xl font-black tracking-tighter mb-2">{pendingInterventions.length}</div>
-          </div>
-          <HeartHandshake className="w-16 h-16 opacity-80" />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-primary rounded-3xl p-5 text-primary-foreground flex flex-col justify-center items-center text-center shadow-md">
+          <Users className="w-8 h-8 mb-2 opacity-80" />
+          <div className="text-4xl font-black">120</div>
+          <div className="text-xs font-bold mt-1 uppercase tracking-wide">Total Siswa</div>
+        </div>
+        
+        <div className="bg-red-100 text-red-700 border border-red-200 rounded-3xl p-5 flex flex-col justify-center items-center text-center shadow-md">
+          <AlertOctagon className="w-8 h-8 mb-2 opacity-80 animate-pulse" />
+          <div className="text-4xl font-black">3</div>
+          <div className="text-xs font-bold mt-1 uppercase tracking-wide">Stres Kronis (Red Flag)</div>
         </div>
       </div>
 
-      <div className="pt-2">
-        <h3 className="font-extrabold text-secondary text-lg mb-4 ml-1">Daftar Intervensi Aktif</h3>
+      <div className="mt-8">
+        <h3 className="font-extrabold text-secondary mb-4 flex items-center">
+          <Brain className="w-5 h-5 mr-2 text-primary" />
+          Daftar Siswa Red Flag (3 Hari Terakhir)
+        </h3>
+        
+        <div className="space-y-4">
+          {/* Siswa 1 */}
+          <div className="bg-card border-2 border-red-200/50 rounded-3xl p-5 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-red-100 text-red-600 px-3 py-1 text-[10px] font-black rounded-bl-xl uppercase tracking-wider">
+              Tindakan Diperlukan
+            </div>
+            <div className="flex items-center mt-2 mb-3">
+              <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-black mr-3 shrink-0">
+                A
+              </div>
+              <div>
+                <h4 className="font-bold text-secondary text-sm">Alya Juwita Putri</h4>
+                <p className="text-xs text-muted-foreground font-semibold">Kelas 10A • Terdeteksi hari ini</p>
+              </div>
+            </div>
+            
+            <div className="bg-muted rounded-xl p-3 text-xs text-muted-foreground space-y-1 mb-4">
+              <div className="flex justify-between">
+                <span className="font-bold text-secondary">Rata-rata Stres:</span>
+                <span className="font-bold text-red-500">85% (Sangat Tinggi)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-bold text-secondary">Gejala Utama:</span>
+                <span className="font-medium">Kelelahan kognitif & hilang fokus</span>
+              </div>
+            </div>
 
-        {pendingInterventions.length === 0 ? (
-          <div className="organic-card p-8 text-center flex flex-col items-center">
-            <CheckCircle2 className="w-12 h-12 text-primary opacity-50 mb-3" />
-            <p className="text-secondary font-bold">Semua Aman!</p>
-            <p className="text-muted-foreground text-sm font-medium mt-1">Tidak ada siswa yang membutuhkan intervensi saat ini.</p>
+            <button className="w-full bg-primary/10 text-primary font-bold py-2 rounded-xl text-xs hover:bg-primary hover:text-white transition-colors flex items-center justify-center">
+              <Send className="w-3 h-3 mr-2" /> Panggil untuk Sesi Konseling
+            </button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {pendingInterventions.map((intervention) => (
-              <div key={intervention.id} className="organic-card p-5 border-l-4 border-l-red-400 border-t border-r border-b border-border/50">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <ShieldAlert className="w-4 h-4 text-red-500" />
-                      <span className="text-xs font-bold text-red-500 uppercase tracking-wide">Prioritas {intervention.priority}</span>
-                      <span className="text-[10px] text-muted-foreground">• {new Date(intervention.createdAt).toLocaleDateString()}</span>
-                    </div>
-                    <h4 className="font-extrabold text-secondary">{intervention.title}</h4>
-                    <p className="text-sm text-secondary/80 font-medium mt-1">{intervention.notes}</p>
-                    
-                    <div className="mt-3 bg-muted/50 p-2 rounded-lg inline-block">
-                      <span className="text-xs text-muted-foreground font-semibold">Tujuan: </span>
-                      <span className="text-xs font-bold text-secondary">{intervention.toUserId}</span>
-                    </div>
-                  </div>
-                  
-                  <button className="bg-primary/10 text-primary hover:bg-primary/20 transition-colors p-3 rounded-full flex-shrink-0">
-                    <MessageCircle className="w-5 h-5" />
-                  </button>
-                </div>
+
+          {/* Siswa 2 */}
+          <div className="bg-card border border-border/50 rounded-3xl p-5 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-orange-100 text-orange-600 px-3 py-1 text-[10px] font-black rounded-bl-xl uppercase tracking-wider">
+              Pemantauan
+            </div>
+            <div className="flex items-center mt-2 mb-3">
+              <div className="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black mr-3 shrink-0">
+                B
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-      
-      {completedInterventions.length > 0 && (
-        <div className="pt-4">
-          <h3 className="font-bold text-secondary text-base mb-3 ml-1">Riwayat Selesai</h3>
-          <div className="space-y-2 opacity-70">
-            {completedInterventions.slice(0,3).map((intervention) => (
-              <div key={intervention.id} className="bg-card border border-border/40 p-3 rounded-xl flex justify-between items-center">
-                <div>
-                  <h4 className="font-semibold text-secondary text-sm">{intervention.title}</h4>
-                  <p className="text-xs text-muted-foreground">{new Date(intervention.createdAt).toLocaleDateString()}</p>
-                </div>
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+              <div>
+                <h4 className="font-bold text-secondary text-sm">Budi Santoso</h4>
+                <p className="text-xs text-muted-foreground font-semibold">Kelas 10B • Terdeteksi 2 hari lalu</p>
               </div>
-            ))}
+            </div>
+            
+            <div className="bg-muted rounded-xl p-3 text-xs text-muted-foreground space-y-1 mb-4">
+              <div className="flex justify-between">
+                <span className="font-bold text-secondary">Rata-rata Stres:</span>
+                <span className="font-bold text-orange-500">72% (Tinggi)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-bold text-secondary">Gejala Utama:</span>
+                <span className="font-medium">Sering melamun di sesi siang</span>
+              </div>
+            </div>
+
+            <button className="w-full bg-background border border-border/50 text-muted-foreground font-bold py-2 rounded-xl text-xs hover:bg-muted transition-colors flex items-center justify-center">
+              Kirimkan Modul Mindfulness
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -32,7 +32,9 @@ export default function DashboardLayout({
       { name: "Profil", href: "/dashboard/parent/profile", icon: User },
     ],
     COUNSELOR: [
-      { name: "Overview", href: "/dashboard/counselor", icon: Home },
+      { name: "Kasus", href: "/dashboard/counselor", icon: Home },
+      { name: "Intervensi", href: "/dashboard/counselor/interventions", icon: BarChart2 },
+      { name: "Profil", href: "/dashboard/counselor/profile", icon: User },
     ],
     ADMIN: [
       { name: "System", href: "/dashboard/admin", icon: Home },
