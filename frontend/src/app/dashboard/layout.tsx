@@ -37,7 +37,9 @@ export default function DashboardLayout({
       { name: "Profil", href: "/dashboard/counselor/profile", icon: User },
     ],
     ADMIN: [
-      { name: "System", href: "/dashboard/admin", icon: Home },
+      { name: "Sistem", href: "/dashboard/admin", icon: Home },
+      { name: "Perangkat", href: "/dashboard/admin/hardware", icon: BarChart2 },
+      { name: "Profil", href: "/dashboard/admin/profile", icon: User },
     ],
   };
 
