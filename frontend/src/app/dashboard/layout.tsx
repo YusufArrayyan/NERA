@@ -23,9 +23,13 @@ export default function DashboardLayout({
     ],
     TEACHER: [
       { name: "Kelas", href: "/dashboard/teacher", icon: Home },
+      { name: "Statistik", href: "/dashboard/teacher/stats", icon: BarChart2 },
+      { name: "Profil", href: "/dashboard/teacher/profile", icon: User },
     ],
     PARENT: [
       { name: "Anak", href: "/dashboard/parent", icon: Home },
+      { name: "Laporan", href: "/dashboard/parent/reports", icon: BarChart2 },
+      { name: "Profil", href: "/dashboard/parent/profile", icon: User },
     ],
     COUNSELOR: [
       { name: "Overview", href: "/dashboard/counselor", icon: Home },
