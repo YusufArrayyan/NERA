@@ -18,20 +18,23 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          {/* Logo - Left */}
+          <div className="flex items-center gap-2 flex-1">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <span className="font-extrabold text-2xl tracking-tight text-secondary">NERA</span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-bold text-muted-foreground">
+          {/* Center Links */}
+          <div className="hidden md:flex items-center justify-center gap-8 text-sm font-bold text-muted-foreground flex-1">
             <a href="#how-it-works" className="hover:text-primary transition-colors">Cara Kerja</a>
             <a href="#features" className="hover:text-primary transition-colors">Fitur Utama</a>
             <a href="#research" className="hover:text-primary transition-colors">Riset</a>
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Right Actions */}
+          <div className="flex items-center justify-end gap-4 flex-1">
             <Link href="/auth/login" className="text-sm font-bold text-secondary hover:text-primary transition-colors hidden md:block">
               Masuk
             </Link>
