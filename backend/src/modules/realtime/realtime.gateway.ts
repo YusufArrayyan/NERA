@@ -114,6 +114,56 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
     return { event: 'joinedRoom', data: { room: data.room } };
   }
 
+  @SubscribeMessage('startClassSimulation')
+  handleStartClassSimulation(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { studentIds: string[] },
+  ) {
+    this.stopClientStream(client.id);
+
+    this.logger.log(`Starting class simulation for ${client.id} with ${data?.studentIds?.length || 0} students`);
+
+    if (!data?.studentIds || data.studentIds.length === 0) {
+      return { event: 'error', message: 'No student IDs provided' };
+    }
+
+    // Assign a random base pattern to each student to simulate different states
+    const studentPatterns = data.studentIds.map(id => {
+      let pattern = 'MODERATE_FOCUS';
+      const rand = Math.random();
+      if (rand > 0.8) pattern = 'HIGH_FOCUS';
+      else if (rand < 0.15) pattern = 'STRESS';
+      else if (rand < 0.3) pattern = 'LOW_FOCUS';
+      return { id, pattern };
+    });
+
+    const intervalId = setInterval(() => {
+      const classData = studentPatterns.map(sp => {
+        // 5% chance every tick to change state dynamically
+        if (Math.random() < 0.05) { 
+          const patterns = ['HIGH_FOCUS', 'MODERATE_FOCUS', 'LOW_FOCUS', 'STRESS'];
+          sp.pattern = patterns[Math.floor(Math.random() * patterns.length)];
+        }
+
+        const raw = this.eegProvider.getDataPoint(sp.pattern);
+        const processed = this.processingService.processDataPoint(raw);
+
+        return {
+          studentId: sp.id,
+          focusIndex: processed.focusIndex,
+          stressIndex: processed.stressIndex,
+          focusCategory: processed.focusCategory,
+          timestamp: processed.timestamp,
+        };
+      });
+
+      client.emit('classEegData', classData);
+    }, 2000); // 0.5Hz (Every 2s) for class dashboard to be readable
+
+    this.clientStreams.set(client.id, intervalId);
+    return { event: 'classSimulationStarted' };
+  }
+
   private stopClientStream(clientId: string) {
     const intervalId = this.clientStreams.get(clientId);
     if (intervalId) {
