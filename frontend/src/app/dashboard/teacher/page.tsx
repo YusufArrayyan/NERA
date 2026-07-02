@@ -189,15 +189,15 @@ export default function TeacherDashboard() {
               let dotColor = 'bg-accent';
               let statusLabel = 'Memuat...';
 
-              if (category === 'HIGH_FOCUS') {
+              if (category === 'HIGH' || category === 'HIGH_FOCUS') {
                 statusColor = 'bg-green-100 text-green-700';
                 dotColor = 'bg-green-500';
                 statusLabel = 'Sangat Fokus';
-              } else if (category === 'MODERATE_FOCUS') {
+              } else if (category === 'MODERATE' || category === 'MODERATE_FOCUS') {
                 statusColor = 'bg-primary/10 text-primary';
                 dotColor = 'bg-primary';
                 statusLabel = 'Fokus Normal';
-              } else if (category === 'LOW_FOCUS') {
+              } else if (category === 'LOW' || category === 'LOW_FOCUS') {
                 statusColor = 'bg-orange-100 text-orange-700';
                 dotColor = 'bg-orange-500 animate-pulse';
                 statusLabel = 'Kurang Fokus';
