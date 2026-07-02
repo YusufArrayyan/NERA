@@ -32,10 +32,10 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/auth/login" className="text-sm font-bold text-secondary hover:text-primary transition-colors hidden sm:block">
+            <Link href="/auth/login" className="text-sm font-bold text-secondary hover:text-primary transition-colors hidden md:block">
               Masuk
             </Link>
-            <Link href="/auth/register" className="organic-button px-6 py-2.5 text-sm shadow-md shadow-primary/20">
+            <Link href="/auth/register" className="organic-button-primary px-6 py-2.5 text-sm shadow-md shadow-primary/20 hidden sm:flex">
               Daftar Sekarang
             </Link>
           </div>
@@ -54,20 +54,20 @@ export default function LandingPage() {
             Revolusi EdTech 2026
           </div>
           
-          <h1 className="text-5xl lg:text-7xl font-black text-secondary tracking-tight mb-8 leading-[1.1]">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-secondary tracking-tight mb-6 leading-tight md:leading-[1.1] px-2">
             Membaca Pikiran,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Memaksimalkan Potensi.</span>
           </h1>
           
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10 font-medium leading-relaxed">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 font-medium leading-relaxed text-justify md:text-center px-4">
             NERA (Neuro-Adaptive Cloud Learning) adalah platform pendidikan pertama di Indonesia yang mendeteksi tingkat fokus dan stres siswa secara real-time melalui gelombang otak (EEG).
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/auth/register" className="organic-button text-lg px-8 py-4 w-full sm:w-auto shadow-xl shadow-primary/20 flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
+            <Link href="/auth/register" className="organic-button-primary text-base md:text-lg px-8 py-4 w-full sm:w-auto shadow-xl shadow-primary/20 flex items-center justify-center">
               Mulai Sekarang <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
-            <a href="#how-it-works" className="organic-button-secondary text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center bg-white border border-border/50 text-secondary hover:bg-muted">
+            <a href="#how-it-works" className="organic-button-secondary text-base md:text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center bg-white border border-border/50 text-secondary hover:bg-muted shadow-sm shadow-black/5">
               <PlayCircle className="w-5 h-5 mr-2 text-primary" /> Lihat Cara Kerja
             </a>
           </div>
@@ -123,15 +123,15 @@ export default function LandingPage() {
       </section>
 
       {/* CTA / Registration Section */}
-      <section className="py-32 relative overflow-hidden">
+      <section className="py-20 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-secondary/5 -z-10"></div>
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-black text-secondary mb-6">Sudah Memiliki NERA Headband?</h2>
-          <p className="text-lg text-muted-foreground mb-10 font-medium">
+          <h2 className="text-3xl md:text-4xl font-black text-secondary mb-6 leading-tight">Sudah Memiliki NERA Headband?</h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-10 font-medium text-justify md:text-center px-2">
             Aktivasi perangkat Anda menggunakan Kode Lisensi (Serial Number) yang terdapat di dalam kemasan untuk membuat akun Orang Tua dan Siswa.
           </p>
-          <Link href="/auth/register" className="organic-button text-lg px-10 py-5 shadow-2xl shadow-primary/30 inline-flex items-center">
-            Mulai Aktivasi Perangkat <ArrowRight className="w-6 h-6 ml-3" />
+          <Link href="/auth/register" className="organic-button-primary text-base md:text-lg px-8 md:px-10 py-4 md:py-5 shadow-2xl shadow-primary/30 inline-flex items-center w-full sm:w-auto justify-center">
+            Mulai Aktivasi Perangkat <ArrowRight className="w-5 h-5 md:w-6 md:h-6 ml-3" />
           </Link>
           <p className="mt-8 text-sm text-muted-foreground font-bold">
             Atau jika Anda dari Pihak Sekolah, silakan <Link href="/auth/login" className="text-primary hover:underline">Masuk di sini</Link>.
