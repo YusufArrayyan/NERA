@@ -56,21 +56,19 @@ export default function LandingPage() {
             Revolusi EdTech 2026
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-secondary tracking-tight mb-6 leading-tight px-2">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-secondary tracking-tight mb-6 leading-tight px-2">
             Membaca Pikiran, Memaksimalkan Potensi
           </h1>
-          <p className="text-lg md:text-xl text-primary font-bold mb-6">untuk Pembelajaran Adaptif</p>
-          
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 font-regular leading-relaxed text-center px-4">
-            Platform pendidikan pertama di Indonesia yang mendeteksi tingkat fokus dan stres siswa secara real-time melalui teknologi EEG untuk pembelajaran yang dipersonalisasi.
+          <p className="text-base md:text-lg text-muted-foreground mb-10 font-regular leading-relaxed text-center px-4">
+            Platform pembelajaran adaptif pertama di Indonesia yang menggunakan teknologi EEG untuk mendeteksi fokus dan stres siswa secara real-time
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
-            <Link href="/auth/register" className="organic-button-primary text-base md:text-lg px-8 py-4 w-full sm:w-auto shadow-xl shadow-primary/20 flex items-center justify-center">
+            <Link href="/auth/register" className="organic-button-primary text-base md:text-lg px-8 py-4 w-full sm:w-auto shadow-xl shadow-primary/20 flex items-center justify-center hover:scale-105 transition-transform duration-200">
               Mulai Sekarang <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
-            <a href="#how-it-works" className="organic-button-secondary text-base md:text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center bg-white border border-border/40 text-secondary hover:bg-muted shadow-sm">
-              <PlayCircle className="w-5 h-5 mr-2 text-primary" /> Lihat Cara Kerja
+            <a href="#how-it-works" className="bg-white text-secondary border-2 border-primary hover:bg-primary hover:text-white text-base md:text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center rounded-full font-bold transition-all duration-200 shadow-md">
+              <PlayCircle className="w-5 h-5 mr-2" /> Lihat Demo
             </a>
           </div>
         </div>
@@ -79,42 +77,45 @@ export default function LandingPage() {
       {/* How it Works / Panduan */}
       <section id="how-it-works" className="py-24 bg-card border-y border-border/40 relative">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-secondary mb-4">Bagaimana NERA Bekerja</h2>
-            <p className="text-muted-foreground font-regular text-base">Tiga langkah sederhana menuju pembelajaran yang disesuaikan dengan kapasitas otak Anda</p>
+          <div className="text-center mb-20">
+            <div className="inline-block mb-4 px-4 py-2 bg-primary/10 rounded-full">
+              <p className="text-sm font-bold text-primary">Bagaimana Cara Kerjanya</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-secondary mb-4">3 Langkah Sederhana</h2>
+            <p className="text-lg text-muted-foreground font-regular max-w-2xl mx-auto">Dari headband hingga adaptasi pembelajaran otomatis</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary">
-                <Cpu className="w-6 h-6" />
+            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                <Cpu className="w-7 h-7" />
               </div>
-              <h3 className="text-base font-bold text-secondary mb-3">Pakai Headband</h3>
+              <h3 className="text-xl font-bold text-secondary mb-3">Pakai Headband</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Siswa menggunakan NERA Headband yang ringan dan nyaman untuk membaca aktivitas gelombang otak secara nirkabel.
+                Sensor EEG membaca aktivitas gelombang otak siswa dengan presisi tinggi tanpa perlu gel konduktif.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-6 text-accent">
-                <LineChart className="w-6 h-6" />
+            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 text-accent group-hover:scale-110 transition-transform duration-300">
+                <LineChart className="w-7 h-7" />
               </div>
-              <h3 className="text-base font-bold text-secondary mb-3">AI Menganalisis</h3>
+              <h3 className="text-xl font-bold text-secondary mb-3">AI Menganalisis</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Algoritma AI menganalisis pola gelombang Beta dan Alpha untuk menentukan tingkat fokus dan stres siswa secara real-time.
+                Algoritma ML menganalisis pola gelombang untuk mengidentifikasi fokus, stres, dan kelelahan secara akurat.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary">
-                <ShieldCheck className="w-6 h-6" />
+            <div className="bg-background rounded-[2rem] p-8 border border-border/40 shadow-sm hover:shadow-[0_4px_16px_rgba(127,160,94,0.12)] transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                <ShieldCheck className="w-7 h-7" />
               </div>
-              <h3 className="text-base font-bold text-secondary mb-3">Adaptasi Otomatis</h3>
+              <h3 className="text-xl font-bold text-secondary mb-3">Adaptasi Otomatis</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Sistem menyesuaikan materi pembelajaran secara otomatis sesuai kapasitas otak siswa dan memberikan peringatan real-time kepada guru.
+                Sistem menyesuaikan konten pembelajaran dan guru menerima insight real-time untuk optimasi pembelajaran.
               </p>
             </div>
           </div>
@@ -125,10 +126,11 @@ export default function LandingPage() {
       <section id="features" className="py-24 md:py-32 bg-muted/30 relative">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-black text-secondary mb-4">Fitur Utama NERA</h2>
-            <p className="text-muted-foreground font-regular text-base max-w-2xl mx-auto">
-              Platform pembelajaran yang dirancang untuk memberikan pengalaman belajar yang dipersonalisasi dan efektif
-            </p>
+            <div className="inline-block mb-4 px-4 py-2 bg-primary/10 rounded-full">
+              <p className="text-sm font-bold text-primary">Fitur Unggulan</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-secondary mb-4">Inovasi Pembelajaran Adaptif</h2>
+            <p className="text-lg text-muted-foreground font-regular max-w-2xl mx-auto">Dirancang untuk semua stakeholder pendidikan dengan teknologi terdepan</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-8">
