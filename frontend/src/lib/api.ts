@@ -1,6 +1,9 @@
 export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
   const baseUrl = envUrl.endsWith('/api/v1') ? envUrl : `${envUrl}/api/v1`;
+  const fullUrl = `${baseUrl}${endpoint}`;
+  
+  console.log('🔗 API Call:', fullUrl); // DEBUG
   
   // Add auth header if token exists in localStorage
   let token = null;
@@ -14,7 +17,9 @@ export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
     ...options.headers,
   };
 
-  const response = await fetch(`${baseUrl}${endpoint}`, {
+  const response = await fetch(fullUrl, {
+    mode: 'cors',
+    credentials: 'include',
     ...options,
     headers,
   });

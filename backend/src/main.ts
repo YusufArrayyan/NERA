@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Security
-  app.use(helmet());
+  // app.use(helmet()); // Disabled for local testing
   app.use(compression());
   app.use(cookieParser());
 
