@@ -1,31 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-border: #E5E0D8;
-  --color-input: #E5E0D8;
-  --color-ring: #8FAD71;
+  /* Borders & Inputs */
+  --color-border: #E8E2D8;
+  --color-input: #E8E2D8;
+  --color-ring: #7FA05E;
   
-  --color-background: #FCFAF8;
-  --color-foreground: #4A3728;
+  /* Background & Foreground */
+  --color-background: #FDFBF9;
+  --color-foreground: #3D2F26;
 
-  /* Moss Green */
-  --color-primary: #8FAD71;
+  /* Primary: Strong Moss Green - for CTAs and key actions */
+  --color-primary: #7FA05E;
   --color-primary-foreground: #FFFFFF;
 
-  /* Chocolate Brown */
-  --color-secondary: #4A3728;
+  /* Secondary: Deep Chocolate - for main text and headings */
+  --color-secondary: #3D2F26;
   --color-secondary-foreground: #FFFFFF;
 
-  /* Soft Orange */
-  --color-accent: #F4A261;
+  /* Accent: Warm Terracotta - for highlights and secondary actions */
+  --color-accent: #E8744F;
   --color-accent-foreground: #FFFFFF;
 
-  --color-muted: #F2EFE9;
-  --color-muted-foreground: #9C948A;
+  /* Muted tones for secondary text */
+  --color-muted: #F5F1ED;
+  --color-muted-foreground: #8B7F75;
 
+  /* Card surfaces */
   --color-card: #FFFFFF;
-  --color-card-foreground: #4A3728;
+  --color-card-foreground: #3D2F26;
 
+  /* Radius scale */
   --radius-lg: 1.5rem; /* 24px */
   --radius-md: 1rem;
   --radius-sm: 0.5rem;
@@ -49,15 +54,19 @@
 
 /* Organic UI Utilities */
 .organic-card {
-  @apply bg-card rounded-3xl shadow-[0_4px_20px_rgba(74,55,40,0.05)] border border-border/40;
+  @apply bg-card rounded-3xl shadow-[0_2px_12px_rgba(61,47,38,0.08)] border border-border/50;
 }
 
 .organic-button-primary {
-  @apply bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity px-6 py-3 flex items-center justify-center;
+  @apply bg-primary text-primary-foreground font-bold rounded-full hover:bg-primary/90 active:bg-primary/80 transition-all duration-200 px-6 py-3 flex items-center justify-center shadow-[0_2px_8px_rgba(127,160,94,0.2)];
 }
 
 .organic-button-secondary {
-  @apply bg-secondary text-secondary-foreground rounded-full font-medium hover:opacity-90 transition-opacity px-6 py-3 flex items-center justify-center;
+  @apply bg-secondary text-secondary-foreground font-bold rounded-full hover:bg-secondary/90 active:bg-secondary/80 transition-all duration-200 px-6 py-3 flex items-center justify-center shadow-[0_2px_8px_rgba(61,47,38,0.1)];
+}
+
+.organic-button-outline {
+  @apply bg-transparent text-secondary border-2 border-secondary font-bold rounded-full hover:bg-secondary/5 active:bg-secondary/10 transition-all duration-200 px-6 py-3 flex items-center justify-center;
 }
 
 /* Hide scrollbar for clean mobile look */
