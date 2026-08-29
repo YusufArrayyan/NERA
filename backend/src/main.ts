@@ -14,28 +14,12 @@ async function bootstrap() {
   app.use(compression());
   app.use(cookieParser());
 
-  // CORS - Must be before routes
+  // CORS
   app.enableCors({
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-      const allowedOrigins = [
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'https://nera-learning.vercel.app',
-        'https://nera-cdhy.onrender.com',
-      ];
-      
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('CORS not allowed'));
-      }
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['Content-Length', 'X-JSON-Response-Body'],
-    maxAge: 3600,
-    preflightContinue: false,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // Global prefix
