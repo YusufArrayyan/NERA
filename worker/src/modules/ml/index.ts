@@ -8,3 +8,4 @@ export * from './brain-state-classifier';
 export * from './stress-detector';
 export * from './focus-analytics';
 export * from './anomaly-detector';
+export * from './personalization-engine';
