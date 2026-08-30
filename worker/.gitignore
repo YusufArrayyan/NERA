@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Build output
+dist/
+build/
+out/
+target/
+
+# Tauri
+tauri-build/
+src-tauri/target/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+nera-worker.log
+
+# Temp files
+*.tmp
+.cache/
