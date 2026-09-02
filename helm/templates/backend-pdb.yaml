@@ -1,0 +1,16 @@
+{{ if and .Values.backend.enabled .Values.podDisruptionBudgets.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "headband.fullname" . }}-backend
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "headband.labels" . | nindent 4 }}
+    app: backend
+spec:
+  minAvailable: {{ max 1 (sub .Values.backend.replicaCount 1) }}
+  selector:
+    matchLabels:
+      {{- include "headband.selectorLabels" . | nindent 6 }}
+      app: backend
+{{ end }}

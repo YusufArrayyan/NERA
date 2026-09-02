@@ -1,0 +1,277 @@
+---
+# Health Check ConfigMap for Backend
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-health-checks
+  namespace: production
+data:
+  health-check.sh: |
+    #!/bin/bash
+    set -e
+    
+    echo "Starting backend health checks..."
+    
+    # Check if service is running
+    if ! curl -s http://localhost:3000/health > /dev/null; then
+      echo "CRITICAL: Backend service is not responding"
+      exit 1
+    fi
+    
+    # Check readiness
+    if ! curl -s http://localhost:3000/ready > /dev/null; then
+      echo "CRITICAL: Backend is not ready"
+      exit 1
+    fi
+    
+    # Check database connection
+    if ! curl -s http://localhost:3000/health/db > /dev/null; then
+      echo "CRITICAL: Database connection failed"
+      exit 1
+    fi
+    
+    # Check Redis connection
+    if ! curl -s http://localhost:3000/health/cache > /dev/null; then
+      echo "CRITICAL: Cache connection failed"
+      exit 1
+    fi
+    
+    echo "All backend health checks passed"
+    exit 0
+
+---
+# Health Check Job for Deployment Validation
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: deployment-validation
+  namespace: production
+spec:
+  backoffLimit: 3
+  completionMode: NonIndexed
+  parallelism: 1
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: health-checker
+      restartPolicy: Never
+      containers:
+        - name: validator
+          image: curlimages/curl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              
+              echo "=== Deployment Validation ==="
+              
+              # Wait for services to be ready
+              echo "Waiting for services to be available..."
+              for i in {1..30}; do
+                if curl -s http://backend:3000/health > /dev/null 2>&1; then
+                  echo "✓ Backend service is ready"
+                  break
+                fi
+                echo "  Attempt $i/30..."
+                sleep 2
+              done
+              
+              # Validate backend
+              echo ""
+              echo "Validating backend..."
+              BACKEND_HEALTH=$(curl -s http://backend:3000/health)
+              if echo $BACKEND_HEALTH | grep -q '"status":"healthy"'; then
+                echo "✓ Backend health check passed"
+              else
+                echo "✗ Backend health check failed"
+                exit 1
+              fi
+              
+              # Validate frontend (if accessible)
+              echo ""
+              echo "Validating frontend..."
+              if curl -s http://frontend:3000 > /dev/null; then
+                echo "✓ Frontend is accessible"
+              else
+                echo "✗ Frontend is not accessible"
+                exit 1
+              fi
+              
+              # Validate worker
+              echo ""
+              echo "Validating worker..."
+              if curl -s http://worker:9090/metrics > /dev/null; then
+                echo "✓ Worker metrics endpoint is accessible"
+              else
+                echo "✗ Worker metrics endpoint is not accessible"
+                exit 1
+              fi
+              
+              echo ""
+              echo "=== All validation checks passed ==="
+              exit 0
+
+---
+# ServiceAccount for Health Checker
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: health-checker
+  namespace: production
+
+---
+# RBAC Role for Health Checker
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: health-checker-role
+  namespace: production
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list"]
+
+---
+# RBAC RoleBinding for Health Checker
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: health-checker-rolebinding
+  namespace: production
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: health-checker-role
+subjects:
+  - kind: ServiceAccount
+    name: health-checker
+    namespace: production
+
+---
+# Readiness Check - Backend
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-check-backend
+  namespace: production
+  annotations:
+    description: "Manual readiness check for backend"
+spec:
+  serviceAccountName: health-checker
+  containers:
+    - name: check
+      image: curlimages/curl:latest
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking backend readiness..."
+          for i in {1..60}; do
+            if curl -s http://backend:3000/ready; then
+              echo "Backend is ready"
+              exit 0
+            fi
+            echo "Attempt $i/60..."
+            sleep 1
+          done
+          echo "Backend failed to become ready"
+          exit 1
+  restartPolicy: Never
+
+---
+# Readiness Check - Frontend
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-check-frontend
+  namespace: production
+  annotations:
+    description: "Manual readiness check for frontend"
+spec:
+  serviceAccountName: health-checker
+  containers:
+    - name: check
+      image: curlimages/curl:latest
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking frontend readiness..."
+          for i in {1..60}; do
+            if curl -s http://frontend:3000/; then
+              echo "Frontend is ready"
+              exit 0
+            fi
+            echo "Attempt $i/60..."
+            sleep 1
+          done
+          echo "Frontend failed to become ready"
+          exit 1
+  restartPolicy: Never
+
+---
+# Elasticsearch Health Check
+apiVersion: v1
+kind: Pod
+metadata:
+  name: elasticsearch-health-check
+  namespace: logging
+  annotations:
+    description: "Elasticsearch cluster health check"
+spec:
+  containers:
+    - name: check
+      image: curlimages/curl:latest
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking Elasticsearch cluster health..."
+          HEALTH=$(curl -s https://elasticsearch:9200/_cluster/health -k -u elastic:$ELASTIC_PASSWORD)
+          echo "Health: $HEALTH"
+          if echo $HEALTH | grep -q '"status":"green"\|"status":"yellow"'; then
+            echo "Elasticsearch cluster is healthy"
+            exit 0
+          else
+            echo "Elasticsearch cluster is unhealthy"
+            exit 1
+          fi
+      env:
+        - name: ELASTIC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-credentials
+              key: password
+  restartPolicy: Never
+
+---
+# Kibana Health Check
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kibana-health-check
+  namespace: logging
+  annotations:
+    description: "Kibana service health check"
+spec:
+  containers:
+    - name: check
+      image: curlimages/curl:latest
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking Kibana status..."
+          for i in {1..30}; do
+            STATUS=$(curl -s http://kibana:5601/api/status)
+            if echo $STATUS | grep -q '"state":"green"'; then
+              echo "Kibana is ready"
+              exit 0
+            fi
+            echo "Attempt $i/30..."
+            sleep 2
+          done
+          echo "Kibana failed to become ready"
+          exit 1
+  restartPolicy: Never

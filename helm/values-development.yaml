@@ -1,0 +1,111 @@
+# Development environment overrides
+
+global:
+  environment: development
+  domain: dev.headband.app
+  apiDomain: api.dev.headband.app
+
+backend:
+  replicaCount: 1
+  image:
+    tag: "dev"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+  env:
+    LOG_LEVEL: "debug"
+    NODE_ENV: "development"
+
+frontend:
+  replicaCount: 1
+  image:
+    tag: "dev"
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "250m"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  env:
+    NEXT_PUBLIC_APP_URL: "https://dev.headband.app"
+    NEXT_PUBLIC_API_URL: "https://api.dev.headband.app"
+  ingress:
+    hosts:
+      - host: dev.headband.app
+        paths:
+          - path: /
+            pathType: Prefix
+
+worker:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  env:
+    LOG_LEVEL: "debug"
+
+elasticsearch:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  storage:
+    size: 5Gi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+kibana:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "250m"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  ingress:
+    host: kibana.dev.headband.app
+
+logstash:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "250m"
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+monitoring:
+  alerts:
+    enabled: false

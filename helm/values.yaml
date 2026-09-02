@@ -1,0 +1,364 @@
+# Default values for Headband Helm Chart
+
+# Global configuration
+global:
+  environment: production
+  domain: headband.app
+  apiDomain: api.headband.app
+
+# Backend configuration
+backend:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/headband-backend
+    pullPolicy: Always
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    metricsPort: 9090
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  env:
+    LOG_LEVEL: "info"
+    CACHE_TTL: "3600"
+    DB_POOL_SIZE: "25"
+    REDIS_CLUSTER_MODE: "true"
+    CORS_ORIGINS: "https://headband.app,https://app.headband.app"
+    JWT_EXPIRES_IN: "24h"
+  
+  livenessProbe:
+    path: "/health"
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    path: "/ready"
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/headband-frontend
+    pullPolicy: Always
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 3000
+  
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  
+  env:
+    NEXT_PUBLIC_API_URL: "https://api.headband.app"
+    NEXT_PUBLIC_APP_URL: "https://headband.app"
+    NEXT_PUBLIC_ENVIRONMENT: "production"
+    NEXT_TELEMETRY_DISABLED: "1"
+  
+  ingress:
+    enabled: true
+    hosts:
+      - host: headband.app
+        paths:
+          - path: /
+            pathType: Prefix
+      - host: www.headband.app
+        paths:
+          - path: /
+            pathType: Prefix
+
+# Worker configuration
+worker:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: 123456789012.dkr.ecr.us-east-1.amazonaws.com/headband-worker
+    pullPolicy: Always
+    tag: "latest"
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 60
+    targetMemoryUtilizationPercentage: 75
+  
+  env:
+    WORKER_CONCURRENCY: "4"
+    WORKER_QUEUE_TIMEOUT: "300000"
+    LOG_LEVEL: "info"
+
+# PostgreSQL configuration (via Bitnami chart)
+postgresql:
+  enabled: false
+  auth:
+    username: headband
+    password: "HeadBand@Database2024!Random"
+    database: headband_db
+  
+  primary:
+    persistence:
+      size: 20Gi
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+
+# Redis configuration (via Bitnami chart)
+redis:
+  enabled: false
+  auth:
+    enabled: true
+    password: "HeadBand@Redis2024!Random"
+  
+  master:
+    persistence:
+      size: 10Gi
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+  
+  replica:
+    replicaCount: 2
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+
+# Prometheus configuration (via Prometheus Community chart)
+prometheus:
+  enabled: false
+  prometheusSpec:
+    retention: 30d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1000m"
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+
+# Grafana configuration (via Grafana chart)
+grafana:
+  enabled: false
+  adminPassword: "HeadBand@Grafana2024!Random"
+  persistence:
+    enabled: true
+    size: 10Gi
+  datasources:
+    prometheus:
+      url: http://prometheus-operated:9090
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Elasticsearch configuration
+elasticsearch:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: docker.elastic.co/elasticsearch/elasticsearch
+    tag: "8.10.0"
+  
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  
+  storage:
+    size: 20Gi
+    className: elasticsearch-sc
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+# Kibana configuration
+kibana:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: docker.elastic.co/kibana/kibana
+    tag: "8.10.0"
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  
+  ingress:
+    enabled: true
+    host: kibana.headband.app
+
+# Logstash configuration
+logstash:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: docker.elastic.co/logstash/logstash
+    tag: "8.10.0"
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+# Network policies
+networkPolicies:
+  enabled: true
+
+# Pod Disruption Budgets
+podDisruptionBudgets:
+  enabled: true
+
+# RBAC configuration
+rbac:
+  create: true
+  rules: []
+
+# Service Monitor for Prometheus
+serviceMonitor:
+  enabled: true
+  interval: 30s
+
+# Namespace
+namespace: production
+
+# Logging namespace for ELK
+loggingNamespace: logging
+
+# Image pull secrets (for private ECR)
+imagePullSecrets:
+  - name: ecr-secret
+
+# Node selector (optional, for node affinity)
+nodeSelector: {}
+
+# Tolerations (optional, for node taints)
+tolerations: []
+
+# Affinity rules
+affinity:
+  podAntiAffinity: soft  # soft or hard
+
+# TLS/SSL configuration
+tls:
+  enabled: true
+  certArn: "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERT_ID"
+  issuer: "letsencrypt-prod"  # or "self-signed"
+
+# Monitoring and alerts
+monitoring:
+  enabled: true
+  alerts:
+    enabled: true
+    slack:
+      enabled: false
+      webhookUrl: ""
+    email:
+      enabled: true
+      recipients:
+        - ops@headband.app
+
+# Development overrides
+development:
+  enabled: false
+  backend:
+    replicaCount: 1
+  frontend:
+    replicaCount: 1
+  worker:
+    replicaCount: 1

@@ -1,86 +1,15 @@
 ---
-# Backend Namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: production
-  labels:
-    environment: production
-
----
-# Backend ConfigMap
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: backend-config
-  namespace: production
-data:
-  APP_ENV: "production"
-  NODE_ENV: "production"
-  LOG_LEVEL: "info"
-  CACHE_TTL: "3600"
-  DB_POOL_SIZE: "25"
-  DB_POOL_MAX: "50"
-  REDIS_CLUSTER_MODE: "true"
-  REDIS_NODES: "3"
-  CORS_ORIGINS: "https://headband.app,https://app.headband.app"
-  JWT_EXPIRES_IN: "24h"
-  ML_MODEL_CACHE_SIZE: "500"
-  ML_BATCH_SIZE: "32"
-  ENABLE_METRICS: "true"
-  METRICS_PORT: "9090"
-
----
-# Backend ServiceAccount
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: backend
-  namespace: production
-
----
-# Backend RBAC Role
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: backend-role
-  namespace: production
-rules:
-  - apiGroups: [""]
-    resources: ["configmaps", "secrets"]
-    verbs: ["get", "list"]
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list"]
-
----
-# Backend RBAC RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: backend-rolebinding
-  namespace: production
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: backend-role
-subjects:
-  - kind: ServiceAccount
-    name: backend
-    namespace: production
-
----
-# Backend Deployment
+# Worker Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: worker
   namespace: production
   labels:
-    app: backend
+    app: worker
     version: v1
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -88,30 +17,27 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: backend
+      app: worker
   template:
     metadata:
       labels:
-        app: backend
+        app: worker
         version: v1
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
     spec:
-      serviceAccountName: backend
+      serviceAccountName: worker
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
       containers:
-        - name: backend
-          image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/headband-backend:latest
+        - name: worker
+          image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/headband-worker:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
-              name: http
-              protocol: TCP
             - containerPort: 9090
               name: metrics
               protocol: TCP
@@ -126,36 +52,14 @@ spec:
                 secretKeyRef:
                   name: redis-credentials
                   key: url
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: secret
             - name: NODE_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: NODE_ENV
+              value: "production"
             - name: LOG_LEVEL
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: LOG_LEVEL
-            - name: CORS_ORIGINS
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: CORS_ORIGINS
-            - name: DB_POOL_SIZE
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: DB_POOL_SIZE
-            - name: CACHE_TTL
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: CACHE_TTL
+              value: "info"
+            - name: WORKER_CONCURRENCY
+              value: "4"
+            - name: WORKER_QUEUE_TIMEOUT
+              value: "300000"
             - name: LOGSTASH_HOST
               value: "logstash-tcp.logging.svc.cluster.local"
             - name: LOGSTASH_PORT
@@ -180,32 +84,25 @@ spec:
               memory: "1Gi"
               cpu: "1000m"
           livenessProbe:
-            httpGet:
-              path: /health
-              port: 3000
-              scheme: HTTP
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "ps aux | grep -i worker | grep -v grep"
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
           readinessProbe:
-            httpGet:
-              path: /ready
-              port: 3000
-              scheme: HTTP
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "curl -f http://localhost:9090/metrics || exit 1"
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 3
-          startupProbe:
-            httpGet:
-              path: /health
-              port: 3000
-              scheme: HTTP
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -232,87 +129,121 @@ spec:
                     - key: app
                       operator: In
                       values:
-                        - backend
+                        - worker
                 topologyKey: kubernetes.io/hostname
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: 60
       dnsPolicy: ClusterFirst
 
 ---
-# Backend Service
+# Worker ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: worker
+  namespace: production
+
+---
+# Worker RBAC Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: worker-role
+  namespace: production
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+
+---
+# Worker RBAC RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: worker-rolebinding
+  namespace: production
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: worker-role
+subjects:
+  - kind: ServiceAccount
+    name: worker
+    namespace: production
+
+---
+# Worker Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: worker
   namespace: production
   labels:
-    app: backend
+    app: worker
 spec:
   selector:
-    app: backend
+    app: worker
   type: ClusterIP
   ports:
-    - port: 3000
-      targetPort: 3000
-      name: http
-      protocol: TCP
     - port: 9090
       targetPort: 9090
       name: metrics
       protocol: TCP
-  sessionAffinity: None
 
 ---
-# Backend HPA
+# Worker HPA
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: backend-hpa
+  name: worker-hpa
   namespace: production
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: backend
-  minReplicas: 3
-  maxReplicas: 10
+    name: worker
+  minReplicas: 2
+  maxReplicas: 20
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 60
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 80
+          averageUtilization: 75
 
 ---
-# Backend PodDisruptionBudget
+# Worker PodDisruptionBudget
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: backend-pdb
+  name: worker-pdb
   namespace: production
 spec:
-  minAvailable: 2
+  minAvailable: 1
   selector:
     matchLabels:
-      app: backend
+      app: worker
 
 ---
-# Backend NetworkPolicy
+# Worker NetworkPolicy
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: backend-network-policy
+  name: worker-network-policy
   namespace: production
 spec:
   podSelector:
     matchLabels:
-      app: backend
+      app: worker
   policyTypes:
     - Ingress
     - Egress
@@ -323,16 +254,7 @@ spec:
               name: production
       ports:
         - protocol: TCP
-          port: 3000
-        - protocol: TCP
           port: 9090
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              name: logging
-      ports:
-        - protocol: TCP
-          port: 3000
   egress:
     - to:
         - namespaceSelector: {}
@@ -343,25 +265,18 @@ spec:
           port: 6379
         - protocol: TCP
           port: 443
-    - to:
-        - podSelector:
-            matchLabels:
-              app: backend
-      ports:
-        - protocol: TCP
-          port: 3000
 
 ---
-# Backend Metrics ServiceMonitor (for Prometheus)
+# Worker Metrics ServiceMonitor (for Prometheus)
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: backend-monitor
+  name: worker-monitor
   namespace: production
 spec:
   selector:
     matchLabels:
-      app: backend
+      app: worker
   endpoints:
     - port: metrics
       interval: 30s
