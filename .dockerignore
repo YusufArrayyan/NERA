@@ -1,53 +1,17 @@
-# Git
-.git
-.gitignore
-
-# Dependencies
 node_modules
 npm-debug.log
-yarn-error.log
-pnpm-debug.log
-
-# Build artifacts
 dist
 build
-.next
-
-# Development
-.env.local
+.git
+.gitignore
+.env
 .env.development
-.env.*.local
-*.log
-
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-*~
+.env.production
 .DS_Store
-
-# Testing
+*.pem
+.idea
+.vscode
+*.log
 coverage
-.nyc_output
-test/
-
-# Docker
-Dockerfile
-docker-compose.yml
-.dockerignore
-
-# CI/CD
-.github
-.gitlab-ci.yml
-.circleci
-
-# Documentation
-*.md
-docs/
-
-# Root files
-README.md
-CONTRIBUTING.md
-LICENSE
-setup.ps1
+.next
+out
