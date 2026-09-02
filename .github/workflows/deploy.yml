@@ -1,34 +1,182 @@
-name: Deploy to Vercel
+name: Deploy
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'worker/**'
+      - 'k8s/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  REGISTRY: ghcr.io
 
 jobs:
-  build-and-deploy:
+  deploy-staging:
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'push' || github.event.inputs.environment == 'staging'
+    environment: staging
+    
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    
+    - name: Configure kubectl
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_STAGING }}" | base64 -d > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
+    
+    - name: Update deployment images
+      run: |
+        kubectl set image deployment/backend backend=ghcr.io/${{ github.repository_owner }}/headband-backend:${{ github.sha }} -n headband
+        kubectl set image deployment/frontend frontend=ghcr.io/${{ github.repository_owner }}/headband-frontend:${{ github.sha }} -n headband
+        kubectl set image deployment/worker worker=ghcr.io/${{ github.repository_owner }}/headband-worker:${{ github.sha }} -n headband
+    
+    - name: Wait for rollout
+      run: |
+        kubectl rollout status deployment/backend -n headband --timeout=5m
+        kubectl rollout status deployment/frontend -n headband --timeout=5m
+        kubectl rollout status deployment/worker -n headband --timeout=5m
+    
+    - name: Run smoke tests
+      env:
+        STAGING_URL: ${{ secrets.STAGING_URL }}
+      run: |
+        ./scripts/smoke-tests.sh $STAGING_URL
+    
+    - name: Notify Slack
+      if: success()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "✅ Staging deployment successful",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Deployed to Staging\nCommit: ${{ github.sha }}\nAuthor: ${{ github.actor }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+  approval:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    environment:
+      name: production
+      # Requires manual approval
+    
+    steps:
+    - run: echo "Waiting for production approval..."
 
-      - name: Install dependencies
-        run: |
-          npm install
-          cd frontend && npm install
-
-      - name: Build frontend
-        run: cd frontend && npm run build
-
-      - name: Deploy to Vercel
-        uses: vercel/action@main
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+  deploy-production:
+    needs: [ deploy-staging, approval ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.inputs.environment == 'production'
+    environment: production
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure kubectl for production
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
+    
+    - name: Create backup
+      run: |
+        kubectl get all -n headband -o yaml > /tmp/headband-backup-${{ github.sha }}.yaml
+        echo "Backup created at /tmp/headband-backup-${{ github.sha }}.yaml"
+    
+    - name: Update deployment images
+      run: |
+        kubectl set image deployment/backend backend=ghcr.io/${{ github.repository_owner }}/headband-backend:${{ github.sha }} -n headband
+        kubectl set image deployment/frontend frontend=ghcr.io/${{ github.repository_owner }}/headband-frontend:${{ github.sha }} -n headband
+        kubectl set image deployment/worker worker=ghcr.io/${{ github.repository_owner }}/headband-worker:${{ github.sha }} -n headband
+    
+    - name: Wait for rollout
+      run: |
+        kubectl rollout status deployment/backend -n headband --timeout=10m
+        kubectl rollout status deployment/frontend -n headband --timeout=10m
+        kubectl rollout status deployment/worker -n headband --timeout=10m
+    
+    - name: Health checks
+      run: |
+        kubectl get pods -n headband
+        kubectl logs -n headband -l app=backend --tail=50
+    
+    - name: Verify deployment
+      env:
+        PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+      run: |
+        ./scripts/verify-deployment.sh $PRODUCTION_URL
+    
+    - name: Notify Slack - Success
+      if: success()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "✅ Production deployment successful",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "🚀 Deployed to Production\nCommit: ${{ github.sha }}\nAuthor: ${{ github.actor }}\nTime: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    
+    - name: Notify Slack - Failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": "❌ Production deployment failed",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "⚠️ Production Deployment FAILED\nCommit: ${{ github.sha }}\nAuthor: ${{ github.actor }}\nCheck logs for details"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    
+    - name: Rollback on failure
+      if: failure()
+      run: |
+        echo "Rolling back to previous stable version..."
+        kubectl rollout undo deployment/backend -n headband
+        kubectl rollout undo deployment/frontend -n headband
+        kubectl rollout undo deployment/worker -n headband
+        kubectl rollout status deployment/backend -n headband --timeout=5m
+        kubectl rollout status deployment/frontend -n headband --timeout=5m
+        kubectl rollout status deployment/worker -n headband --timeout=5m
