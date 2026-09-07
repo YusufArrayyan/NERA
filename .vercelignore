@@ -1,0 +1,16 @@
+.git
+.gitignore
+README.md
+docs
+.env.local
+.env.*.local
+node_modules
+backend
+worker
+k8s
+nginx
+terraform
+scripts
+tests
+*.md
+!frontend
