@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: headband-frontend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://chef-overlook-cocoa.ngrok-free.dev
