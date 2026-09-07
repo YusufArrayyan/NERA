@@ -1,52 +1,34 @@
-@import "tailwindcss";
-
-@theme {
-  /* Borders & Inputs */
-  --color-border: #E8E2D8;
-  --color-input: #E8E2D8;
-  --color-ring: #7FA05E;
-  
-  /* Background & Foreground */
-  --color-background: #FDFBF9;
-  --color-foreground: #3D2F26;
-
-  /* Primary: Strong Moss Green - for CTAs and key actions */
-  --color-primary: #7FA05E;
-  --color-primary-foreground: #FFFFFF;
-
-  /* Secondary: Deep Chocolate - for main text and headings */
-  --color-secondary: #3D2F26;
-  --color-secondary-foreground: #FFFFFF;
-
-  /* Accent: Warm Terracotta - for highlights and secondary actions */
-  --color-accent: #E8744F;
-  --color-accent-foreground: #FFFFFF;
-
-  /* Muted tones for secondary text */
-  --color-muted: #F5F1ED;
-  --color-muted-foreground: #8B7F75;
-
-  /* Card surfaces */
-  --color-card: #FFFFFF;
-  --color-card-foreground: #3D2F26;
-
-  /* Radius scale */
-  --radius-lg: 1.5rem; /* 24px */
-  --radius-md: 1rem;
-  --radius-sm: 0.5rem;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
+  :root {
+    --color-border: 232 226 216;
+    --color-input: 232 226 216;
+    --color-ring: 127 160 94;
+    --color-background: 253 251 249;
+    --color-foreground: 61 47 38;
+    --color-primary: 127 160 94;
+    --color-primary-foreground: 255 255 255;
+    --color-secondary: 61 47 38;
+    --color-secondary-foreground: 255 255 255;
+    --color-accent: 232 116 79;
+    --color-accent-foreground: 255 255 255;
+    --color-muted: 245 241 237;
+    --color-muted-foreground: 139 127 117;
+    --color-card: 255 255 255;
+    --color-card-foreground: 61 47 38;
+  }
+
   * {
-    border-color: var(--color-border);
+    @apply border-border;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
-    /* Remove the techy dark mode gradients */
   }
 
-  /* Force light mode since the design is exclusively light/warm */
   :root {
     color-scheme: light;
   }
