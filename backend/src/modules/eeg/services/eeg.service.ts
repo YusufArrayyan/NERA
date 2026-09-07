@@ -2,6 +2,7 @@ import { Injectable, Inject, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../database/prisma.service';
 import { IEEGProvider, EEG_PROVIDER, EEGDataPoint, StreamConfig } from '../interfaces/eeg-provider.interface';
 import { EEGProcessingService, ProcessedEEG } from './eeg-processing.service';
+import { InterventionsTriggerService } from '../../interventions/interventions-trigger.service';
 
 @Injectable()
 export class EEGService {
@@ -12,6 +13,7 @@ export class EEGService {
     @Inject(EEG_PROVIDER) private readonly eegProvider: any,
     private readonly processingService: EEGProcessingService,
     private readonly prisma: PrismaService,
+    private readonly interventionsTrigger: InterventionsTriggerService,
   ) {}
 
   async connect() {
@@ -92,6 +94,13 @@ export class EEGService {
           },
         });
 
+        // Trigger interventions based on EEG thresholds
+        await this.interventionsTrigger.processEEGDataForInterventions(
+          session.id,
+          userId,
+          processed,
+        );
+
         // Update session learning mode based on recommendation
         await this.prisma.session.update({
           where: { id: session.id },
@@ -123,6 +132,9 @@ export class EEGService {
       clearInterval(intervalId);
       this.activeSessions.delete(sessionId);
     }
+
+    // Clean up intervention tracking
+    this.interventionsTrigger.endSession(sessionId);
 
     // Get all processed data for summary
     const processedData = await this.prisma.eegProcessed.findMany({

@@ -1,4 +1,6 @@
 -- Initialize Headband Database
+-- Make headband user a superuser for development
+ALTER USER headband WITH SUPERUSER;
 
 -- Create extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

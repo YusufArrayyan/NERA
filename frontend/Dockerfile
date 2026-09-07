@@ -1,6 +1,6 @@
 # Multi-stage build for Next.js frontend
 # Stage 1: Dependencies
-FROM node:20-alpine AS dependencies
+FROM node:20-slim AS dependencies
 WORKDIR /app
 
 COPY package*.json ./
@@ -8,7 +8,7 @@ RUN npm ci --only=production && \
     npm cache clean --force
 
 # Stage 2: Builder
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 
 COPY package*.json ./
@@ -18,11 +18,14 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Runtime
-FROM node:20-alpine AS runtime
+FROM node:20-slim AS runtime
 WORKDIR /app
 
-# Install dumb-init
-RUN apk add --no-cache dumb-init
+# Install dumb-init and ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dumb-init \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create app user
 RUN addgroup -g 1001 -S nodejs && \

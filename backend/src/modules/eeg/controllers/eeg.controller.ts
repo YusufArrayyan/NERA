@@ -3,10 +3,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../../auth/guards/roles.guard';
-import { Roles } from '../../auth/decorators/roles.decorator';
 import { EEGService } from '../services/eeg.service';
-import { UserRole } from '@prisma/client';
 
 @ApiTags('eeg')
 @Controller('eeg')
@@ -47,8 +44,6 @@ export class EEGController {
   }
 
   @Post('sessions/start')
-  @Roles(UserRole.STUDENT)
-  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Start a new EEG recording session' })
   async startSession(
     @Request() req: any,

@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(role?: UserRole) {
+  async findAll(role?: string) {
     return this.prisma.user.findMany({
-      where: { deletedAt: null, ...(role ? { role } : {}) },
-      select: { id: true, name: true, email: true, role: true, avatar: true, isActive: true, isVerified: true, locale: true, lastLoginAt: true, createdAt: true },
-      orderBy: { createdAt: 'desc' },
+      where: { deleted_at: null, ...(role ? { role } : {}) },
+      select: { id: true, email: true, username: true, first_name: true, last_name: true, role: true, status: true, created_at: true },
+      orderBy: { created_at: 'desc' },
     });
   }
 
@@ -22,59 +21,21 @@ export class UsersService {
   }
 
   async update(id: string, data: any) {
-    const { passwordHash, ...safeData } = data;
+    const { password_hash, ...safeData } = data;
     return this.prisma.user.update({ where: { id }, data: safeData });
   }
 
   async softDelete(id: string) {
-    return this.prisma.user.update({ where: { id }, data: { deletedAt: new Date(), isActive: false } });
-  }
-
-  async getStudentsForTeacher(teacherId: string) {
-    const relations = await this.prisma.teacherStudent.findMany({
-      where: { teacherId },
-      include: {
-        student: {
-          include: {
-            gamification: true,
-            sessions: { orderBy: { startTime: 'desc' }, take: 1 },
-          },
-        },
-      },
-    });
-    return relations.map((r) => r.student);
-  }
-
-  async getChildrenForParent(parentId: string) {
-    const relations = await this.prisma.parentChild.findMany({
-      where: { parentId },
-      include: {
-        child: {
-          include: { gamification: true, sessions: { orderBy: { startTime: 'desc' }, take: 5 } },
-        },
-      },
-    });
-    return relations.map((r) => r.child);
-  }
-
-  async assignTeacherToStudent(teacherId: string, studentId: string) {
-    return this.prisma.teacherStudent.create({ data: { teacherId, studentId } });
-  }
-
-  async assignParentToChild(parentId: string, childId: string) {
-    return this.prisma.parentChild.create({ data: { parentId, childId } });
+    return this.prisma.user.update({ where: { id }, data: { deleted_at: new Date(), status: 'inactive' } });
   }
 
   async getDashboardStats() {
-    const [totalUsers, students, teachers, counselors, parents, admins, activeSessions] = await Promise.all([
-      this.prisma.user.count({ where: { deletedAt: null } }),
-      this.prisma.user.count({ where: { role: 'STUDENT', deletedAt: null } }),
-      this.prisma.user.count({ where: { role: 'TEACHER', deletedAt: null } }),
-      this.prisma.user.count({ where: { role: 'COUNSELOR', deletedAt: null } }),
-      this.prisma.user.count({ where: { role: 'PARENT', deletedAt: null } }),
-      this.prisma.user.count({ where: { role: 'ADMIN', deletedAt: null } }),
-      this.prisma.session.count({ where: { status: 'ACTIVE' } }),
+    const [totalUsers, students, teachers, activeSessions] = await Promise.all([
+      this.prisma.user.count({ where: { deleted_at: null } }),
+      this.prisma.user.count({ where: { role: 'student', deleted_at: null } }),
+      this.prisma.user.count({ where: { role: 'teacher', deleted_at: null } }),
+      this.prisma.eegSession.count({ where: { status: 'recording' } }),
     ]);
-    return { totalUsers, students, teachers, counselors, parents, admins, activeSessions };
+    return { totalUsers, students, teachers, activeSessions };
   }
 }

@@ -25,7 +25,7 @@ interface EEGDataPoint {
   time: string;
 }
 
-export default function EEGChart({ sessionId }: { sessionId?: string }) {
+export default function EEGChart({ sessionId, onMetricsUpdate }: { sessionId?: string; onMetricsUpdate?: (metrics: any) => void }) {
   const [data, setData] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [pattern, setPattern] = useState("MODERATE_FOCUS");
@@ -63,14 +63,21 @@ export default function EEGChart({ sessionId }: { sessionId?: string }) {
         fRatio: payload.processed.fRatio,
       };
 
-      setCurrentMetrics({
+      const metrics = {
         attention: payload.raw.attention,
         meditation: payload.raw.meditation,
         focusCategory: payload.processed.focusCategory,
         fRatio: payload.processed.fRatio,
-        mode: payload.processed.recommendedMode,
+        recommendedMode: payload.processed.recommendedMode,
         quality: payload.raw.signalQuality,
-      });
+      };
+
+      setCurrentMetrics(metrics);
+      
+      // Emit metrics update to parent component
+      if (onMetricsUpdate) {
+        onMetricsUpdate(metrics);
+      }
 
       setData((prev) => {
         const newArray = [...prev, newDataPoint];
@@ -84,7 +91,7 @@ export default function EEGChart({ sessionId }: { sessionId?: string }) {
       socketRef.current?.emit("stopStream");
       socketRef.current?.disconnect();
     };
-  }, [sessionId]);
+  }, [sessionId, onMetricsUpdate]);
 
   const changePattern = (newPattern: string) => {
     setPattern(newPattern);

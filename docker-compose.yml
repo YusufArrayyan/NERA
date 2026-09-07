@@ -9,7 +9,8 @@ services:
       POSTGRES_USER: headband
       POSTGRES_PASSWORD: headband_password_dev
       POSTGRES_DB: headband_db
-      POSTGRES_INITDB_ARGS: "-c max_connections=200 -c shared_buffers=256MB"
+      POSTGRES_INITDB_ARGS: "-c max_connections=200 -c shared_buffers=256MB -U headband"
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     ports:
       - "5432:5432"
     volumes:
@@ -40,49 +41,49 @@ services:
     networks:
       - headband-network
 
-  # Elasticsearch
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
-    container_name: headband-elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - http.cors.enabled=true
-      - http.cors.allow-origin=*
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:9200 | grep -q cluster_name || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - headband-network
+  # Elasticsearch (DISABLED - removed for simplified MVP validation)
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+  #   container_name: headband-elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #     - xpack.security.enabled=false
+  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m
+  #     - http.cors.enabled=true
+  #     - http.cors.allow-origin=*
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+  #   volumes:
+  #     - elasticsearch_data:/usr/share/elasticsearch/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -s http://localhost:9200 | grep -q cluster_name || exit 1"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - headband-network
 
-  # Kibana
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.10.0
-    container_name: headband-kibana
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: elastic
-    ports:
-      - "5601:5601"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -q green || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - headband-network
+  # Kibana (DISABLED - removed for simplified MVP validation)
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.10.0
+  #   container_name: headband-kibana
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+  #     ELASTICSEARCH_USERNAME: elastic
+  #     ELASTICSEARCH_PASSWORD: elastic
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -q green || exit 1"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - headband-network
 
   # Backend API
   backend:
@@ -98,8 +99,6 @@ services:
       LOG_LEVEL: debug
       CACHE_TTL: 3600
       DB_POOL_SIZE: 20
-      LOGSTASH_HOST: logstash
-      LOGSTASH_PORT: 5000
     ports:
       - "3000:3000"
       - "9090:9090"
@@ -107,8 +106,6 @@ services:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_healthy
-      elasticsearch:
         condition: service_healthy
     volumes:
       - ./backend/src:/app/src
@@ -157,8 +154,6 @@ services:
       JWT_SECRET: dev_jwt_secret_key_change_in_production
       LOG_LEVEL: debug
       WORKER_CONCURRENCY: 4
-      LOGSTASH_HOST: logstash
-      LOGSTASH_PORT: 5000
     depends_on:
       postgres:
         condition: service_healthy
@@ -170,24 +165,24 @@ services:
     networks:
       - headband-network
 
-  # Logstash (Optional - for logging)
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.10.0
-    container_name: headband-logstash
-    environment:
-      LS_JAVA_OPTS: -Xms256m -Xmx256m
-    volumes:
-      - ./scripts/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    ports:
-      - "5000:5000/tcp"
-      - "5001:5001/tcp"
-      - "5002:5002/tcp"
-      - "9600:9600"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    networks:
-      - headband-network
+  # Logstash (DISABLED - removed for simplified MVP validation)
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.10.0
+  #   container_name: headband-logstash
+  #   environment:
+  #     LS_JAVA_OPTS: -Xms256m -Xmx256m
+  #   volumes:
+  #     - ./scripts/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+  #   ports:
+  #     - "5000:5000/tcp"
+  #     - "5001:5001/tcp"
+  #     - "5002:5002/tcp"
+  #     - "9600:9600"
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   networks:
+  #     - headband-network
 
 networks:
   headband-network:
@@ -196,4 +191,3 @@ networks:
 volumes:
   postgres_data:
   redis_data:
-  elasticsearch_data:

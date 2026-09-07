@@ -1,24 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { fetchApi } from "@/lib/api";
 import EEGChart from "@/components/EEGChart";
 import { 
   Play, Activity, Clock, Zap, Brain, Bell, Settings, 
-  Trophy, Flame, Award, Edit3, Smile, Frown, Meh, X, BookOpen, HeartPulse
+  Trophy, Flame, Award, Edit3, Smile, Frown, Meh, X, BookOpen, HeartPulse,
+  ChevronRight, ExternalLink
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+interface Recommendation {
+  id: string;
+  title: string;
+  description: string;
+  reason: string;
+  contentType?: string;
+}
+
+interface LearningContent {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  difficulty: string;
+  contentUrl?: string;
+}
+
+interface CurrentEEGMetrics {
+  focusCategory?: string;
+  recommendedMode?: string;
+  fRatio?: number;
+}
 
 export default function StudentSuperDashboard() {
   const { user } = useAuth();
   const router = useRouter();
+  const eegMetricsRef = useRef<CurrentEEGMetrics>({});
   
   // Data States
   const [stats, setStats] = useState<any>(null);
   const [activeSession, setActiveSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [sessionTimer, setSessionTimer] = useState(0);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [recommendedContent, setRecommendedContent] = useState<LearningContent[]>([]);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   
   // UI States
   const [activeTab, setActiveTab] = useState<'LEARNING' | 'PROGRESS' | 'JOURNAL'>('LEARNING');
@@ -26,18 +54,22 @@ export default function StudentSuperDashboard() {
   const [mood, setMood] = useState<string | null>(null);
   const [journalText, setJournalText] = useState("");
 
-  // Simulated live focus for gauge (0-100)
-  const [liveFocus, setLiveFocus] = useState(80);
+  // Live focus score derived from EEG data (0-100)
+  const [liveFocus, setLiveFocus] = useState(0);
 
+  // Fetch initial dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const [statsData, currentSession] = await Promise.all([
           fetchApi('/gamification/stats'),
-          fetchApi('/eeg/sessions').then(res => res[0]?.status === 'ACTIVE' ? res[0] : null)
+          fetchApi('/eeg/sessions').then(res => res?.[0]?.status === 'ACTIVE' ? res[0] : null)
         ]);
         setStats(statsData);
         setActiveSession(currentSession);
+        
+        // Fetch AI recommendations
+        await fetchRecommendations();
       } catch (error) {
         console.error("Failed to load dashboard data", error);
       } finally {
@@ -47,20 +79,59 @@ export default function StudentSuperDashboard() {
     fetchDashboardData();
   }, []);
 
+  // Fetch recommendations when EEG metrics change
+  const fetchRecommendations = async () => {
+    try {
+      setLoadingRecommendations(true);
+      const recs = await fetchApi('/ai/recommendations');
+      setRecommendations(recs || []);
+      
+      // Fetch learning content based on recommended mode
+      if (eegMetricsRef.current?.recommendedMode) {
+        const content = await fetchApi(
+          `/learning/adaptive/${eegMetricsRef.current.recommendedMode}`
+        );
+        setRecommendedContent(content || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch recommendations", error);
+    } finally {
+      setLoadingRecommendations(false);
+    }
+  };
+
+  // Update EEG metrics from WebSocket and trigger recommendation refresh
+  const handleEEGMetricsUpdate = (metrics: CurrentEEGMetrics) => {
+    eegMetricsRef.current = metrics;
+    
+    // Convert F-ratio to 0-100 focus score
+    if (metrics.fRatio !== undefined) {
+      const focusScore = Math.min(100, Math.round((metrics.fRatio / 2) * 100));
+      setLiveFocus(focusScore);
+    }
+    
+    // Refresh recommendations every 30 seconds or when mode changes
+    if (metrics.recommendedMode) {
+      fetchRecommendations();
+    }
+  };
+
   // Timer logic for active session
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (activeSession) {
       interval = setInterval(() => {
         setSessionTimer(prev => prev + 1);
-        // Simulate fluctuating live focus for gauge
-        setLiveFocus(prev => Math.min(100, Math.max(0, prev + (Math.random() * 10 - 5))));
+        // Refresh recommendations every 30 seconds
+        if (sessionTimer % 30 === 0) {
+          fetchRecommendations();
+        }
       }, 1000);
     } else {
       setSessionTimer(0);
     }
     return () => clearInterval(interval);
-  }, [activeSession]);
+  }, [activeSession, sessionTimer]);
 
   const startSession = async () => {
     try {
@@ -237,23 +308,73 @@ export default function StudentSuperDashboard() {
           {/* Real-time Line Chart (EEG) */}
           {activeSession && (
             <div className="animate-in slide-in-from-bottom-4">
-              <EEGChart sessionId={activeSession.id} />
+              <EEGChartWithMetrics sessionId={activeSession.id} onMetricsUpdate={handleEEGMetricsUpdate} />
             </div>
           )}
 
-          {/* AI Recommendations */}
+          {/* AI Recommendations with Learning Content */}
           <div className="space-y-3">
             <h3 className="font-extrabold text-secondary ml-1">Saran Adaptif AI</h3>
-            <div className="organic-card p-4 flex items-start">
-              <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center mr-4 shrink-0">
-                <Brain className="w-5 h-5" />
+            
+            {loadingRecommendations ? (
+              <div className="organic-card p-4 animate-pulse bg-muted/50 h-20" />
+            ) : recommendations.length > 0 ? (
+              <div className="space-y-3">
+                {recommendations.slice(0, 3).map((rec) => (
+                  <div key={rec.id} className="organic-card p-4 flex items-start">
+                    <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center mr-4 shrink-0">
+                      <Brain className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-secondary text-sm mb-1">{rec.title}</h4>
+                      <p className="text-xs text-muted-foreground font-medium">{rec.reason || rec.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div>
-                <h4 className="font-bold text-secondary text-sm mb-1">Materi Visual Lebih Efektif</h4>
-                <p className="text-xs text-muted-foreground font-medium">Berdasarkan rasio Theta/Beta kamu, belajar dengan gambar atau video akan meningkatkan daya ingat hari ini.</p>
+            ) : (
+              <div className="organic-card p-4 flex items-start">
+                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center mr-4 shrink-0">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-secondary text-sm mb-1">Mulai sesi belajar</h4>
+                  <p className="text-xs text-muted-foreground font-medium">Rekomendasi AI akan muncul saat sesi aktif berdasarkan data EEG Anda.</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Recommended Learning Content */}
+          {recommendedContent.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="font-extrabold text-secondary ml-1 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2" />
+                Materi yang Direkomendasikan
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {recommendedContent.slice(0, 2).map((content) => (
+                  <div key={content.id} className="organic-card p-4 border-l-4 border-l-primary hover:bg-muted/50 transition-colors cursor-pointer group">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 className="font-bold text-secondary text-sm">{content.title}</h4>
+                        <div className="flex gap-2 mt-1">
+                          <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full font-semibold">
+                            {content.type}
+                          </span>
+                          <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded-full font-semibold">
+                            {content.difficulty}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">{content.description}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
         </div>
       )}
@@ -381,3 +502,6 @@ export default function StudentSuperDashboard() {
     </div>
   );
 }
+
+// Alias for metrics update support
+const EEGChartWithMetrics = EEGChart;
