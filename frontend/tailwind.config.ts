@@ -7,38 +7,34 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      white: '#ffffff',
-      black: '#000000',
-      border: 'rgb(var(--color-border) / <alpha-value>)',
-      input: 'rgb(var(--color-input) / <alpha-value>)',
-      ring: 'rgb(var(--color-ring) / <alpha-value>)',
-      background: 'rgb(var(--color-background) / <alpha-value>)',
-      foreground: 'rgb(var(--color-foreground) / <alpha-value>)',
-      primary: {
-        DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
-        foreground: 'rgb(var(--color-primary-foreground) / <alpha-value>)',
-      },
-      secondary: {
-        DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
-        foreground: 'rgb(var(--color-secondary-foreground) / <alpha-value>)',
-      },
-      accent: {
-        DEFAULT: 'rgb(var(--color-accent) / <alpha-value>)',
-        foreground: 'rgb(var(--color-accent-foreground) / <alpha-value>)',
-      },
-      muted: {
-        DEFAULT: 'rgb(var(--color-muted) / <alpha-value>)',
-        foreground: 'rgb(var(--color-muted-foreground) / <alpha-value>)',
-      },
-      card: {
-        DEFAULT: 'rgb(var(--color-card) / <alpha-value>)',
-        foreground: 'rgb(var(--color-card-foreground) / <alpha-value>)',
-      },
-    },
     extend: {
+      colors: {
+        border: '#E8E2D8',
+        input: '#E8E2D8',
+        ring: '#7FA05E',
+        background: '#FDFBF9',
+        foreground: '#3D2F26',
+        primary: {
+          DEFAULT: '#7FA05E',
+          foreground: '#FFFFFF',
+        },
+        secondary: {
+          DEFAULT: '#3D2F26',
+          foreground: '#FFFFFF',
+        },
+        accent: {
+          DEFAULT: '#E8744F',
+          foreground: '#FFFFFF',
+        },
+        muted: {
+          DEFAULT: '#F5F1ED',
+          foreground: '#8B7F75',
+        },
+        card: {
+          DEFAULT: '#FFFFFF',
+          foreground: '#3D2F26',
+        },
+      },
       borderRadius: {
         lg: '1.5rem',
         md: '1rem',

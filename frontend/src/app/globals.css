@@ -3,28 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --color-border: 232 226 216;
-    --color-input: 232 226 216;
-    --color-ring: 127 160 94;
-    --color-background: 253 251 249;
-    --color-foreground: 61 47 38;
-    --color-primary: 127 160 94;
-    --color-primary-foreground: 255 255 255;
-    --color-secondary: 61 47 38;
-    --color-secondary-foreground: 255 255 255;
-    --color-accent: 232 116 79;
-    --color-accent-foreground: 255 255 255;
-    --color-muted: 245 241 237;
-    --color-muted-foreground: 139 127 117;
-    --color-card: 255 255 255;
-    --color-card-foreground: 61 47 38;
-  }
-
-  * {
-    @apply border-border;
-  }
-  
   body {
     @apply bg-background text-foreground antialiased;
   }
