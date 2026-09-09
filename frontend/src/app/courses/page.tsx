@@ -1,5 +1,5 @@
-import { CourseCatalogPage } from '@/components/CourseCatalogPage';
+import { CoursesPageStitch } from '@/components/CoursesPageStitch';
 
 export default function Page() {
-  return <CourseCatalogPage />;
+  return <CoursesPageStitch />;
 }

@@ -1,5 +1,5 @@
-import { StudentDashboardMobile } from '@/components/StudentDashboardMobile';
+import { StudentDashboardStitch } from '@/components/StudentDashboardStitch';
 
 export default function Page() {
-  return <StudentDashboardMobile />;
+  return <StudentDashboardStitch />;
 }
