@@ -5,6 +5,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { NotificationsService } from './notifications.service';
 import { EmailService } from './email.service';
+import { UserRole } from '@prisma/client';
 
 @ApiTags('notifications')
 @Controller('notifications')

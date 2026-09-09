@@ -1,7 +1,6 @@
 export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
-  const baseUrl = envUrl.endsWith('/api/v1') ? envUrl : `${envUrl}/api/v1`;
-  const fullUrl = `${baseUrl}${endpoint}`;
+  // Use relative path - Next.js will proxy to backend via rewrites
+  const fullUrl = `/api/v1${endpoint}`;
   
   console.log('🔗 API Call:', fullUrl); // DEBUG
   

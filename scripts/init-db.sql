@@ -1,6 +1,13 @@
 -- Initialize Headband Database
--- Make headband user a superuser for development
-ALTER USER headband WITH SUPERUSER;
+-- Create headband user if not exists (PostgreSQL 16 compatible)
+DO
+$$
+BEGIN
+  CREATE USER headband WITH PASSWORD 'headband_password_dev' SUPERUSER CREATEDB CREATEROLE;
+EXCEPTION WHEN duplicate_object THEN
+  ALTER USER headband WITH SUPERUSER;
+END
+$$;
 
 -- Create extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

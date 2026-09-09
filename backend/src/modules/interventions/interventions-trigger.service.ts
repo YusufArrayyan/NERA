@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../../database/prisma.service';
+import { RawQueryService } from '../../database/raw-query.service';
 import { ProcessedEEG } from '../eeg/services/eeg-processing.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
@@ -45,6 +47,7 @@ export class InterventionsTriggerService {
 
   constructor(
     private prisma: PrismaService,
+    private db: RawQueryService,
     private notificationsService?: NotificationsService,
   ) {}
 
@@ -226,18 +229,22 @@ export class InterventionsTriggerService {
       // In production, create a "System" user for auto-interventions
       const systemUserId = await this.getOrCreateSystemUser();
 
-      // Create intervention record
-      const created = await this.prisma.intervention.create({
-        data: {
-          fromUserId: systemUserId,
-          toUserId: userId,
-          type: intervention.type,
-          title: intervention.title,
-          notes: intervention.description,
-          priority: intervention.priority as any,
-          metadata: intervention.eegMetrics,
-        },
-      });
+      // Create intervention record using RawQueryService
+      const interventionId = uuidv4();
+      await this.db.execute(
+        `INSERT INTO interventions (id, "fromUserId", "toUserId", type, title, notes, priority, metadata, "createdAt", "updatedAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
+        [
+          interventionId,
+          systemUserId,
+          userId,
+          intervention.type,
+          intervention.title,
+          intervention.description,
+          intervention.priority,
+          JSON.stringify(intervention.eegMetrics),
+        ],
+      );
 
       this.logger.log(
         `Created ${intervention.type} intervention for user ${userId}`,
@@ -249,7 +256,7 @@ export class InterventionsTriggerService {
           type: intervention.type,
           title: intervention.title,
           message: intervention.description,
-          data: { interventionId: created.id },
+          data: { interventionId },
         });
       }
     } catch (error) {
@@ -266,11 +273,11 @@ export class InterventionsTriggerService {
     sessionId: string,
   ): Promise<void> {
     try {
-      // Find assigned counselor for this student
-      const student = await this.prisma.user.findUnique({
-        where: { id: studentId },
-        select: { id: true, name: true },
-      });
+      // Get student name
+      const student = await this.db.queryOne(
+        'SELECT id, name FROM users WHERE id = $1',
+        [studentId],
+      );
 
       if (!student) return;
 
@@ -280,23 +287,27 @@ export class InterventionsTriggerService {
       const alertMessage = `High stress detected for ${student.name} during session. Stress index: ${eegData.stressIndex}. Consider reaching out.`;
 
       // Create alert as intervention
-      await this.prisma.intervention.create({
-        data: {
-          fromUserId: systemUserId,
-          toUserId: studentId,
-          type: 'AUTO_ALERT',
-          title: 'Student Stress Alert',
-          notes: alertMessage,
-          priority: 'HIGH',
-          metadata: {
+      const interventionId = uuidv4();
+      await this.db.execute(
+        `INSERT INTO interventions (id, "fromUserId", "toUserId", type, title, notes, priority, metadata, "createdAt", "updatedAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
+        [
+          interventionId,
+          systemUserId,
+          studentId,
+          'AUTO_ALERT',
+          'Student Stress Alert',
+          alertMessage,
+          'HIGH',
+          JSON.stringify({
             sessionId,
             stressIndex: eegData.stressIndex,
             fRatio: eegData.fRatio,
             focusIndex: eegData.focusIndex,
             timestamp: new Date().toISOString(),
-          },
-        },
-      });
+          }),
+        ],
+      );
 
       this.logger.warn(`Counselor alert created for student ${studentId}`);
     } catch (error) {
@@ -343,28 +354,27 @@ export class InterventionsTriggerService {
    */
   private async getOrCreateSystemUser(): Promise<string> {
     // Look for existing system user
-    let systemUser = await this.prisma.user.findFirst({
-      where: { email: 'system@headband.app' },
-      select: { id: true },
-    });
+    let systemUser = await this.db.queryOne(
+      'SELECT id FROM users WHERE email = $1',
+      ['system@headband.app'],
+    );
 
     if (systemUser) {
       return systemUser.id;
     }
 
     // Create system user
-    systemUser = await this.prisma.user.create({
-      data: {
-        email: 'system@headband.app',
-        name: 'Headband System',
-        passwordHash: '', // System user has no password
-        role: 'ADMIN',
-        locale: 'id',
-      },
-      select: { id: true },
-    });
+    const userId = uuidv4();
+    // Use empty string for password since system user shouldn't have real password
+    const passwordHash = ''; 
 
-    return systemUser.id;
+    await this.db.execute(
+      `INSERT INTO users (id, email, name, "passwordHash", role, locale, "createdAt", "updatedAt")
+       VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())`,
+      [userId, 'system@headband.app', 'Headband System', passwordHash, 'ADMIN', 'id'],
+    );
+
+    return userId;
   }
 
   /**
@@ -384,23 +394,24 @@ export class InterventionsTriggerService {
     pendingCount: number;
     byType: Record<string, number>;
   }> {
-    const interventions = await this.prisma.intervention.findMany({
-      where: { toUserId: userId },
-    });
+    const interventions = await this.db.query(
+      `SELECT id, type, status FROM interventions WHERE "toUserId" = $1`,
+      [userId],
+    );
 
     const stats = {
       totalInterventions: interventions.length,
       autoInterventions: interventions.filter(
-        (i) => i.type.startsWith('AUTO_'),
+        (i: any) => i.type.startsWith('AUTO_'),
       ).length,
-      resolvedCount: interventions.filter((i) => i.status === 'RESOLVED')
+      resolvedCount: interventions.filter((i: any) => i.status === 'RESOLVED')
         .length,
-      pendingCount: interventions.filter((i) => i.status === 'PENDING').length,
+      pendingCount: interventions.filter((i: any) => i.status === 'PENDING').length,
       byType: {} as Record<string, number>,
     };
 
     // Count by type
-    interventions.forEach((i) => {
+    interventions.forEach((i: any) => {
       stats.byType[i.type] = (stats.byType[i.type] || 0) + 1;
     });
 

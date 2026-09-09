@@ -1,8 +1,9 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
-import { PrismaService } from '../../../database/prisma.service';
 import { IEEGProvider, EEG_PROVIDER, EEGDataPoint, StreamConfig } from '../interfaces/eeg-provider.interface';
 import { EEGProcessingService, ProcessedEEG } from './eeg-processing.service';
 import { InterventionsTriggerService } from '../../interventions/interventions-trigger.service';
+import { RawQueryService } from '../../../database/raw-query.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class EEGService {
@@ -12,7 +13,7 @@ export class EEGService {
   constructor(
     @Inject(EEG_PROVIDER) private readonly eegProvider: any,
     private readonly processingService: EEGProcessingService,
-    private readonly prisma: PrismaService,
+    private readonly db: RawQueryService,
     private readonly interventionsTrigger: InterventionsTriggerService,
   ) {}
 
@@ -43,84 +44,101 @@ export class EEGService {
    * Start a streaming session — data is saved to DB
    */
   async startSession(userId: string, pattern: string = 'MODERATE_FOCUS') {
-    // Create session in DB
-    const session = await this.prisma.session.create({
-      data: {
+    try {
+      // Create session in DB using direct query
+      const sessionId = uuidv4();
+      await this.db.execute(
+        `INSERT INTO sessions (id, "userId", status, "learningMode", "startTime", "createdAt", "updatedAt")
+         VALUES ($1, $2, $3, $4, NOW(), NOW(), NOW())`,
+        [sessionId, userId, 'ACTIVE', 'VISUAL'],
+      );
+
+      const session = {
+        id: sessionId,
         userId,
         status: 'ACTIVE',
         learningMode: 'VISUAL',
-      },
-    });
+        startTime: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-    const config: StreamConfig = {
-      samplingRate: 256,
-      pattern,
-      noiseLevel: 0.1,
-      sessionId: session.id,
-    };
+      console.log('✅ Session created:', session);
 
-    // Start periodic data collection and storage (every 1 second for DB storage)
-    const intervalId = setInterval(async () => {
-      try {
-        const raw = this.eegProvider.getDataPoint(pattern);
-        raw.sessionId = session.id;
-        const processed = this.processingService.processDataPoint(raw);
+      const config: StreamConfig = {
+        samplingRate: 256,
+        pattern,
+        noiseLevel: 0.1,
+        sessionId: session.id,
+      };
 
-        // Save raw EEG log
-        await this.prisma.eegLog.create({
-          data: {
-            sessionId: session.id,
-            alpha: raw.alpha,
-            beta: raw.beta,
-            theta: raw.theta,
-            gamma: raw.gamma || 0,
-            attention: raw.attention,
-            meditation: raw.meditation,
-            signalQuality: raw.signalQuality,
-          },
-        });
+      // Start periodic data collection and storage (every 1 second for DB storage)
+      const intervalId = setInterval(async () => {
+        try {
+          const raw = this.eegProvider.getDataPoint(pattern);
+          raw.sessionId = session.id;
+          const processed = this.processingService.processDataPoint(raw);
 
-        // Save processed data
-        await this.prisma.eegProcessed.create({
-          data: {
-            sessionId: session.id,
-            focusIndex: processed.focusIndex,
-            stressIndex: processed.stressIndex,
-            fRatio: processed.fRatio,
-            focusCategory: processed.focusCategory,
-            attentionScore: processed.attentionScore,
-            qualityScore: processed.qualityScore,
-            bandPowers: processed.bandPowers,
-          },
-        });
+          // Save raw EEG log
+          await this.db.execute(
+            `INSERT INTO eeg_logs ("sessionId", alpha, beta, theta, gamma, attention, meditation, "signalQuality", timestamp)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+            [
+              session.id,
+              raw.alpha,
+              raw.beta,
+              raw.theta,
+              raw.gamma || 0,
+              raw.attention,
+              raw.meditation,
+              raw.signalQuality,
+            ],
+          );
 
-        // Trigger interventions based on EEG thresholds
-        await this.interventionsTrigger.processEEGDataForInterventions(
-          session.id,
-          userId,
-          processed,
-        );
+          // Save processed data
+          await this.db.execute(
+            `INSERT INTO eeg_processed ("sessionId", "focusIndex", "stressIndex", "fRatio", "focusCategory", "attentionScore", "qualityScore", "bandPowers", timestamp)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+            [
+              session.id,
+              processed.focusIndex,
+              processed.stressIndex,
+              processed.fRatio,
+              processed.focusCategory,
+              processed.attentionScore,
+              processed.qualityScore,
+              JSON.stringify(processed.bandPowers),
+            ],
+          );
 
-        // Update session learning mode based on recommendation
-        await this.prisma.session.update({
-          where: { id: session.id },
-          data: {
-            learningMode: processed.recommendedMode,
-            focusCategory: processed.focusCategory,
-          },
-        });
-      } catch (error) {
-        this.logger.error(`Error processing EEG data: ${error.message}`);
-      }
-    }, 1000); // Store every second
+          // Trigger interventions based on EEG thresholds
+          await this.interventionsTrigger.processEEGDataForInterventions(
+            session.id,
+            userId,
+            processed,
+          );
 
-    this.activeSessions.set(session.id, intervalId);
+          // Update session learning mode based on recommendation
+          await this.db.execute(
+            `UPDATE sessions SET "learningMode" = $1, "focusCategory" = $2, "updatedAt" = NOW() WHERE id = $3`,
+            [processed.recommendedMode, processed.focusCategory, session.id],
+          );
+        } catch (error) {
+          this.logger.error(`Error processing EEG data: ${error.message}`);
+        }
+      }, 1000); // Store every second
 
-    return {
-      session,
-      config,
-      message: 'EEG session started',
-    };
+      this.activeSessions.set(session.id, intervalId);
+
+      return {
+        session,
+        config,
+        message: 'EEG session started',
+      };
+    } catch (error) {
+      this.logger.error(`Error starting session: ${error.message}`, error.stack);
+      throw error;
+    }
   }
 
   /**
@@ -137,37 +155,44 @@ export class EEGService {
     this.interventionsTrigger.endSession(sessionId);
 
     // Get all processed data for summary
-    const processedData = await this.prisma.eegProcessed.findMany({
-      where: { sessionId },
-      orderBy: { timestamp: 'asc' },
-    });
+    const processedData = await this.db.query(
+      `SELECT "focusIndex", "stressIndex", "fRatio", "focusCategory", "attentionScore", "qualityScore", "bandPowers", timestamp
+       FROM eeg_processed WHERE "sessionId" = $1 ORDER BY timestamp ASC`,
+      [sessionId],
+    );
 
     const summary = this.processingService.getSessionSummary(
-      processedData.map((d) => ({
+      processedData.map((d: any) => ({
         focusIndex: d.focusIndex,
         stressIndex: d.stressIndex,
         fRatio: d.fRatio,
         focusCategory: d.focusCategory as any,
         attentionScore: d.attentionScore,
         qualityScore: d.qualityScore,
-        bandPowers: d.bandPowers as any,
+        bandPowers: typeof d.bandPowers === 'string' ? JSON.parse(d.bandPowers) : d.bandPowers,
         recommendedMode: 'VISUAL' as any,
         timestamp: d.timestamp,
       })),
     );
 
     // Update session with summary
-    const session = await this.prisma.session.update({
-      where: { id: sessionId },
-      data: {
-        status: 'COMPLETED',
-        endTime: new Date(),
-        duration: processedData.length, // each record = 1 second
-        avgFocus: summary.avgFocus,
-        avgStress: summary.avgStress,
-        avgAttention: summary.avgAttention,
-      },
-    });
+    await this.db.execute(
+      `UPDATE sessions SET status = $1, "endTime" = NOW(), duration = $2, "avgFocus" = $3, "avgStress" = $4, "avgAttention" = $5, "updatedAt" = NOW()
+       WHERE id = $6`,
+      [
+        'COMPLETED',
+        processedData.length,
+        summary.avgFocus,
+        summary.avgStress,
+        summary.avgAttention,
+        sessionId,
+      ],
+    );
+
+    const session = await this.db.queryOne(
+      'SELECT * FROM sessions WHERE id = $1',
+      [sessionId],
+    );
 
     return { session, summary };
   }
@@ -176,29 +201,41 @@ export class EEGService {
    * Get session history with EEG data
    */
   async getSessionData(sessionId: string) {
-    const session = await this.prisma.session.findUnique({
-      where: { id: sessionId },
-      include: {
-        eegLogs: { orderBy: { timestamp: 'asc' } },
-        eegProcessed: { orderBy: { timestamp: 'asc' } },
-      },
-    });
+    const session = await this.db.queryOne(
+      'SELECT * FROM sessions WHERE id = $1',
+      [sessionId],
+    );
 
-    return session;
+    const eegLogs = await this.db.query(
+      'SELECT * FROM eeg_logs WHERE "sessionId" = $1 ORDER BY timestamp ASC',
+      [sessionId],
+    );
+
+    const eegProcessed = await this.db.query(
+      'SELECT * FROM eeg_processed WHERE "sessionId" = $1 ORDER BY timestamp ASC',
+      [sessionId],
+    );
+
+    return {
+      ...session,
+      eegLogs,
+      eegProcessed,
+    };
   }
 
   /**
    * Get user's session history
    */
   async getUserSessions(userId: string, limit = 20) {
-    return this.prisma.session.findMany({
-      where: { userId, deletedAt: null },
-      orderBy: { startTime: 'desc' },
-      take: limit,
-      include: {
-        _count: { select: { eegLogs: true } },
-      },
-    });
+    return this.db.query(
+      `SELECT s.*, COUNT(el.id) as eeg_logs_count FROM sessions s
+       LEFT JOIN eeg_logs el ON s.id = el."sessionId"
+       WHERE s."userId" = $1 AND s."deletedAt" IS NULL
+       GROUP BY s.id
+       ORDER BY s."startTime" DESC
+       LIMIT $2`,
+      [userId, limit],
+    );
   }
 
   /**

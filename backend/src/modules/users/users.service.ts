@@ -1,15 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(role?: string) {
+    // Map lowercase role string to UserRole enum if provided
+    let whereClause: any = { deletedAt: null };
+    if (role) {
+      const roleMap: Record<string, UserRole> = {
+        student: UserRole.STUDENT,
+        teacher: UserRole.TEACHER,
+        counselor: UserRole.COUNSELOR,
+        parent: UserRole.PARENT,
+        admin: UserRole.ADMIN,
+      };
+      const mappedRole = roleMap[role.toLowerCase()];
+      if (mappedRole) {
+        whereClause.role = mappedRole;
+      }
+    }
+
     return this.prisma.user.findMany({
-      where: { deleted_at: null, ...(role ? { role } : {}) },
-      select: { id: true, email: true, username: true, first_name: true, last_name: true, role: true, status: true, created_at: true },
-      orderBy: { created_at: 'desc' },
+      where: whereClause,
+      select: { id: true, email: true, name: true, role: true, isActive: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -21,20 +38,20 @@ export class UsersService {
   }
 
   async update(id: string, data: any) {
-    const { password_hash, ...safeData } = data;
+    const { passwordHash, ...safeData } = data;
     return this.prisma.user.update({ where: { id }, data: safeData });
   }
 
   async softDelete(id: string) {
-    return this.prisma.user.update({ where: { id }, data: { deleted_at: new Date(), status: 'inactive' } });
+    return this.prisma.user.update({ where: { id }, data: { deletedAt: new Date(), isActive: false } });
   }
 
   async getDashboardStats() {
     const [totalUsers, students, teachers, activeSessions] = await Promise.all([
-      this.prisma.user.count({ where: { deleted_at: null } }),
-      this.prisma.user.count({ where: { role: 'student', deleted_at: null } }),
-      this.prisma.user.count({ where: { role: 'teacher', deleted_at: null } }),
-      this.prisma.eegSession.count({ where: { status: 'recording' } }),
+      this.prisma.user.count({ where: { deletedAt: null } }),
+      this.prisma.user.count({ where: { role: 'STUDENT', deletedAt: null } }),
+      this.prisma.user.count({ where: { role: 'TEACHER', deletedAt: null } }),
+      this.prisma.session.count({ where: { status: 'ACTIVE' } }),
     ]);
     return { totalUsers, students, teachers, activeSessions };
   }

@@ -15,6 +15,7 @@ import {
   Calendar,
   Clock,
   BarChart3,
+  CheckCircle2,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader, CardFooter } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';

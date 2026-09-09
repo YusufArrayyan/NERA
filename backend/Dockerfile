@@ -26,9 +26,5 @@ RUN npm ci --only=production
 # Expose ports
 EXPOSE 3000 9090
 
-# Health check
-HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
-  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
-
 # Start application
 CMD ["npm", "run", "start:prod"]
