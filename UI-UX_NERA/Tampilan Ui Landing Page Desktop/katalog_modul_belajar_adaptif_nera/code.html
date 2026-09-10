@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>NERA Neuro-Adaptive Learning Platform</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed-dim":"#a7d29b","surface-container-highest":"#e1e3e0","on-background":"#191c1b","on-secondary-fixed-variant":"#4c4543","on-tertiary-container":"#fcfcff","surface-container-high":"#e7e9e6","surface":"#f8faf7","surface-container-low":"#f2f4f1","surface-dim":"#d8dbd8","tertiary-fixed-dim":"#7bd0ff","outline":"#73796e","on-tertiary-fixed":"#001e2c","on-surface":"#191c1b","on-secondary":"#ffffff","on-error-container":"#93000a","tertiary":"#006387","tertiary-container":"#007da9","on-primary-fixed":"#002201","surface-variant":"#e1e3e0","inverse-on-surface":"#eff1ee","on-tertiary":"#ffffff","primary-container":"#577e4f","on-error":"#ffffff","on-secondary-fixed":"#201a18","on-primary-fixed-variant":"#2b4f25","secondary-container":"#ece0dd","on-primary":"#ffffff","outline-variant":"#c2c8bc","error-container":"#ffdad6","on-primary-container":"#f8fff0","inverse-surface":"#2e312f","on-secondary-container":"#6b6360","primary-fixed":"#c3eeb5","on-surface-variant":"#42493f","error":"#ba1a1a","on-tertiary-fixed-variant":"#004c69","secondary-fixed-dim":"#cfc4c1","surface-container-lowest":"#ffffff","secondary-fixed":"#ece0dd","surface-container":"#eceeeb","background":"#f8faf7","surface-tint":"#42673a","inverse-primary":"#a7d29b","primary":"#3f6538","secondary":"#655d5a","surface-bright":"#f8faf7","tertiary-fixed":"#c4e7ff"},borderRadius:{DEFAULT:"1rem",lg:"2rem",xl:"3rem",full:"9999px"},spacing:{"space-lg":"1.5rem","space-md":"1rem","margin-desktop":"3rem","margin-mobile":"1rem","space-3xl":"4.5rem",gutter:"1.5rem","space-2xs":"0.25rem","space-2xl":"3rem","max-content-width":"1200px","space-xl":"2rem","space-xs":"0.5rem","space-sm":"0.75rem"},fontFamily:{"display-hero-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-tag":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-telemetry":["JetBrains Mono"]},fontSize:{"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"800"}],"headline-md":["22px",{lineHeight:"30px",fontWeight:"600"}],"label-tag":["11px",{lineHeight:"16px",letterSpacing:"0.06em",fontWeight:"700"}],"headline-lg-mobile":["26px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"body-md":["15px",{lineHeight:"24px",fontWeight:"400"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"display-hero":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"800"}],"headline-sm":["18px",{lineHeight:"26px",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"20px",fontWeight:"400"}],"label-telemetry":["13px",{lineHeight:"18px",letterSpacing:"0.02em",fontWeight:"500"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="NERA Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wwli1qzd5jo4_dajbha-x_5ZDigOEh9l1NZYvVofV_S1NrlPri8AyYAQYzTu3_WC6ZIgQiAhFK21H3xJzdEEM_GGoW9e2NZh_o4ikm7C69VQngOcvOPL0U2TBe1DjCP5Tl8HzS4eK5Wo2Td5SvUKprC9WAY3Au7t2k30oi7-6PQoDqv0meCkr2q0ZbHTdJ2fKfQfiL2TXm0LK7MzhLxyqFUUS5FC2zCpK0u2C8fPfeOkSUb-63NU6V9w"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight leading-none">NERA</span><span class="font-label-tag text-label-tag text-on-surface-variant leading-tight tracking-wider uppercase">Neuro-Adaptive Learning</span></div></div><nav class="hidden xl:flex items-center p-1.5 bg-surface-container-low rounded-full" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="beranda" href="#">Beranda</a><a aria-current="page" class="px-space-md py-space-xs rounded-full transition-colors duration-150 bg-primary text-on-primary font-semibold shadow-sm" data-path="katalog-modul" href="#">Katalog Modul</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="statistik-dan-analisis" href="#">Statistik &amp; Analisis</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="jurnal-refleksi" href="#">Jurnal Refleksi</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="hardware-headband" href="#">Hardware Headband</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="portal-guru-pengawas" href="#">Guru &amp; Pengawas</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-lowest px-space-md py-space-xs rounded-full shadow-[0_2px_12px_rgba(43,37,35,0.04)]"><div class="flex items-center gap-1.5 text-primary"><span class="material-symbols-outlined text-[18px]">bluetooth_connected</span><span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span></div><div class="h-3.5 w-px bg-surface-container-highest"></div><div class="flex items-center gap-1 text-on-surface font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-tertiary">sensors</span><span>98%</span></div><div class="h-3.5 w-px bg-surface-container-highest"></div><div class="flex items-center gap-1 text-on-surface font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span><span>84%</span></div></div><div class="flex items-center gap-space-2xs"><button aria-label="Notifikasi" class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span></button><button aria-label="Pengaturan Sistem" class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">settings</span></button></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Alya Juwita Putri Avatar" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhiUOkzUr0bdbmOv7nIslu_X3xmq8hooTXz6Yq-WvY8knsFOcakgvt4uxHWlcl0pi7w9duL90ozl7tkzxdRAdJKCLOjGpSm_1fRbmF30FeidStzmRsc_IP_BrqRQlOXgR9pf0UBiKanLYRWbuFTduegN6Gpp8fo4vvd17v7u81YZ99vHJx0tfbFcIpK0WC_QVxtulp9JOcOvZQxuwO5Ux5S6IOA400T-0657psMAajDvFu8aI4RAMH"/><div class="hidden lg:flex flex-col text-left"><span class="font-headline-sm text-body-sm font-semibold text-on-surface leading-snug">Alya Juwita Putri</span><div class="flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span><span class="font-label-tag text-label-tag text-primary uppercase font-bold tracking-wider">SISWA AKTIF</span></div></div></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="max-w-max-content-width mx-auto w-full px-margin-mobile lg:px-margin-desktop py-space-xl flex flex-col gap-space-2xl">
+<!-- Top Action & Search Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs max-w-xl">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-tag text-label-tag text-primary uppercase tracking-wider bg-surface-container-low px-space-sm py-space-2xs rounded-full">Kurikulum Berbasis Neurobiometrik</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">Sirkadian: Puncak Pagi</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Pilih Materi &amp; Siapkan Gelombang Fokus</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Modul pembelajaran dikalibrasi otomatis berdasarkan rasio gelombang Alpha-Theta dan estimasi kapasitas memori kerja harian Anda.</p>
+</div>
+<!-- Search & IoT Quick Status -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm w-full md:w-auto">
+<div class="relative min-w-[280px]">
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant font-body-md text-body-md shadow-sm outline-none transition-shadow focus:shadow-md" placeholder="Cari konsep, rumus, atau bab..." type="text"/>
+</div>
+<button class="flex items-center justify-center gap-space-2xs px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary">tune</span>
+<span>Filter Lanjutan</span>
+</button>
+</div>
+</div>
+<!-- Filter Chips Horizontal Scroll -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar">
+<button class="filter-chip active shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm font-semibold bg-primary text-on-primary shadow-sm transition-all" data-category="all" type="button">Semua Topik</button>
+<button class="filter-chip shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-category="physics" type="button">Sains &amp; Fisika</button>
+<button class="filter-chip shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-category="math" type="button">Matematika Terapan</button>
+<button class="filter-chip shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-category="biology" type="button">Biologi Molekuler</button>
+<button class="filter-chip shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-category="cs" type="button">Logika Algoritma</button>
+<button class="filter-chip shrink-0 px-space-lg py-space-xs rounded-full font-body-sm text-body-sm bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-category="language" type="button">Sastra &amp; Bahasa</button>
+</div>
+<!-- Featured Adaptive Hero Banner -->
+<div class="relative w-full rounded-2xl bg-inverse-surface text-inverse-on-surface overflow-hidden shadow-xl p-space-lg md:p-space-2xl">
+<!-- Ambient Glow Shapes -->
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-primary-container/20 blur-3xl pointer-events-none"></div>
+<div class="absolute right-1/3 -bottom-20 w-64 h-64 rounded-full bg-tertiary/20 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-primary-fixed/20 text-primary-fixed font-label-tag text-label-tag uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">psychology</span>
+              Rekomendasi AI Sesuai Ritme Sirkadian
+            </span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-highest/20 text-inverse-on-surface font-label-telemetry text-label-telemetry">Tingkat Kesulitan: Level 4</span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h2 class="font-headline-lg text-headline-lg font-bold tracking-tight text-surface-container-lowest">Fisika Kuantum: Dualitas Gelombang-Partikel</h2>
+<p class="font-body-md text-body-md text-surface-variant/90 max-w-xl">Aktivitas lobus parietal Anda menunjukkan sinkronisasi spasial terbaik pada jam ini. Mode visual interaktif diaktifkan guna mereduksi beban kognitif berlebih.</p>
+</div>
+<!-- Neuro-telemetry Metrics Row -->
+<div class="flex flex-wrap items-center gap-space-lg py-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-fixed text-[24px]">timer</span>
+<div class="flex flex-col">
+<span class="font-label-telemetry text-label-telemetry font-bold text-surface-container-lowest">35 Menit</span>
+<span class="font-label-tag text-label-tag text-surface-variant/70">Jendela Fokus Ideal</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-fixed text-[24px]">visibility</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-surface-container-lowest">Optimalkan Pemahaman Visual</span>
+<span class="font-label-tag text-label-tag text-surface-variant/70">Stimulus Kognitif AI</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[24px]">waves</span>
+<div class="flex flex-col">
+<span class="font-label-telemetry text-label-telemetry font-bold text-surface-container-lowest">10.4 Hz</span>
+<span class="font-label-tag text-label-tag text-surface-variant/70">Pita Alpha Target</span>
+</div>
+</div>
+</div>
+<!-- Hero Action Button -->
+<div class="pt-space-xs flex flex-wrap items-center gap-space-md">
+<button class="group flex items-center gap-space-sm px-space-xl py-space-sm rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold shadow-md hover:bg-primary-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">sensors</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+<button class="px-space-md py-space-sm rounded-full bg-inverse-surface hover:bg-surface-container-highest/20 text-inverse-on-surface font-body-sm text-body-sm transition-colors" type="button">
+              Pratinjau Silabus
+            </button>
+</div>
+</div>
+<!-- Visual Spline Wave Graphic & Telemetry Card -->
+<div class="lg:col-span-5 flex flex-col justify-center">
+<div class="w-full bg-surface-container-lowest/5 backdrop-blur-md rounded-xl p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-primary-fixed">LIVE BRAINWAVE HARMONICS</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry text-surface-variant/80">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Sinyal Terkalibrasi
+              </span>
+</div>
+<!-- Inline SVG Neuro-Waveform (Compact & Vector) -->
+<div class="w-full h-28 flex items-center justify-center">
+<svg class="w-full h-full overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 400 100">
+<!-- Theta background trail -->
+<path class="text-tertiary/40" d="M0,60 Q50,40 100,55 T200,65 T300,45 T400,50" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<!-- Alpha target wave (vibrant glow) -->
+<path class="text-primary-fixed" d="M0,50 Q25,15 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" style="filter: drop-shadow(0 0 6px rgba(167, 210, 155, 0.6));">
+<animate attributename="d" dur="6s" repeatcount="indefinite" values="
+                    M0,50 Q25,10 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50;
+                    M0,50 Q25,75 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50;
+                    M0,50 Q25,10 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50
+                  "></animate>
+</path>
+<!-- Focus marker vertical dash -->
+<line class="text-tertiary-fixed" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1.5" x1="260" x2="260" y1="10" y2="90"></line>
+</svg>
+</div>
+<div class="grid grid-cols-3 gap-space-2xs text-center pt-space-2xs">
+<div class="flex flex-col bg-surface-container-lowest/5 p-space-xs rounded">
+<span class="font-label-tag text-label-tag text-surface-variant/70">Kesiapan</span>
+<span class="font-label-telemetry text-label-telemetry font-bold text-surface-container-lowest">94.8%</span>
+</div>
+<div class="flex flex-col bg-surface-container-lowest/5 p-space-xs rounded">
+<span class="font-label-tag text-label-tag text-surface-variant/70">Impedansi</span>
+<span class="font-label-telemetry text-label-telemetry font-bold text-primary-fixed">&lt; 5kΩ</span>
+</div>
+<div class="flex flex-col bg-surface-container-lowest/5 p-space-xs rounded">
+<span class="font-label-tag text-label-tag text-surface-variant/70">Sinkroni</span>
+<span class="font-label-telemetry text-label-telemetry font-bold text-tertiary-fixed">Tinggi</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Layout: Grid of Modules + Sidebar -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+<!-- Catalog Modules Grid (8 Cols on large) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Daftar Modul Terkalibrasi</h3>
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">6 Modul Aktif</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Card 1: Fisika Kuantum -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Sains &amp; Fisika</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-primary-fixed/30 text-on-primary-fixed-variant font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Alpha Stabil
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Fisika Kuantum: Dualitas Gelombang-Partikel</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Eksperimen celah ganda, probabilitas fungsi gelombang, dan interpretasi Kopenhagen.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Comprehension Level Bar -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">74%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 74%"></div>
+</div>
+</div>
+<!-- Metadata Tags -->
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">videocam</span> Mode Visual Interaktif</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 30m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Kalkulus Diferensial Lanjut -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Matematika Terapan</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-tertiary-fixed/40 text-on-tertiary-fixed-variant font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Theta Dalam
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Kalkulus Diferensial Lanjut</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Gradien multivariabel, matriks Hessian, dan optimasi Lagrange berdimensi jamak.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">82%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 82%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">headphones</span> Auditory Alpha Boost</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 45m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Biologi Sel & Neurotransmiter -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Biologi Molekuler</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Sensitivitas Sedang
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Biologi Sel &amp; Neurotransmiter</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Sinapsis dopaminergik, reseptor GABA, dan potensial aksi neuron kortikal.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">60%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 60%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">style</span> Adaptif Flashcards</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 25m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Kimia Organik: Reaksi Redoks -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Sains &amp; Fisika</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-primary-fixed/30 text-on-primary-fixed-variant font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Fokus Puncak
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Kimia Organik: Reaksi Redoks</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Penyeimbangan setengah reaksi, potensial reduksi standar, dan elektrokimia sel.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">90%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 90%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">quiz</span> Ujian Simulasi</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 40m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+<!-- Card 5: Struktur Data & Pemrograman Web -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Logika Algoritma</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-primary-fixed/30 text-on-primary-fixed-variant font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Aliran Kognitif Aktif
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Struktur Data &amp; Pemrograman Web</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Implementasi Binary Search Tree, traversal graf, dan efisiensi memori runtime.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">88%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 88%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">terminal</span> Coding Lab</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 50m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+<!-- Card 6: Bahasa Inggris: Academic Reading Comprehension -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">Sastra &amp; Bahasa</span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-primary-fixed/30 text-on-primary-fixed-variant font-label-tag text-label-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Retensi Sempurna
+                </span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Bahasa Inggris: Academic Reading Comprehension</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Analisis sintaksis jurnal ilmiah, identifikasi bias retoris, dan inferensi logis.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-tag text-label-tag">
+<span class="text-on-surface-variant">Tingkat Pemahaman</span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface font-semibold">95%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container">
+<div class="h-2 rounded-full bg-primary" style="width: 95%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm py-space-2xs">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-tertiary">menu_book</span> Deep Read</span>
+<span class="flex items-center gap-1 font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span> 30m</span>
+</div>
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-primary text-on-primary font-headline-sm text-body-sm font-semibold hover:bg-primary-container shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Mulai Sesi Fokus dengan Headband</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar: Brain Readiness & Calibration Panel (4 Cols on large) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Readiness Summary Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">vital_signs</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Kesiapan Otak Hari Ini</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<!-- Circular Readiness Gauge & Main Baseline Score -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase">Baseline Kognitif</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-display-hero text-[40px] font-extrabold text-on-surface leading-none">81.4</span>
+<span class="font-label-telemetry text-label-telemetry text-primary font-bold">/100</span>
+</div>
+<span class="font-body-sm text-body-sm text-primary font-medium mt-1">Kondisi Prima (Alpha Dominan)</span>
+</div>
+<!-- Mini Circular Visual Chart -->
+<div class="relative w-20 h-20 flex items-center justify-center shrink-0">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="81.4, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-telemetry text-label-telemetry font-bold text-on-surface">81%</span>
+</div>
+</div>
+<!-- Optimal Time Window Block -->
+<div class="flex flex-col gap-space-xs bg-surface-container-lowest p-space-md rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<span class="font-label-tag text-label-tag text-tertiary uppercase font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+              Jendela Waktu Belajar Optimal
+            </span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface font-label-telemetry">09:00 – 11:30 WIB</span>
+<span class="px-space-xs py-0.5 rounded-full bg-primary-fixed/30 text-on-primary-fixed-variant font-label-tag text-label-tag font-bold">SEDANG BERJALAN</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Gelombang Beta dan Alpha Anda berada pada konvergensi paling stabil untuk sintesis materi analitis tingkat tinggi.</p>
+</div>
+<!-- EEG Sensor Impedance & Placement Telemetry -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-tag text-label-tag text-on-surface-variant uppercase font-bold tracking-wider">Status Kontak Sensor Headband</span>
+<div class="space-y-2 pt-1">
+<div class="flex items-center justify-between text-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Kanal Frontal (Fp1, Fp2)
+                </span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">0.8 kΩ (Optimal)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Kanal Temporal (TP9, TP10)
+                </span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">1.2 kΩ (Optimal)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Referensi Mastoid
+                </span>
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">0.5 kΩ (Kuat)</span>
+</div>
+</div>
+</div>
+<!-- Quick Headband Sync Check Action -->
+<div class="pt-space-xs">
+<button class="w-full flex items-center justify-center gap-space-xs py-space-xs px-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm font-semibold hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary">restart_alt</span>
+<span>Kalibrasi Ulang Sensor</span>
+</button>
+</div>
+</div>
+<!-- Biometric Recommendation Tips Card -->
+<div class="bg-surface-container-low rounded-2xl p-space-xl flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">lightbulb</span>
+<span class="font-headline-sm text-body-sm font-bold text-on-surface">Tips Adaptasi Sesi Ini</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Apabila sensor mendeteksi kelelahan kognitif (lonjakan frekuensi Delta &gt; 18%), antarmuka belajar otomatis meredupkan kontras visual dan menyederhanakan paragraf penjelasan menjadi diagram alir interaktif.
+          </p>
+<div class="pt-space-2xs flex items-center gap-space-xs text-primary font-body-sm text-body-sm font-semibold cursor-pointer hover:underline">
+<span>Pelajari Mekanisme Neuro-Loop</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive filter chip switching for user feedback
+  document.querySelectorAll('.filter-chip').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-on-primary', 'font-semibold', 'shadow-sm');
+        btn.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+      });
+      button.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+      button.classList.add('bg-primary', 'text-on-primary', 'font-semibold', 'shadow-sm');
+    });
+  });
+</script></main><footer class="w-full bg-surface-container-low py-space-xl mt-space-3xl"><div class="max-w-max-content-width mx-auto px-margin-desktop flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm font-bold text-primary">NERA</span><span class="font-body-sm text-body-sm">© 2024 NERA Neuro-Adaptive Platform. Hak Cipta Dilindungi.</span></div><div class="flex items-center gap-space-lg font-body-sm text-body-sm"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span>Headband IoT Sinkron</span><a class="hover:text-on-surface transition-colors" href="#">Privasi Kognitif</a><a class="hover:text-on-surface transition-colors" href="#">Bantuan &amp; Kalibrasi</a></div></div></footer></body></html>

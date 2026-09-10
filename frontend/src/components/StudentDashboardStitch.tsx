@@ -9,6 +9,7 @@ export function StudentDashboardStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
   const [analytics, setAnalytics] = useState<any>(null);
   const [gamification, setGamification] = useState<any>(null);
+  const [activeSession, setActiveSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

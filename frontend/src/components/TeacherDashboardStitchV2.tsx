@@ -147,7 +147,7 @@ export function TeacherDashboardStitchV2() {
             <CardBody className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-text-secondary">Fokus >= 80%</span>
+                  <span className="text-sm text-text-secondary">Fokus {'>='} 80%</span>
                   <span className="font-bold text-primary">12 siswa</span>
                 </div>
                 <div className="h-2 bg-bg-surface rounded-full overflow-hidden">

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>NERA Neuro-Adaptive Learning Platform</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed-dim":"#a7d29b","surface-container-highest":"#e1e3e0","on-background":"#191c1b","on-secondary-fixed-variant":"#4c4543","on-tertiary-container":"#fcfcff","surface-container-high":"#e7e9e6","surface":"#f8faf7","surface-container-low":"#f2f4f1","surface-dim":"#d8dbd8","tertiary-fixed-dim":"#7bd0ff","outline":"#73796e","on-tertiary-fixed":"#001e2c","on-surface":"#191c1b","on-secondary":"#ffffff","on-error-container":"#93000a","tertiary":"#006387","tertiary-container":"#007da9","on-primary-fixed":"#002201","surface-variant":"#e1e3e0","inverse-on-surface":"#eff1ee","on-tertiary":"#ffffff","primary-container":"#577e4f","on-error":"#ffffff","on-secondary-fixed":"#201a18","on-primary-fixed-variant":"#2b4f25","secondary-container":"#ece0dd","on-primary":"#ffffff","outline-variant":"#c2c8bc","error-container":"#ffdad6","on-primary-container":"#f8fff0","inverse-surface":"#2e312f","on-secondary-container":"#6b6360","primary-fixed":"#c3eeb5","on-surface-variant":"#42493f","error":"#ba1a1a","on-tertiary-fixed-variant":"#004c69","secondary-fixed-dim":"#cfc4c1","surface-container-lowest":"#ffffff","secondary-fixed":"#ece0dd","surface-container":"#eceeeb","background":"#f8faf7","surface-tint":"#42673a","inverse-primary":"#a7d29b","primary":"#3f6538","secondary":"#655d5a","surface-bright":"#f8faf7","tertiary-fixed":"#c4e7ff"},borderRadius:{DEFAULT:"1rem",lg:"2rem",xl:"3rem",full:"9999px"},spacing:{"space-lg":"1.5rem","space-md":"1rem","margin-desktop":"3rem","margin-mobile":"1rem","space-3xl":"4.5rem",gutter:"1.5rem","space-2xs":"0.25rem","space-2xl":"3rem","max-content-width":"1200px","space-xl":"2rem","space-xs":"0.5rem","space-sm":"0.75rem"},fontFamily:{"display-hero-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-tag":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-telemetry":["JetBrains Mono"]},fontSize:{"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"800"}],"headline-md":["22px",{lineHeight:"30px",fontWeight:"600"}],"label-tag":["11px",{lineHeight:"16px",letterSpacing:"0.06em",fontWeight:"700"}],"headline-lg-mobile":["26px",{lineHeight:"34px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"body-md":["15px",{lineHeight:"24px",fontWeight:"400"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"display-hero":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"800"}],"headline-sm":["18px",{lineHeight:"26px",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"20px",fontWeight:"400"}],"label-telemetry":["13px",{lineHeight:"18px",letterSpacing:"0.02em",fontWeight:"500"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="NERA Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wwli1qzd5jo4_dajbha-x_5ZDigOEh9l1NZYvVofV_S1NrlPri8AyYAQYzTu3_WC6ZIgQiAhFK21H3xJzdEEM_GGoW9e2NZh_o4ikm7C69VQngOcvOPL0U2TBe1DjCP5Tl8HzS4eK5Wo2Td5SvUKprC9WAY3Au7t2k30oi7-6PQoDqv0meCkr2q0ZbHTdJ2fKfQfiL2TXm0LK7MzhLxyqFUUS5FC2zCpK0u2C8fPfeOkSUb-63NU6V9w"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight leading-none">NERA</span><span class="font-label-tag text-label-tag text-on-surface-variant leading-tight tracking-wider uppercase">Neuro-Adaptive Learning</span></div></div><nav class="hidden xl:flex items-center p-1.5 bg-surface-container-low rounded-full" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="beranda" href="#">Beranda</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="katalog-modul" href="#">Katalog Modul</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="statistik-dan-analisis" href="#">Statistik &amp; Analisis</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="jurnal-refleksi" href="#">Jurnal Refleksi</a><a class="px-space-md py-space-xs rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-150" data-path="hardware-headband" href="#">Hardware Headband</a><a aria-current="page" class="px-space-md py-space-xs rounded-full transition-colors duration-150 bg-primary text-on-primary font-semibold shadow-sm" data-path="portal-guru-pengawas" href="#">Guru &amp; Pengawas</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-lowest px-space-md py-space-xs rounded-full shadow-[0_2px_12px_rgba(43,37,35,0.04)]"><div class="flex items-center gap-1.5 text-primary"><span class="material-symbols-outlined text-[18px]">bluetooth_connected</span><span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span></div><div class="h-3.5 w-px bg-surface-container-highest"></div><div class="flex items-center gap-1 text-on-surface font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-tertiary">sensors</span><span>98%</span></div><div class="h-3.5 w-px bg-surface-container-highest"></div><div class="flex items-center gap-1 text-on-surface font-label-telemetry text-label-telemetry"><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span><span>84%</span></div></div><div class="flex items-center gap-space-2xs"><button aria-label="Notifikasi" class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span></button><button aria-label="Pengaturan Sistem" class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">settings</span></button></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Alya Juwita Putri Avatar" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhiUOkzUr0bdbmOv7nIslu_X3xmq8hooTXz6Yq-WvY8knsFOcakgvt4uxHWlcl0pi7w9duL90ozl7tkzxdRAdJKCLOjGpSm_1fRbmF30FeidStzmRsc_IP_BrqRQlOXgR9pf0UBiKanLYRWbuFTduegN6Gpp8fo4vvd17v7u81YZ99vHJx0tfbFcIpK0WC_QVxtulp9JOcOvZQxuwO5Ux5S6IOA400T-0657psMAajDvFu8aI4RAMH"/><div class="hidden lg:flex flex-col text-left"><span class="font-headline-sm text-body-sm font-semibold text-on-surface leading-snug">Alya Juwita Putri</span><div class="flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span><span class="font-label-tag text-label-tag text-primary uppercase font-bold tracking-wider">SISWA AKTIF</span></div></div></div></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-max-content-width mx-auto px-margin-mobile lg:px-margin-desktop py-space-xl flex flex-col gap-space-2xl">
+<!-- Top Classroom Status & Overview Header -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-tag text-label-tag uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+            Sesi Berlangsung (Menit 38 / 90)
+          </span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-telemetry text-label-telemetry">
+            RUANG LAB 402
+          </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+          Dashboard Guru &amp; Konselor: Pemantauan Fokus Kelas XII MIPA 1
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span>Mata Pelajaran: <strong>Fisika Kuantum</strong> (Teori Dualisme Gelombang &amp; Probabilitas Schrodinger)</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Instruktur: Dr. Hendra Permadi, M.Si.</span>
+</p>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-body-sm text-body-sm flex items-center gap-2 shadow-sm transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Batas Ambang EEG</span>
+</button>
+<button class="px-space-md py-space-xs rounded-full bg-primary text-on-primary font-body-sm text-body-sm font-semibold flex items-center gap-2 shadow-md hover:bg-primary-container transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[18px]">wifi_tethering</span>
+<span>Sinkronisasi Ulang (34 Unit)</span>
+</button>
+</div>
+</div>
+<!-- Live Classroom Aggregate Metrics Bar -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Metric 1: Connected Devices -->
+<div class="p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant uppercase tracking-wider">Siswa Terhubung</span>
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[20px]">headset_mic</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">32 <span class="text-headline-sm font-normal text-on-surface-variant">/ 34</span></span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-tag text-label-tag">94% ONLINE</span>
+</div>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">2 modul dilepas / kalibrasi ulang</p>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 94%"></div>
+</div>
+</div>
+<!-- Metric 2: Focus Average -->
+<div class="p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant uppercase tracking-wider">Rerata Fokus Kelas</span>
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-tertiary">78%</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-tag text-label-tag">DEEP FLOW</span>
+</div>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">+6% di atas baseline rata-rata sekolah</p>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- Metric 3: Cognitive Load -->
+<div class="p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant uppercase tracking-wider">Beban Kognitif Rata-rata</span>
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">vital_signs</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">44%</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-tag text-label-tag">NORMAL SEHAT</span>
+</div>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">Rasio Theta/Beta stabil di 1.24</p>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 44%"></div>
+</div>
+</div>
+<!-- Metric 4: Fatigue Warning -->
+<div class="p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-error uppercase tracking-wider">Peringatan Kelelahan</span>
+<div class="w-9 h-9 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined text-[20px]">hourglass_bottom</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-error">2 Siswa</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-tag text-label-tag">ISTIRAHAT MIKRO</span>
+</div>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">Citra D. &amp; Fajar K. (Alpha drop &gt;40%)</p>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<!-- Main Workspace Split: Heatmap & AI Co-Pilot / Telemetry Feed -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-xl items-start">
+<!-- Left 8 Cols: Live Classroom Focus Heatmap Grid -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<div class="p-space-xl rounded-3xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Denah Heatmap Meja Siswa (34 Meja)</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Posisi spasial lab interaktif berdasarkan nomor stasiun EEG</p>
+</div>
+<!-- Heatmap Legend -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-tag text-label-tag text-on-surface-variant">Tinggi (&gt;70%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+<span class="font-label-tag text-label-tag text-on-surface-variant">Sedang (50-70%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="font-label-tag text-label-tag text-on-surface-variant">Lelah/Jeda</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+<span class="font-label-tag text-label-tag text-on-surface-variant">Sensor Lepas</span>
+</div>
+</div>
+</div>
+<!-- Podium Bar (Class Orientation) -->
+<div class="w-full py-2 bg-surface-container-low rounded-xl flex items-center justify-center gap-2 text-on-surface-variant font-label-tag text-label-tag tracking-wider uppercase">
+<span class="material-symbols-outlined text-[16px]">podium</span>
+<span>Area Podium Guru &amp; Proyektor Holografik</span>
+</div>
+<!-- The 34 Student Desks Matrix (6 Columns layout with 6 rows) -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-space-sm" id="classroom-desk-grid">
+<!-- Desk 01: Alya (High Focus) -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5 relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#01</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate group-hover:text-primary">Alya Juwita P.</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 82%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- Desk 02: Budi S (Medium Focus) -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#02</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Budi Santoso</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 75%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 75%"></div>
+</div>
+</div>
+<!-- Desk 03: Citra D (Fatigue Trigger) -->
+<div class="p-space-sm rounded-xl bg-error-container/30 hover:bg-error-container/50 transition-all cursor-pointer group flex flex-col gap-1.5 relative">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-error">#03</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-error truncate">Citra Dewi</span>
+<span class="font-label-telemetry text-[11px] text-error font-bold">58% (Lelah)</span>
+</div>
+<div class="w-full bg-error-container h-1 rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 58%"></div>
+</div>
+</div>
+<!-- Desk 04: Dimas A -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#04</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Dimas Aditya</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 86%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 86%"></div>
+</div>
+</div>
+<!-- Desk 05: Eva Lestari -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#05</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Eva Lestari</span>
+<span class="font-label-telemetry text-[11px] text-amber-600 font-bold">Fokus: 64%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full" style="width: 64%"></div>
+</div>
+</div>
+<!-- Desk 06: Fajar K (Fatigue) -->
+<div class="p-space-sm rounded-xl bg-error-container/30 hover:bg-error-container/50 transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-error">#06</span>
+<span class="w-2 h-2 rounded-full bg-error"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-error truncate">Fajar Kusuma</span>
+<span class="font-label-telemetry text-[11px] text-error font-bold">52% (Drowsy)</span>
+</div>
+<div class="w-full bg-error-container h-1 rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 52%"></div>
+</div>
+</div>
+<!-- Desk 07: Gilang R -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#07</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Gilang Ramadhan</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 79%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 79%"></div>
+</div>
+</div>
+<!-- Desk 08: Hana N -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#08</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Hana Nadhira</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 88%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 88%"></div>
+</div>
+</div>
+<!-- Desk 09: Ilham W (Disconnected Sensor) -->
+<div class="p-space-sm rounded-xl bg-surface-container-high opacity-75 hover:opacity-100 transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#09</span>
+<span class="w-2 h-2 rounded-full bg-surface-dim"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface-variant truncate">Ilham Wijaya</span>
+<span class="font-label-telemetry text-[11px] text-on-surface-variant font-medium">Sensor Lepas</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full" style="width: 0%"></div>
+</div>
+</div>
+<!-- Desk 10: Jessica T -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#10</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Jessica Tan</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 91%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 91%"></div>
+</div>
+</div>
+<!-- Desk 11: Kevin P -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#11</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Kevin Pratama</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 80%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 80%"></div>
+</div>
+</div>
+<!-- Desk 12: Larasati -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#12</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Larasati Putri</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 84%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 84%"></div>
+</div>
+</div>
+<!-- Desk 13: Mahendra -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#13</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Mahendra Siregar</span>
+<span class="font-label-telemetry text-[11px] text-amber-600 font-bold">Fokus: 68%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full" style="width: 68%"></div>
+</div>
+</div>
+<!-- Desk 14: Nadia S -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#14</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Nadia Safitri</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 77%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 77%"></div>
+</div>
+</div>
+<!-- Desk 15: Oki V -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#15</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Oki Vernando</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 79%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 79%"></div>
+</div>
+</div>
+<!-- Desk 16: Pandu W -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#16</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Pandu Wicaksono</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 83%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 83%"></div>
+</div>
+</div>
+<!-- Desk 17: Qanita R -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#17</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Qanita Rania</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 76%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 76%"></div>
+</div>
+</div>
+<!-- Desk 18: Raditya -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#18</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Raditya Nugraha</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 81%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 81%"></div>
+</div>
+</div>
+<!-- Desk 19: Sarah B -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#19</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Sarah Bilqis</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 89%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 89%"></div>
+</div>
+</div>
+<!-- Desk 20: Taufik H -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#20</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Taufik Hidayat</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 78%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- Desk 21: Ulfa M -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#21</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Ulfa Mawaddah</span>
+<span class="font-label-telemetry text-[11px] text-amber-600 font-bold">Fokus: 66%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full" style="width: 66%"></div>
+</div>
+</div>
+<!-- Desk 22: Vano E -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#22</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Vano Erlangga</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 74%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 74%"></div>
+</div>
+</div>
+<!-- Desk 23: Winda C -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#23</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Winda Cahya</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 81%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 81%"></div>
+</div>
+</div>
+<!-- Desk 24: Xavier G -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#24</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Xavier Gunawan</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 85%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 85%"></div>
+</div>
+</div>
+<!-- Desk 25: Yasmin K -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#25</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Yasmin Kamila</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 72%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 72%"></div>
+</div>
+</div>
+<!-- Desk 26: Zaidan A -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#26</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Zaidan Akbar</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 80%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 80%"></div>
+</div>
+</div>
+<!-- Desk 27: Anisa F -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#27</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Anisa Farah</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 78%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- Desk 28: Bagas M -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#28</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Bagas Mahendra</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 83%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 83%"></div>
+</div>
+</div>
+<!-- Desk 29: Cindy A -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#29</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Cindy Aurelia</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 86%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 86%"></div>
+</div>
+</div>
+<!-- Desk 30: Danang W -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#30</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Danang Wahyu</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 76%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 76%"></div>
+</div>
+</div>
+<!-- Desk 31: Eni K -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#31</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Eni Kurniawati</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 79%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 79%"></div>
+</div>
+</div>
+<!-- Desk 32: Farhan M -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#32</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Farhan Maulana</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 80%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 80%"></div>
+</div>
+</div>
+<!-- Desk 33: Gita S -->
+<div class="p-space-sm rounded-xl bg-surface-container-high opacity-75 hover:opacity-100 transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#33</span>
+<span class="w-2 h-2 rounded-full bg-surface-dim"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface-variant truncate">Gita Septiani</span>
+<span class="font-label-telemetry text-[11px] text-on-surface-variant font-medium">Sensor Lepas</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full" style="width: 0%"></div>
+</div>
+</div>
+<!-- Desk 34: Haris J -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">#34</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Haris Juliansyah</span>
+<span class="font-label-telemetry text-[11px] text-primary font-bold">Fokus: 81%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 81%"></div>
+</div>
+</div>
+</div>
+<!-- Real-Time Focus Distribution Graph (Inline Mini Visualizer) -->
+<div class="pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant">
+<div class="flex items-center gap-space-sm text-body-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">insights</span>
+<span><strong>Kurva Spektrum Kelas:</strong> Dominasi Gelombang Beta (14–22 Hz) 62% • Alpha (8–12 Hz) 24% • Theta 14%</span>
+</div>
+<div class="flex items-center gap-2 font-label-telemetry text-[11px]">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span>UPDATE SETIAP 2.5 DETIK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right 4 Cols: Real-time Cognitive Insights & Intervention Controls -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- AI Co-Pilot Recommendation Card -->
+<div class="p-space-xl rounded-3xl bg-inverse-surface text-inverse-on-surface shadow-xl flex flex-col gap-space-md relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-40 h-40 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-center justify-between relative z-10">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+</div>
+<span class="font-label-tag text-label-tag tracking-wider uppercase text-primary-fixed">NERA AI Co-Pilot Guru</span>
+</div>
+<span class="font-label-telemetry text-[11px] text-surface-variant">LIVE ALERT</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-inverse-on-surface leading-tight">
+              Kelelahan Kognitif Terdeteksi
+            </h3>
+<p class="mt-2 font-body-md text-body-md text-surface-variant leading-relaxed">
+              “Gelombang Theta kelas naik <strong>18%</strong> setelah menit ke-35. Terjadi saturasi pada memori kerja jangka pendek materi integral gelombang. Disarankan memulai sesi kuis interaktif atau peregangan 3 menit.”
+            </p>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex flex-col gap-2.5 pt-space-xs relative z-10">
+<button class="w-full py-space-sm px-space-md rounded-full bg-primary text-on-primary font-body-sm text-body-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-container shadow-md transition-all active:scale-95" id="btn-haptic-break" type="button">
+<span class="material-symbols-outlined text-[18px]">vibration</span>
+<span>Kirim Notifikasi Haptik Jeda ke Seluruh Kelas</span>
+</button>
+<button class="w-full py-space-sm px-space-md rounded-full bg-inverse-on-surface/10 text-inverse-on-surface hover:bg-inverse-on-surface/20 font-body-sm text-body-sm font-medium flex items-center justify-center gap-2 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Sesuaikan Tingkat Kesulitan Materi (Sederhanakan)</span>
+</button>
+</div>
+<div class="pt-2 flex items-center justify-between text-[12px] text-surface-variant relative z-10 font-label-telemetry">
+<span>Estimasi Recovery: <strong>4.2 Menit</strong></span>
+<span class="text-primary-fixed">Rekomendasi Akurasi 94%</span>
+</div>
+</div>
+<!-- Real-time Active Interventions Panel -->
+<div class="p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant uppercase tracking-wider">Tindakan Siswa Prioritas</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-tag text-label-tag">2 BUTUH RESPON</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Student 1 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between gap-3">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-error-container text-error flex items-center justify-center shrink-0 font-label-telemetry text-[12px] font-bold">
+                  03
+                </div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Citra Dewi</span>
+<span class="font-body-sm text-[12px] text-error">Micro-sleep risk: 62%</span>
+</div>
+</div>
+<button class="px-space-sm py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container text-primary font-label-tag text-label-tag font-bold shadow-sm shrink-0" type="button">
+                PING HAPTIK
+              </button>
+</div>
+<!-- Student 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between gap-3">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-error-container text-error flex items-center justify-center shrink-0 font-label-telemetry text-[12px] font-bold">
+                  06
+                </div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface truncate">Fajar Kusuma</span>
+<span class="font-body-sm text-[12px] text-error">Theta overload: 74%</span>
+</div>
+</div>
+<button class="px-space-sm py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container text-primary font-label-tag text-label-tag font-bold shadow-sm shrink-0" type="button">
+                PING HAPTIK
+              </button>
+</div>
+</div>
+<!-- Soundscape Control in Room -->
+<div class="pt-space-xs flex flex-col gap-2">
+<span class="font-label-telemetry text-label-telemetry text-on-surface-variant">BIOMETRIC SOUNDSCAPE LAB</span>
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">graphic_eq</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-medium text-on-surface">Binaural Beats 40Hz (Gamma)</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Speaker Ruang Lab Aktif</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px] cursor-pointer">volume_up</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Weekly Session History & Focus-Score Correlation Table -->
+<div class="w-full p-space-xl rounded-3xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">
+            Histori Sesi Mingguan &amp; Korelasi Nilai Evaluasi Kelas XII MIPA 1
+          </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Matriks neuro-metrik sinkron dengan ketercapaian capaian pembelajaran kognitif (CPK)
+          </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- Filter Sesi -->
+<div class="flex items-center p-1 bg-surface-container-low rounded-full">
+<button class="px-space-md py-1 rounded-full bg-surface-container-lowest font-body-sm text-body-sm text-on-surface font-semibold shadow-sm" type="button">
+              4 Minggu Terakhir
+            </button>
+<button class="px-space-md py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" type="button">
+              Semester Genap 2024
+            </button>
+</div>
+<!-- Action Button: Export PDF/XLS -->
+<button class="px-space-md py-space-xs rounded-full bg-primary text-on-primary font-body-sm text-body-sm font-semibold flex items-center gap-2 shadow-sm hover:bg-primary-container transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Ekspor Laporan Kognitif Sekolah (PDF/XLS)</span>
+</button>
+</div>
+</div>
+<!-- Historical Analytics Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-telemetry text-label-telemetry uppercase tracking-wider">
+<th class="py-3 px-space-md rounded-l-xl">Tanggal &amp; Modul</th>
+<th class="py-3 px-space-md">Topik Materi</th>
+<th class="py-3 px-space-md">Durasi</th>
+<th class="py-3 px-space-md">Rerata Fokus</th>
+<th class="py-3 px-space-md">Beban Mental</th>
+<th class="py-3 px-space-md">Retensi Kuis</th>
+<th class="py-3 px-space-md">Indeks Korelasi</th>
+<th class="py-3 px-space-md rounded-r-xl">Status Validasi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm text-on-surface">
+<!-- Row 1 (Current Week Active) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">14 Okt 2024</span>
+<span class="font-label-telemetry text-[11px] text-primary">Sesi #12 (Live)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-medium">Fisika Kuantum &amp; Efek Fotolistrik</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry">38 / 90m</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-semibold font-label-telemetry text-primary">78%</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-[12px]">44% (Sehat)</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry font-bold text-on-surface">
+                86.4 / 100
+              </td>
+<td class="py-space-md px-space-md">
+<span class="text-primary font-bold font-label-telemetry">+0.82 (Kuat)</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-tag text-label-tag uppercase font-bold">
+                  AKTIF LIVE
+                </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">07 Okt 2024</span>
+<span class="font-label-telemetry text-[11px] text-on-surface-variant">Sesi #11</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-medium">Termodinamika &amp; Entropi Sistem</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry">90m</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-semibold font-label-telemetry">74%</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-[12px]">51% (Moderat)</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry font-bold text-on-surface">
+                82.0 / 100
+              </td>
+<td class="py-space-md px-space-md">
+<span class="text-primary font-bold font-label-telemetry">+0.79 (Kuat)</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">
+                  TERVERIFIKASI
+                </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">30 Sep 2024</span>
+<span class="font-label-telemetry text-[11px] text-on-surface-variant">Sesi #10</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-medium">Elektromagnetisme &amp; Induksi Faraday</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry">90m</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-semibold font-label-telemetry">81%</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-[12px]">39% (Optimal)</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry font-bold text-on-surface">
+                89.2 / 100
+              </td>
+<td class="py-space-md px-space-md">
+<span class="text-primary font-bold font-label-telemetry">+0.88 (Sangat Kuat)</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">
+                  TERVERIFIKASI
+                </span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">23 Sep 2024</span>
+<span class="font-label-telemetry text-[11px] text-on-surface-variant">Sesi #09</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-medium">Gelombang Mekanik &amp; Akustik Resonansi</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry">90m</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="font-semibold font-label-telemetry text-amber-600">67%</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[12px]">68% (Tinggi)</span>
+</td>
+<td class="py-space-md px-space-md font-label-telemetry font-bold text-on-surface">
+                71.5 / 100
+              </td>
+<td class="py-space-md px-space-md">
+<span class="text-on-surface-variant font-bold font-label-telemetry">+0.64 (Sedang)</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-tag text-label-tag uppercase font-bold">
+                  TERVERIFIKASI
+                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Supervisor Summary Card -->
+<div class="p-space-md rounded-2xl bg-surface-container-low flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">verified_user</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">Catatan Pengawas Akademik Sekolah</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Korelasi fokus-nilai (r = +0.78) membuktikan efektivitas bio-intervensi haptik pada kelas sains eksakta.</span>
+</div>
+</div>
+<button class="px-space-md py-space-xs rounded-full bg-surface-container-lowest text-on-surface hover:bg-surface font-body-sm text-body-sm font-semibold shadow-sm shrink-0" type="button">
+          Lihat Riwayat Audit EEG
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for the Haptic Break button
+  document.addEventListener('DOMContentLoaded', () => {
+    const hapticBtn = document.getElementById('btn-haptic-break');
+    if (hapticBtn) {
+      hapticBtn.addEventListener('click', function() {
+        const originalText = this.innerHTML;
+        this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">autorenew</span><span>Mengirim Sinyal Haptik ke 32 Siswa...</span>';
+        this.classList.remove('bg-primary');
+        this.classList.add('bg-primary-container');
+        
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span><span>Sinyal Haptik 3-Detik Terkirim!</span>';
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.classList.add('bg-primary');
+            this.classList.remove('bg-primary-container');
+          }, 2500);
+        }, 1200);
+      });
+    }
+  });
+</script></main><footer class="w-full bg-surface-container-low py-space-xl mt-space-3xl"><div class="max-w-max-content-width mx-auto px-margin-desktop flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm font-bold text-primary">NERA</span><span class="font-body-sm text-body-sm">© 2024 NERA Neuro-Adaptive Platform. Hak Cipta Dilindungi.</span></div><div class="flex items-center gap-space-lg font-body-sm text-body-sm"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span>Headband IoT Sinkron</span><a class="hover:text-on-surface transition-colors" href="#">Privasi Kognitif</a><a class="hover:text-on-surface transition-colors" href="#">Bantuan &amp; Kalibrasi</a></div></div></footer></body></html>
