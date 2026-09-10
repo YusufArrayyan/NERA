@@ -27,10 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#2db87f" />
+        <meta name="theme-color" content="#5B7B5A" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
       <body className={`${font.className} min-h-screen bg-background antialiased selection:bg-primary selection:text-white`}>
         <ServiceWorkerProvider>
