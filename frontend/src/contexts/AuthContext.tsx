@@ -34,11 +34,27 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+  
+  // Only use router/pathname on client side
+  let router = null;
+  let pathname = null;
+  
+  try {
+    router = useRouter();
+    pathname = usePathname();
+  } catch (e) {
+    // Router not available during build/SSR
+  }
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     // Check if user is logged in
+    if (typeof window === 'undefined') return; // Skip on server
+    
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('accessToken');
     
@@ -49,9 +65,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, []);
 
-  // Role-based routing protection
+  // Role-based routing protection - only client side
   useEffect(() => {
-    if (loading) return;
+    if (!isClient || loading || !router || !pathname) return;
     
     const isDashboardPath = pathname.startsWith('/dashboard');
     
@@ -67,7 +83,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         router.push(rolePath);
       }
     }
-  }, [user, loading, pathname, router]);
+  }, [user, loading, pathname, router, isClient]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -76,12 +92,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         body: JSON.stringify({ email, password }),
       });
       
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
       
       setUser(data.user);
-      router.push(`/dashboard/${data.user.role.toLowerCase()}`);
+      if (router) router.push(`/dashboard/${data.user.role.toLowerCase()}`);
     } catch (error) {
       throw error;
     }
@@ -91,11 +109,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await fetchApi('/auth/logout', { method: 'POST' }).catch(() => {});
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+      }
       setUser(null);
-      router.push('/');
+      if (router) router.push('/');
     }
   };
 
