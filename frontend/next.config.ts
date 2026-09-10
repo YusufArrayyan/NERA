@@ -18,9 +18,17 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Experimental features
-  experimental: {
-    // turbo: false, // Disable turbopack if causing issues
+  // Webpack configuration to handle build errors
+  webpack: (config, { isServer }) => {
+    // Ignore specific modules that cause issues
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    };
+    
+    return config;
   },
 };
 
