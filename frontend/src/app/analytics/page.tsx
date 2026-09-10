@@ -1,5 +1,5 @@
-import { AnalyticsPage } from '@/components/AnalyticsPage';
+import { AnalyticsPageStitch } from '@/components/AnalyticsPageStitch';
 
 export default function Page() {
-  return <AnalyticsPage />;
+  return <AnalyticsPageStitch />;
 }

@@ -1,5 +1,5 @@
-import { HardwareCalibrationStitch } from '@/components/HardwareCalibrationStitch';
+import { HardwareCalibrationStitchV2 } from '@/components/HardwareCalibrationStitchV2';
 
 export default function CalibrationPage() {
-  return <HardwareCalibrationStitch />;
+  return <HardwareCalibrationStitchV2 />;
 }
