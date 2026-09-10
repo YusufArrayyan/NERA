@@ -1,10 +1,77 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { ApiClient } from '@/lib/api-client';
 
 export function StudentDashboardStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [gamification, setGamification] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [timeRange]);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch analytics data based on time range
+      const period = timeRange === 'week' ? 'WEEKLY' : timeRange === 'month' ? 'MONTHLY' : 'MONTHLY';
+      const [analyticsData, badgesData, levelData, streakData] = await Promise.all([
+        ApiClient.getUserAnalytics(period).catch(() => mockAnalytics),
+        ApiClient.getUserBadges().catch(() => mockBadges),
+        ApiClient.getUserLevel().catch(() => mockLevel),
+        ApiClient.getUserStreak().catch(() => mockStreak),
+      ]);
+
+      setAnalytics(analyticsData);
+      setGamification({
+        badges: badgesData,
+        level: levelData,
+        streak: streakData,
+      });
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+      // Fall back to mock data
+      setAnalytics(mockAnalytics);
+      setGamification({ badges: mockBadges, level: mockLevel, streak: mockStreak });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Mock data fallback
+  const mockAnalytics = {
+    avgFocus: 79,
+    totalMinutes: 1125,
+    totalSessions: 28,
+    avgStress: 35,
+    dailyData: [
+      { date: '2026-01-20', focus: 75, duration: 2.5 },
+      { date: '2026-01-21', focus: 82, duration: 3.2 },
+      { date: '2026-01-22', focus: 88, duration: 4.2 },
+      { date: '2026-01-23', focus: 76, duration: 2.8 },
+      { date: '2026-01-24', focus: 85, duration: 3.5 },
+      { date: '2026-01-25', focus: 70, duration: 1.8 },
+      { date: '2026-01-26', focus: 65, duration: 1.0 },
+    ],
+  };
+
+  const mockBadges = [
+    { id: 1, name: 'Fokus Baja', unlocked: true, progress: 100 },
+    { id: 2, name: '7 Hari Konsisten', unlocked: true, progress: 100 },
+    { id: 3, name: 'Zen Master', unlocked: false, progress: 66 },
+    { id: 4, name: 'Alpha Pioneer', unlocked: false, progress: 93 },
+  ];
+
+  const mockLevel = { level: 5, xp: 2840, xpToNext: 3000 };
+  const mockStreak = { days: 7, isActive: true };
+
+  const data = analytics || mockAnalytics;
+  const gamif = gamification || { badges: mockBadges, level: mockLevel, streak: mockStreak };
 
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
@@ -148,7 +215,7 @@ export function StudentDashboardStitch() {
             <div className="flex items-center gap-3 mb-4">
               <span className="material-icons text-[#f59e0b] text-4xl">local_fire_department</span>
             </div>
-            <div className="text-3xl font-black text-[#1F2937] mb-1">7 Hari</div>
+            <div className="text-3xl font-black text-[#1F2937] mb-1">{gamif.streak.days} Hari</div>
             <div className="text-sm text-[#4B5563] mb-3">Runtun</div>
             <div className="bg-[#FEF3C7] text-[#92400E] text-xs font-bold px-3 py-1.5 rounded-lg inline-block">
               Fokus Konsisten 🔥
@@ -161,15 +228,20 @@ export function StudentDashboardStitch() {
             <div className="flex items-center gap-3 mb-4">
               <span className="material-icons text-[#5B7B5A] text-4xl">military_tech</span>
             </div>
-            <div className="text-3xl font-black text-[#1F2937] mb-1">Level 5</div>
+            <div className="text-3xl font-black text-[#1F2937] mb-1">Level {gamif.level.level}</div>
             <div className="text-sm text-[#4B5563] mb-4">Master Learner</div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-[#4B5563]">2.840 / 3.000 XP</span>
-                <span className="font-bold text-[#5B7B5A]">94% ke Lvl 6</span>
+                <span className="text-[#4B5563]">{gamif.level.xp} / {gamif.level.xpToNext} XP</span>
+                <span className="font-bold text-[#5B7B5A]">
+                  {Math.round((gamif.level.xp / gamif.level.xpToNext) * 100)}% ke Lvl {gamif.level.level + 1}
+                </span>
               </div>
               <div className="h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
-                <div className="h-full w-[94%] bg-[#5B7B5A] rounded-full"></div>
+                <div
+                  className="h-full bg-[#5B7B5A] rounded-full"
+                  style={{ width: `${(gamif.level.xp / gamif.level.xpToNext) * 100}%` }}
+                ></div>
               </div>
             </div>
           </div>
@@ -181,7 +253,7 @@ export function StudentDashboardStitch() {
               <span className="material-icons text-[#10dcc8] text-4xl">psychology_alt</span>
             </div>
             <div className="flex items-baseline gap-2 mb-1">
-              <div className="text-3xl font-black text-[#1F2937]">79</div>
+              <div className="text-3xl font-black text-[#1F2937]">{data.avgFocus}</div>
               <div className="text-lg text-[#4B5563]">/ 100</div>
             </div>
             <div className="flex items-center gap-1 text-sm text-[#10b981]">
@@ -197,9 +269,9 @@ export function StudentDashboardStitch() {
               <span className="material-icons text-[#3b82f6] text-4xl">timelapse</span>
             </div>
             <div className="flex items-baseline gap-2 mb-1">
-              <div className="text-3xl font-black text-[#1F2937]">18</div>
+              <div className="text-3xl font-black text-[#1F2937]">{Math.floor(data.totalMinutes / 60)}</div>
               <div className="text-sm text-[#4B5563]">Jam</div>
-              <div className="text-3xl font-black text-[#1F2937]">45</div>
+              <div className="text-3xl font-black text-[#1F2937]">{data.totalMinutes % 60}</div>
               <div className="text-sm text-[#4B5563]">Mnt</div>
             </div>
             <div className="text-xs text-[#9CA3AF]">Tercatat pekan ini via EEG Band</div>
@@ -235,25 +307,19 @@ export function StudentDashboardStitch() {
 
             {/* Bar Chart */}
             <div className="space-y-4">
-              {[
-                { day: 'Sen', hours: 2.5 },
-                { day: 'Sel', hours: 3.2 },
-                { day: 'Rab', hours: 4.2 },
-                { day: 'Kam', hours: 2.8 },
-                { day: 'Jum', hours: 3.5 },
-                { day: 'Sab', hours: 1.8 },
-                { day: 'Min', hours: 1.0 },
-              ].map((data, idx) => (
+              {data.dailyData.map((day: any, idx: number) => (
                 <div key={idx} className="flex items-center gap-4">
-                  <div className="w-12 text-sm font-semibold text-[#4B5563]">{data.day}</div>
+                  <div className="w-12 text-sm font-semibold text-[#4B5563]">
+                    {new Date(day.date).toLocaleDateString('id-ID', { weekday: 'short' })}
+                  </div>
                   <div className="flex-1">
                     <div
                       className="bg-[#5B7B5A] h-8 rounded-lg transition-all hover:bg-[#4A6349]"
-                      style={{ width: `${(data.hours / 4.5) * 100}%` }}
+                      style={{ width: `${(day.duration / 4.5) * 100}%` }}
                     ></div>
                   </div>
                   <div className="w-16 text-sm font-bold text-[#1F2937] text-right">
-                    {data.hours}h
+                    {day.duration.toFixed(1)}h
                   </div>
                 </div>
               ))}
