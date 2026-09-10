@@ -1,5 +1,5 @@
-import { TeacherDashboard } from '@/components/TeacherDashboard';
+import { TeacherDashboardStitch } from '@/components/TeacherDashboardStitch';
 
 export default function Page() {
-  return <TeacherDashboard />;
+  return <TeacherDashboardStitch />;
 }

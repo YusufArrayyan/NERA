@@ -1,5 +1,5 @@
-import { HeadbandCalibration } from '@/components/HeadbandCalibration';
+import { HardwareCalibrationStitch } from '@/components/HardwareCalibrationStitch';
 
 export default function CalibrationPage() {
-  return <HeadbandCalibration />;
+  return <HardwareCalibrationStitch />;
 }

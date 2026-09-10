@@ -179,10 +179,10 @@
 
   /* Aspect ratios */
   .aspect-video {
-    @apply aspect-video;
+    aspect-ratio: 16 / 9;
   }
 
   .aspect-square {
-    @apply aspect-square;
+    aspect-ratio: 1 / 1;
   }
 }

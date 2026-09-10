@@ -1,5 +1,5 @@
-import { LandingPage } from '@/components/LandingPage';
+import { LandingPageStitch } from '@/components/LandingPageStitch';
 
 export default function Home() {
-  return <LandingPage />;
+  return <LandingPageStitch />;
 }
