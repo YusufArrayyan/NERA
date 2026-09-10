@@ -60,6 +60,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     if (storedUser && token) {
       setUser(JSON.parse(storedUser));
+    } else {
+      // MOCK MODE: Auto-login as demo student for preview
+      const mockUser: User = {
+        id: 'demo-student-001',
+        name: 'Alya Juwita Putri',
+        email: 'alya@nera.demo',
+        role: 'STUDENT',
+        locale: 'id',
+      };
+      setUser(mockUser);
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      localStorage.setItem('accessToken', 'demo-token');
     }
     
     setLoading(false);
@@ -87,36 +99,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const data = await fetchApi('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
+      // MOCK MODE: Skip backend API, direct login
+      const mockUser: User = {
+        id: 'demo-student-001',
+        name: 'Alya Juwita Putri',
+        email: email,
+        role: 'STUDENT',
+        locale: 'id',
+      };
       
       if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('accessToken', 'demo-token');
+        localStorage.setItem('refreshToken', 'demo-refresh-token');
+        localStorage.setItem('user', JSON.stringify(mockUser));
       }
       
-      setUser(data.user);
-      if (router) router.push(`/dashboard/${data.user.role.toLowerCase()}`);
+      setUser(mockUser);
+      if (router) router.push(`/dashboard/${mockUser.role.toLowerCase()}`);
     } catch (error) {
       throw error;
     }
   };
 
   const logout = async () => {
-    try {
-      await fetchApi('/auth/logout', { method: 'POST' }).catch(() => {});
-    } finally {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-      }
-      setUser(null);
-      if (router) router.push('/');
+    // MOCK MODE: Skip backend, just clear local storage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
     }
+    setUser(null);
+    if (router) router.push('/');
   };
 
   return (
