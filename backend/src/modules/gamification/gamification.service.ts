@@ -1,16 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../../database/prisma.service';
 import { RawQueryService } from '../../database/raw-query.service';
 
 @Injectable()
 export class GamificationService {
+  private readonly logger = new Logger(GamificationService.name);
+  private statsCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private readonly CACHE_TTL = 30 * 1000; // 30 seconds cache
+
   constructor(
     private prisma: PrismaService,
     private db: RawQueryService,
   ) {}
 
+  private getCachedStats(userId: string): any | null {
+    const cached = this.statsCache.get(userId);
+    if (!cached) return null;
+    
+    if (Date.now() - cached.timestamp > this.CACHE_TTL) {
+      this.statsCache.delete(userId);
+      return null;
+    }
+    
+    return cached.data;
+  }
+
+  private setCachedStats(userId: string, data: any): void {
+    this.statsCache.set(userId, { data, timestamp: Date.now() });
+  }
+
+  private invalidateCache(userId: string): void {
+    this.statsCache.delete(userId);
+  }
+
   async getUserStats(userId: string) {
+    // Check cache first
+    const cached = this.getCachedStats(userId);
+    if (cached) {
+      this.logger.debug(`Cache hit for user ${userId}`);
+      return cached;
+    }
+
     let stats = await this.db.queryOne(
       'SELECT * FROM gamification WHERE "userId" = $1',
       [userId],
@@ -42,10 +73,18 @@ export class GamificationService {
       [userId],
     );
 
-    return { ...stats, achievements, recentRewards };
+    const result = { ...stats, achievements, recentRewards };
+    
+    // Cache the result
+    this.setCachedStats(userId, result);
+
+    return result;
   }
 
   async addXPAndCoins(userId: string, xp: number, coins: number, reason: string, sessionId?: string) {
+    // Invalidate cache when updating
+    this.invalidateCache(userId);
+
     // Get current stats or create
     let stats = await this.db.queryOne(
       'SELECT * FROM gamification WHERE "userId" = $1',
@@ -93,6 +132,8 @@ export class GamificationService {
   }
 
   async updateStreak(userId: string) {
+    this.invalidateCache(userId);
+
     const stats = await this.db.queryOne(
       'SELECT * FROM gamification WHERE "userId" = $1',
       [userId],

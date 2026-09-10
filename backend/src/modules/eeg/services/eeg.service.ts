@@ -72,6 +72,11 @@ export class EEGService {
         sessionId: session.id,
       };
 
+      // Buffer for batch inserts (performance optimization)
+      const dataBuffer: { raw: EEGDataPoint; processed: ProcessedEEG }[] = [];
+      const BATCH_SIZE = 10; // Insert every 10 data points
+      let dataCounter = 0;
+
       // Start periodic data collection and storage (every 1 second for DB storage)
       const intervalId = setInterval(async () => {
         try {
@@ -79,50 +84,31 @@ export class EEGService {
           raw.sessionId = session.id;
           const processed = this.processingService.processDataPoint(raw);
 
-          // Save raw EEG log
-          await this.db.execute(
-            `INSERT INTO eeg_logs ("sessionId", alpha, beta, theta, gamma, attention, meditation, "signalQuality", timestamp)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
-            [
+          dataBuffer.push({ raw, processed });
+          dataCounter++;
+
+          // Batch insert when buffer is full
+          if (dataBuffer.length >= BATCH_SIZE) {
+            await this.batchInsertEEGData(session.id, dataBuffer);
+            dataBuffer.length = 0; // Clear buffer
+          }
+
+          // Update session learning mode every 5 data points (less frequent updates)
+          if (dataCounter % 5 === 0) {
+            await this.db.execute(
+              `UPDATE sessions SET "learningMode" = $1, "focusCategory" = $2, "updatedAt" = NOW() WHERE id = $3`,
+              [processed.recommendedMode, processed.focusCategory, session.id],
+            );
+          }
+
+          // Trigger interventions based on EEG thresholds (every 3 data points)
+          if (dataCounter % 3 === 0) {
+            await this.interventionsTrigger.processEEGDataForInterventions(
               session.id,
-              raw.alpha,
-              raw.beta,
-              raw.theta,
-              raw.gamma || 0,
-              raw.attention,
-              raw.meditation,
-              raw.signalQuality,
-            ],
-          );
-
-          // Save processed data
-          await this.db.execute(
-            `INSERT INTO eeg_processed ("sessionId", "focusIndex", "stressIndex", "fRatio", "focusCategory", "attentionScore", "qualityScore", "bandPowers", timestamp)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
-            [
-              session.id,
-              processed.focusIndex,
-              processed.stressIndex,
-              processed.fRatio,
-              processed.focusCategory,
-              processed.attentionScore,
-              processed.qualityScore,
-              JSON.stringify(processed.bandPowers),
-            ],
-          );
-
-          // Trigger interventions based on EEG thresholds
-          await this.interventionsTrigger.processEEGDataForInterventions(
-            session.id,
-            userId,
-            processed,
-          );
-
-          // Update session learning mode based on recommendation
-          await this.db.execute(
-            `UPDATE sessions SET "learningMode" = $1, "focusCategory" = $2, "updatedAt" = NOW() WHERE id = $3`,
-            [processed.recommendedMode, processed.focusCategory, session.id],
-          );
+              userId,
+              processed,
+            );
+          }
         } catch (error) {
           this.logger.error(`Error processing EEG data: ${error.message}`);
         }
@@ -138,6 +124,54 @@ export class EEGService {
     } catch (error) {
       this.logger.error(`Error starting session: ${error.message}`, error.stack);
       throw error;
+    }
+  }
+
+  /**
+   * Batch insert EEG data for performance
+   */
+  private async batchInsertEEGData(
+    sessionId: string,
+    dataBuffer: { raw: EEGDataPoint; processed: ProcessedEEG }[],
+  ) {
+    if (dataBuffer.length === 0) return;
+
+    try {
+      // Batch insert raw logs
+      const rawValues = dataBuffer.map(d => 
+        `('${sessionId}', ${d.raw.alpha}, ${d.raw.beta}, ${d.raw.theta}, ${d.raw.gamma || 0}, ${d.raw.attention}, ${d.raw.meditation}, ${d.raw.signalQuality}, NOW())`
+      ).join(',');
+      
+      await this.db.execute(
+        `INSERT INTO eeg_logs ("sessionId", alpha, beta, theta, gamma, attention, meditation, "signalQuality", timestamp)
+         VALUES ${rawValues}`,
+      );
+
+      // Batch insert processed data
+      const processedValues = dataBuffer.map(d => 
+        `('${sessionId}', ${d.processed.focusIndex}, ${d.processed.stressIndex}, ${d.processed.fRatio}, '${d.processed.focusCategory}', ${d.processed.attentionScore}, ${d.processed.qualityScore}, '${JSON.stringify(d.processed.bandPowers)}', NOW())`
+      ).join(',');
+      
+      await this.db.execute(
+        `INSERT INTO eeg_processed ("sessionId", "focusIndex", "stressIndex", "fRatio", "focusCategory", "attentionScore", "qualityScore", "bandPowers", timestamp)
+         VALUES ${processedValues}`,
+      );
+
+      this.logger.debug(`Batch inserted ${dataBuffer.length} EEG data points`);
+    } catch (error) {
+      this.logger.error(`Batch insert failed: ${error.message}`);
+      // Fallback to individual inserts if batch fails
+      for (const data of dataBuffer) {
+        try {
+          await this.db.execute(
+            `INSERT INTO eeg_logs ("sessionId", alpha, beta, theta, gamma, attention, meditation, "signalQuality", timestamp)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+            [sessionId, data.raw.alpha, data.raw.beta, data.raw.theta, data.raw.gamma || 0, data.raw.attention, data.raw.meditation, data.raw.signalQuality],
+          );
+        } catch (err) {
+          this.logger.error(`Individual insert failed: ${err.message}`);
+        }
+      }
     }
   }
 
@@ -224,17 +258,20 @@ export class EEGService {
   }
 
   /**
-   * Get user's session history
+   * Get user's session history (optimized with pagination)
    */
-  async getUserSessions(userId: string, limit = 20) {
+  async getUserSessions(userId: string, limit = 20, offset = 0) {
     return this.db.query(
-      `SELECT s.*, COUNT(el.id) as eeg_logs_count FROM sessions s
+      `SELECT s.id, s."userId", s.status, s."learningMode", s."startTime", s."endTime", 
+              s.duration, s."avgFocus", s."avgStress", s."focusCategory",
+              COUNT(el.id) as eeg_logs_count 
+       FROM sessions s
        LEFT JOIN eeg_logs el ON s.id = el."sessionId"
        WHERE s."userId" = $1 AND s."deletedAt" IS NULL
        GROUP BY s.id
        ORDER BY s."startTime" DESC
-       LIMIT $2`,
-      [userId, limit],
+       LIMIT $2 OFFSET $3`,
+      [userId, limit, offset],
     );
   }
 
