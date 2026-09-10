@@ -1,135 +1,186 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, Brain, Zap, BarChart3, Users, Shield, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, Brain, Zap, BarChart3, Users, Shield, Sparkles, ChevronRight } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 export function LandingPageStitch() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-bg-default text-text-default min-h-screen">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Brain className="w-6 h-6 text-green-600" />
-            <span className="text-lg font-bold text-neutral-900">NERA</span>
-            <span className="text-xs text-neutral-600 hidden md:inline">Neuro-Adaptive Learning</span>
+      <nav className="sticky top-0 z-50 bg-bg-elevated/95 backdrop-blur-md border-b border-border-color">
+        <div className="container-max py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div className="text-lg font-bold text-text-default">NERA</div>
+              <div className="text-xs text-text-muted hidden md:block">Neuro-Adaptive Learning</div>
+            </div>
           </div>
+          
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-neutral-600 hover:text-neutral-900 font-medium">
+            <a href="#features" className="text-sm text-text-secondary hover:text-primary transition-colors">
               Fitur
             </a>
-            <a href="#benefits" className="text-sm text-neutral-600 hover:text-neutral-900 font-medium">
+            <a href="#benefits" className="text-sm text-text-secondary hover:text-primary transition-colors">
               Manfaat
             </a>
-            <a href="#pricing" className="text-sm text-neutral-600 hover:text-neutral-900 font-medium">
-              Pricing
+            <a href="/courses" className="text-sm text-text-secondary hover:text-primary transition-colors">
+              Pelajaran
             </a>
-            <Button variant="primary" size="sm">
+            <Button className="button-primary button-sm">
               Mulai Sekarang
               <ArrowRight className="w-4 h-4" />
             </Button>
+          </div>
+
+          <div className="md:hidden">
+            <Button className="button-ghost button-sm">☰</Button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+      <section className="container-max py-16 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <Badge variant="primary" size="sm" className="mb-4">
-              🧠 Teknologi EEG Terdepan
-            </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
-              Membaca Gelombang Otak, Memaksimalkan Potensi Siswa
+          <div className="animate-fade-in">
+            <div className="flex items-center gap-2 mb-6">
+              <Badge className="badge-primary">
+                <Zap className="w-3 h-3" />
+                Teknologi EEG Terdepan
+              </Badge>
+            </div>
+            
+            <h1 className="text-h1 text-text-default mb-6 leading-tight">
+              Membaca Gelombang Otak, <span className="text-gradient">Memaksimalkan Potensi</span>
             </h1>
-            <p className="text-xl text-neutral-600 mb-8 leading-relaxed">
-              Platform pembelajaran adaptif berbasis real-time EEG. Tingkatkan fokus, optimaliskan retensi memori, dan
-              ciptakan pembelajaran yang truly personal dengan kecerdasan buatan.
+            
+            <p className="text-lg text-text-secondary mb-8 leading-relaxed">
+              Platform pembelajaran adaptif berbasis real-time EEG. Tingkatkan fokus, optimaliskan retensi memori, dan ciptakan pembelajaran yang truly personal dengan AI.
             </p>
+            
             <div className="flex flex-col md:flex-row gap-4">
-              <Button variant="primary" size="lg">
-                Coba Gratis
-                <ArrowRight className="w-4 h-4" />
+              <Button className="button-primary button-lg">
+                Coba Gratis Sekarang
+                <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button variant="outline" size="lg">
-                Pelajari Lebih Lanjut
+              <Button className="button-outline button-lg">
+                Lihat Demo
               </Button>
+            </div>
+
+            <div className="mt-12 pt-8 border-t border-border-color">
+              <div className="text-sm text-text-muted mb-4">Dipercaya oleh sekolah di seluruh Indonesia</div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-bg-surface rounded-full flex items-center justify-center text-xs font-semibold text-primary">SMA</div>
+                <div className="w-10 h-10 bg-bg-surface rounded-full flex items-center justify-center text-xs font-semibold text-primary">MTs</div>
+                <div className="w-10 h-10 bg-bg-surface rounded-full flex items-center justify-center text-xs font-semibold text-primary">SD</div>
+                <span className="text-sm text-text-muted">+5000 siswa aktif</span>
+              </div>
             </div>
           </div>
 
-          <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-green-100 to-teal-100 rounded-2xl flex items-center justify-center">
-              <div className="text-6xl">🧠</div>
+          {/* Hero Visual */}
+          <div className="relative animate-slide-up">
+            <div className="card-elevated p-8">
+              <div className="aspect-square bg-gradient-dark rounded-xl flex flex-col items-center justify-center gap-6 relative overflow-hidden">
+                {/* Animated Background Elements */}
+                <div className="absolute inset-0 opacity-30">
+                  <div className="absolute top-0 left-1/4 w-32 h-32 bg-primary/50 rounded-full blur-3xl animate-pulse"></div>
+                  <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center gap-6">
+                  <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center animate-pulse-glow">
+                    <Brain className="w-12 h-12 text-primary" />
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-primary mb-2">98%</div>
+                    <div className="text-sm text-text-secondary">Akurasi Deteksi Fokus</div>
+                  </div>
+
+                  <div className="flex gap-4 pt-4 border-t border-border-color">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-secondary">15+</div>
+                      <div className="text-xs text-text-muted">Parameter EEG</div>
+                    </div>
+                    <div className="w-px bg-border-color"></div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-accent-success">24/7</div>
+                      <div className="text-xs text-text-muted">Real-time Monitoring</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="bg-neutral-50 py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
+      <section id="features" className="bg-bg-elevated/50 py-20 md:py-32 border-y border-border-color">
+        <div className="container-max">
           <div className="text-center mb-16">
-            <p className="text-sm text-green-600 font-semibold tracking-wide mb-2">FITUR UNGGULAN</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-              Teknologi yang Mengubah Pembelajaran
-            </h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+            <Badge className="badge-primary mb-4">
+              <Sparkles className="w-3 h-3" />
+              Fitur Unggulan
+            </Badge>
+            <h2 className="text-h2 mb-6">Teknologi yang Mengubah Pembelajaran</h2>
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Menggunakan sensor EEG terbaru untuk memahami pola kognitif siswa secara real-time.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid-3">
             {[
               {
-                icon: <Brain className="w-8 h-8" />,
+                icon: Brain,
                 title: 'Real-Time EEG Monitoring',
-                description:
-                  'Pantau gelombang otak siswa secara langsung untuk mendeteksi tingkat fokus, kelelahan, dan kesiapan kognitif.',
+                description: 'Pantau gelombang otak siswa secara langsung untuk mendeteksi fokus, kelelahan, dan kesiapan kognitif.',
+                color: 'text-primary',
               },
               {
-                icon: <Zap className="w-8 h-8" />,
-                title: 'Pembelajaran Adaptif Personal',
-                description:
-                  'Sistem menyesuaikan konten pembelajaran berdasarkan pola EEG unik setiap siswa untuk hasil optimal.',
+                icon: Zap,
+                title: 'Pembelajaran Adaptif',
+                description: 'Sistem menyesuaikan konten pembelajaran berdasarkan pola EEG unik setiap siswa.',
+                color: 'text-secondary',
               },
               {
-                icon: <BarChart3 className="w-8 h-8" />,
-                title: 'Analytics & Insights',
-                description:
-                  'Dashboard komprehensif untuk tracking progress, pattern recognition, dan actionable insights pembelajaran.',
+                icon: BarChart3,
+                title: 'Analytics Mendalam',
+                description: 'Dapatkan insights komprehensif tentang pola pembelajaran dan progres siswa.',
+                color: 'text-accent-success',
               },
               {
-                icon: <Users className="w-8 h-8" />,
-                title: 'Kolaborasi Guru-Siswa',
-                description:
-                  'Tools untuk guru memantau fokus kelas secara real-time dan memberikan intervensi personal yang tepat.',
+                icon: Users,
+                title: 'Kolaborasi Guru & Orang Tua',
+                description: 'Berbagi data dan insights untuk dukungan pembelajaran yang holistik.',
+                color: 'text-accent-info',
               },
               {
-                icon: <Shield className="w-8 h-8" />,
-                title: 'Aman & Terpercaya',
-                description:
-                  'Data siswa dilindungi dengan enkripsi end-to-end dan mematuhi standar privasi internasional.',
+                icon: Shield,
+                title: 'Privasi & Keamanan',
+                description: 'Data tersensifikasi dengan enkripsi end-to-end dan compliance GDPR.',
+                color: 'text-accent-warning',
               },
               {
-                icon: <Sparkles className="w-8 h-8" />,
-                title: 'AI-Powered Recommendations',
-                description:
-                  'Algoritma pembelajaran mesin memberikan rekomendasi konten yang dipersonalisasi untuk setiap siswa.',
+                icon: Sparkles,
+                title: 'AI Recommendations',
+                description: 'Rekomendasi personalized untuk optimalisasi waktu belajar dan performa.',
+                color: 'text-accent-error',
               },
             ].map((feature, idx) => (
-              <Card key={idx} variant="elevated">
-                <CardBody className="space-y-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
-                    {feature.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-neutral-900 mb-2">{feature.title}</h3>
-                    <p className="text-neutral-600">{feature.description}</p>
-                  </div>
-                </CardBody>
+              <Card key={idx} className="card hover:border-primary/50 group">
+                <div className={`w-12 h-12 bg-bg-surface rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors ${feature.color}`}>
+                  <feature.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-h4 mb-2 text-text-default">{feature.title}</h3>
+                <p className="text-text-secondary">{feature.description}</p>
               </Card>
             ))}
           </div>
@@ -137,104 +188,136 @@ export function LandingPageStitch() {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
-        <div className="text-center mb-16">
-          <p className="text-sm text-green-600 font-semibold tracking-wide mb-2">MANFAAT TERBUKTI</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-            Hasil yang Terukur dan Nyata
-          </h2>
-        </div>
+      <section id="benefits" className="py-20 md:py-32">
+        <div className="container-max">
+          <div className="text-center mb-16">
+            <h2 className="text-h2 mb-6">Manfaat Nyata untuk Semua</h2>
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+              Setiap pengguna mendapatkan pengalaman yang disesuaikan untuk kesuksesan maksimal.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              stat: '+45%',
-              label: 'Peningkatan Fokus',
-              desc: 'Siswa mengalami peningkatan rata-rata fokus hingga 45% dalam 30 hari pertama.',
-            },
-            {
-              stat: '+30%',
-              label: 'Retensi Memori',
-              desc: 'Pembelajaran adaptif meningkatkan retensi informasi hingga 30% lebih baik.',
-            },
-            {
-              stat: '+50%',
-              label: 'Engagement',
-              desc: 'Interaktivitas tingkat tinggi meningkatkan keterlibatan siswa hingga 50%.',
-            },
-          ].map((benefit, idx) => (
-            <div key={idx} className="text-center">
-              <div className="text-5xl font-bold text-green-600 mb-2">{benefit.stat}</div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-2">{benefit.label}</h3>
-              <p className="text-neutral-600">{benefit.desc}</p>
-            </div>
-          ))}
+          <div className="grid-2">
+            {[
+              {
+                role: 'Untuk Siswa',
+                benefits: [
+                  'Pembelajaran yang dipersonalisasi sesuai gaya kognitif unik',
+                  'Deteksi kelelahan otomatis dengan rekomendasi istirahat',
+                  'Gamifikasi dan achievement badges untuk motivasi',
+                  'Progress tracking real-time dengan AI insights',
+                ],
+              },
+              {
+                role: 'Untuk Guru',
+                benefits: [
+                  'Dashboard monitoring kelas untuk deteksi kesulitan belajar',
+                  'Rekomendasi strategi pengajaran yang efektif',
+                  'Laporan komprehensif untuk setiap siswa',
+                  'Tools untuk personalisasi pembelajaran di kelas',
+                ],
+              },
+              {
+                role: 'Untuk Orang Tua',
+                benefits: [
+                  'Transparansi penuh tentang progres belajar anak',
+                  'Insights tentang pola dan kesulitan belajar',
+                  'Rekomendasi dukungan di rumah',
+                  'Real-time notifications untuk milestone achievements',
+                ],
+              },
+              {
+                role: 'Untuk Sekolah',
+                benefits: [
+                  'Peningkatan rata-rata nilai siswa 25-35%',
+                  'Pengurangan tingkat drop-out hingga 40%',
+                  'Data-driven decision making untuk curriculum',
+                  'Competitive advantage dalam aksreditasi sekolah',
+                ],
+              },
+            ].map((item, idx) => (
+              <Card key={idx} className="card p-8">
+                <h3 className="text-h4 mb-6 text-primary">{item.role}</h3>
+                <ul className="space-y-3">
+                  {item.benefits.map((benefit, bidx) => (
+                    <li key={bidx} className="flex items-start gap-3">
+                      <ChevronRight className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
+                      <span className="text-text-secondary">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-green-600 to-teal-600 py-20 md:py-32 text-white">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Siap Mengoptimalkan Pembelajaran?</h2>
-          <p className="text-lg text-green-100 mb-8">
-            Bergabunglah dengan ribuan sekolah yang telah merasakan transformasi pembelajaran dengan NERA.
+      <section className="bg-gradient-dark border-t border-border-color py-16 md:py-24">
+        <div className="container-max text-center">
+          <h2 className="text-h2 mb-6">Siap Mengubah Pembelajaran?</h2>
+          <p className="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+            Bergabunglah dengan ribuan siswa yang sudah merasakan transformasi pembelajaran dengan NERA.
           </p>
+          
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button variant="primary" size="lg" className="bg-white text-green-600 hover:bg-neutral-50">
-              Mulai Demo Gratis
-              <ArrowRight className="w-4 h-4" />
+            <Button className="button-primary button-lg">
+              Mulai Gratis 30 Hari
+              <ArrowRight className="w-5 h-5" />
             </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+            <Button className="button-outline button-lg">
               Hubungi Sales
             </Button>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-border-color text-text-muted text-sm">
+            Tidak perlu kartu kredit. Setup dalam 5 menit.
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
+      <footer className="bg-bg-elevated border-t border-border-color py-12">
+        <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="w-5 h-5 text-green-500" />
-                <span className="font-bold text-white">NERA</span>
+                <Brain className="w-5 h-5 text-primary" />
+                <span className="font-bold text-text-default">NERA</span>
               </div>
-              <p className="text-sm">Neuro-Adaptive Learning Platform</p>
+              <p className="text-sm text-text-muted">Platform pembelajaran adaptif berbasis EEG untuk masa depan pendidikan.</p>
             </div>
+            
             <div>
-              <h4 className="font-bold text-white mb-4">Produk</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">Fitur</a></li>
-                <li><a href="#" className="hover:text-white">Pricing</a></li>
-                <li><a href="#" className="hover:text-white">Keamanan</a></li>
+              <h4 className="text-sm font-semibold text-text-default mb-4">Produk</h4>
+              <ul className="space-y-2 text-sm text-text-muted">
+                <li><a href="#" className="hover:text-primary transition-colors">Fitur</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Security</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-bold text-white mb-4">Perusahaan</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">Tentang</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Karir</a></li>
+              <h4 className="text-sm font-semibold text-text-default mb-4">Perusahaan</h4>
+              <ul className="space-y-2 text-sm text-text-muted">
+                <li><a href="#" className="hover:text-primary transition-colors">Tentang</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Karir</a></li>
               </ul>
             </div>
+
             <div>
-              <h4 className="font-bold text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white">Privacy</a></li>
-                <li><a href="#" className="hover:text-white">Terms</a></li>
-                <li><a href="#" className="hover:text-white">Support</a></li>
+              <h4 className="text-sm font-semibold text-text-default mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm text-text-muted">
+                <li><a href="#" className="hover:text-primary transition-colors">Privasi</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Terms</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-            <p>&copy; 2026 NERA Neuro-Adaptive Platform. Hak Cipta Dilindungi.</p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <a href="#" className="hover:text-white">Twitter</a>
-              <a href="#" className="hover:text-white">LinkedIn</a>
-              <a href="#" className="hover:text-white">GitHub</a>
-            </div>
+          <div className="border-t border-border-color pt-8 text-center text-sm text-text-muted">
+            <p>&copy; 2024 NERA Neuro-Adaptive Platform. All rights reserved.</p>
           </div>
         </div>
       </footer>
