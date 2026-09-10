@@ -11,6 +11,11 @@ import {
   Download,
   MoreVertical,
   ChevronRight,
+  Activity,
+  Award,
+  Flame,
+  Clock,
+  Signal,
 } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -19,164 +24,192 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { StatCard } from '@/components/ui/StatCard';
 
 export function StudentDashboardStitch() {
-  const [timeRange, setTimeRange] = useState<'week' | 'month'>('week');
+  const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
 
-  // Heatmap data (weekly)
   const heatmapData = [
-    [5, 8, 9, 7, 8, 6, 0], // Week 1
-    [8, 9, 8, 9, 7, 8, 4], // Week 2
-    [7, 8, 7, 9, 8, 7, 2], // Week 3
-    [9, 9, 8, 7, 8, 6, 1], // Week 4
+    [5, 8, 9, 7, 8, 6, 0],
+    [8, 9, 8, 9, 7, 8, 4],
+    [7, 8, 7, 9, 8, 7, 2],
+    [9, 9, 8, 7, 8, 6, 1],
   ];
 
   const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
   const weeks = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
 
   const getHeatmapColor = (value: number) => {
-    if (value === 0) return 'bg-neutral-100';
-    if (value < 3) return 'bg-red-100';
-    if (value < 6) return 'bg-yellow-100';
-    if (value < 8) return 'bg-green-100';
-    return 'bg-green-500';
+    if (value === 0) return 'bg-neutral-800';
+    if (value < 3) return 'bg-accent-error/30';
+    if (value < 6) return 'bg-accent-warning/30';
+    if (value < 8) return 'bg-primary/40';
+    return 'bg-primary';
   };
 
+  const brainWaves = [
+    { name: 'Beta (18-24 Hz)', value: 92, color: 'text-secondary', label: 'Fokus Optimal' },
+    { name: 'Alpha (8-12 Hz)', value: 65, color: 'text-accent-success', label: 'Relaksasi' },
+    { name: 'Theta (4-8 Hz)', value: 35, color: 'text-accent-warning', label: 'Kreativitas' },
+  ];
+
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="bg-bg-default text-text-default min-h-screen pb-12">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
-          <div className="flex items-center justify-between mb-6">
+      <header className="sticky top-0 z-40 bg-bg-elevated/95 border-b border-border-color backdrop-blur-md">
+        <div className="container-max py-6">
+          <div className="flex items-start justify-between mb-6">
             <div>
-              <p className="text-xs md:text-sm text-green-600 font-semibold tracking-wide">
+              <Badge className="badge-primary mb-3">
+                <Signal className="w-3 h-3" />
                 LAPORAN BIOMETRIK & KOGNITIF
-              </p>
-              <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mt-2">
-                Dashboard Analitik Pembelajaran
-              </h1>
-              <p className="text-neutral-600 text-sm mt-1 max-w-2xl">
-                Insights mendalam tentang pola kognitif, konsistensi fokus, dan rekomendasi personalisasi.
+              </Badge>
+              <h1 className="text-h2 mt-2">Dashboard Analitik Pembelajaran</h1>
+              <p className="text-text-secondary text-base mt-2 max-w-2xl">
+                Insights mendalam tentang pola kognitif, konsistensi fokus, dan rekomendasi personalisasi berdasarkan data EEG real-time.
               </p>
             </div>
-            <Button variant="secondary" size="md">
+            <Button className="button-primary button-sm">
               <Download className="w-4 h-4" />
-              Unduh Laporan PDF
+              Export PDF
             </Button>
           </div>
 
           {/* Time Range Selector */}
           <div className="flex gap-2">
-            {(['week', 'month'] as const).map((range) => (
+            {(['week', 'month', 'semester'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
                   timeRange === range
-                    ? 'bg-green-600 text-white shadow-md'
-                    : 'bg-white text-neutral-700 border border-neutral-200 hover:border-green-300'
+                    ? 'bg-primary text-white shadow-lg'
+                    : 'bg-bg-surface text-text-secondary border border-border-color hover:border-primary/50'
                 }`}
               >
-                {range === 'week' ? '7 Hari' : '30 Hari'}
+                {range === 'week' ? '7 Hari' : range === 'month' ? '30 Hari' : 'Semester'}
               </button>
             ))}
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+      <main className="container-max py-8">
         {/* Top Metrics - 4 Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Rerata Fokus"
-            value={79}
-            unit="/100"
-            change={{ value: 8, direction: 'up', period: 'vs pekan lalu' }}
-            icon="🧠"
-            variant="highlight"
-          />
-          <StatCard
-            title="Streak Konsistensi"
-            value="7"
-            unit="Hari"
-            description="Fokus konsisten 🔥"
-            icon="🔥"
-            variant="default"
-          />
-          <StatCard
-            title="Modul Diselesaikan"
-            value="23"
-            unit="/ 40"
-            change={{ value: 3, direction: 'up', period: 'bulan ini' }}
-            icon="✓"
-            variant="default"
-          />
-          <StatCard
-            title="Waktu Belajar"
-            value="48"
-            unit="Jam"
-            change={{ value: 12, direction: 'up', period: 'target +60' }}
-            icon="⏱"
-            variant="default"
-          />
+        <div className="grid-4 mb-8">
+          <Card className="card">
+            <div className="flex items-start justify-between mb-4">
+              <Flame className="w-6 h-6 text-accent-error" />
+              <span className="text-xs font-semibold text-primary">↑ 8%</span>
+            </div>
+            <div className="text-label text-text-muted mb-1">Rerata Fokus</div>
+            <div className="text-4xl font-bold text-text-default">79</div>
+            <div className="text-sm text-text-secondary mt-2">vs minggu lalu +8%</div>
+          </Card>
+
+          <Card className="card">
+            <div className="flex items-start justify-between mb-4">
+              <Award className="w-6 h-6 text-secondary" />
+              <Badge className="badge-primary">Level 5</Badge>
+            </div>
+            <div className="text-label text-text-muted mb-1">Level Kognitif</div>
+            <div className="text-4xl font-bold text-text-default">Master</div>
+            <div className="text-sm text-text-secondary mt-2">2,840 / 3,000 XP</div>
+          </Card>
+
+          <Card className="card">
+            <div className="flex items-start justify-between mb-4">
+              <Clock className="w-6 h-6 text-accent-info" />
+              <span className="text-xs font-semibold text-accent-info">↑ +4h</span>
+            </div>
+            <div className="text-label text-text-muted mb-1">Waktu Flow Kognitif</div>
+            <div className="text-4xl font-bold text-text-default">18h 45m</div>
+            <div className="text-sm text-text-secondary mt-2">Minggu ini via EEG Band</div>
+          </Card>
+
+          <Card className="card">
+            <div className="flex items-start justify-between mb-4">
+              <TrendingUp className="w-6 h-6 text-primary" />
+              <Badge className="badge-primary">7 Hari</Badge>
+            </div>
+            <div className="text-label text-text-muted mb-1">Streak Konsistensi</div>
+            <div className="text-4xl font-bold text-primary">7</div>
+            <div className="text-sm text-text-secondary mt-2">Fokus Konsisten 🔥</div>
+          </Card>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Left Column - Heatmap */}
-          <div className="lg:col-span-2">
-            <Card variant="elevated">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Left Column - Heatmap & Charts */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Heatmap Section */}
+            <Card className="card-elevated">
               <CardHeader>
-                <h2 className="font-bold text-neutral-900 flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-green-600" />
-                  Denah Heatmap Pola Belajar
+                <h2 className="text-h4 flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-primary" />
+                  Distribusi Jam Fokus Harian
                 </h2>
+                <p className="text-sm text-text-secondary mt-2">Fluktuasi konsentrasi mendalam berdasarkan pembacaan sensor EEG</p>
               </CardHeader>
               <CardBody className="space-y-6">
-                {/* Heatmap Grid */}
-                <div className="space-y-3">
-                  {heatmapData.map((weekData, weekIdx) => (
-                    <div key={weekIdx} className="space-y-2">
-                      <p className="text-xs font-semibold text-neutral-600">{weeks[weekIdx]}</p>
-                      <div className="flex gap-2">
-                        {weekData.map((value, dayIdx) => (
+                {heatmapData.map((weekData, weekIdx) => (
+                  <div key={weekIdx}>
+                    <div className="text-sm font-semibold text-text-secondary mb-3 flex items-center justify-between">
+                      <span>{weeks[weekIdx]}</span>
+                      <span className="text-xs text-text-muted">{weekData.reduce((a, b) => a + b)} jam</span>
+                    </div>
+                    <div className="grid grid-cols-7 gap-2">
+                      {weekData.map((value, dayIdx) => (
+                        <div key={dayIdx} className="group">
                           <div
-                            key={dayIdx}
-                            className={`flex-1 h-12 rounded-lg ${getHeatmapColor(value)} flex items-center justify-center relative group cursor-pointer`}
+                            className={`h-16 rounded-lg ${getHeatmapColor(value)} flex flex-col items-center justify-center transition-all hover:scale-105 cursor-pointer border border-border-color hover:border-primary`}
                             title={`${days[dayIdx]}: ${value} jam`}
                           >
-                            <span className="text-xs font-semibold text-neutral-700">{value}h</span>
-                            <div className="absolute bottom-full left-0 mb-2 bg-neutral-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-10">
-                              {days[dayIdx]}: {value} jam belajar
-                            </div>
+                            <span className="text-xs font-bold text-text-default">{value}h</span>
+                            <span className="text-xs text-text-muted">{days[dayIdx]}</span>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
+              </CardBody>
+            </Card>
 
-                {/* Legend */}
-                <div className="pt-4 border-t border-neutral-200">
-                  <p className="text-xs font-semibold text-neutral-600 mb-2">Intensitas Belajar</p>
-                  <div className="flex gap-3 text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded bg-neutral-100" />
-                      <span>0 jam</span>
+            {/* Brain Waves Chart Section */}
+            <Card className="card-elevated">
+              <CardHeader>
+                <h2 className="text-h4 flex items-center gap-3">
+                  <Brain className="w-5 h-5 text-primary" />
+                  Status Gelombang Otak Real-Time
+                </h2>
+                <p className="text-sm text-text-secondary mt-2">Aktivitas neural current monitoring</p>
+              </CardHeader>
+              <CardBody className="space-y-6">
+                {brainWaves.map((wave, idx) => (
+                  <div key={idx}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-text-default">{wave.name}</span>
+                      <span className={`text-sm font-bold ${wave.color}`}>{wave.value}%</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded bg-red-100" />
-                      <span>&lt;3 jam</span>
+                    <div className="h-2 bg-bg-surface rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          wave.name.includes('Beta') ? 'bg-secondary' :
+                          wave.name.includes('Alpha') ? 'bg-accent-success' :
+                          'bg-accent-warning'
+                        }`}
+                        style={{ width: `${wave.value}%` }}
+                      ></div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded bg-yellow-100" />
-                      <span>3-6 jam</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded bg-green-100" />
-                      <span>6-8 jam</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded bg-green-500" />
-                      <span>&gt;8 jam</span>
+                    <div className="text-xs text-text-muted mt-1">{wave.label}</div>
+                  </div>
+                ))}
+
+                {/* Peak Time Insight */}
+                <div className="mt-6 pt-6 border-t border-border-color">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-text-default mb-1">Peak Focus Zone (09:00 - 11:30)</p>
+                      <p className="text-sm text-text-secondary">Zona Beta 18-24 Hz dengan presisi 92%. Jadwalkan materi kompleks pada waktu ini.</p>
                     </div>
                   </div>
                 </div>
@@ -184,123 +217,115 @@ export function StudentDashboardStitch() {
             </Card>
           </div>
 
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
-            {/* Cognitive Window */}
-            <Card variant="elevated" className="bg-gradient-to-br from-yellow-50 to-orange-50">
-              <CardBody className="space-y-3">
-                <h3 className="font-bold text-neutral-900 flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-yellow-600" />
-                  Jendela Belajar Optimal
+          {/* Right Column - Insights & Recommendations */}
+          <div className="space-y-8">
+            {/* Konsistensi Belajar */}
+            <Card className="card-elevated">
+              <CardHeader>
+                <h3 className="text-h4 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-primary" />
+                  Konsistensi Belajar
                 </h3>
-                <div className="space-y-2">
-                  <p className="text-sm text-neutral-700">
-                    <span className="font-semibold">09:00 - 11:30 WIB</span>
-                  </p>
-                  <p className="text-xs text-neutral-600">
-                    Puncak kognitif pagi - Waktu terbaik untuk pembelajaran kompleks
-                  </p>
-                </div>
-              </CardBody>
-            </Card>
-
-            {/* Focus Capacity */}
-            <Card variant="elevated">
-              <CardBody className="space-y-3">
-                <h3 className="font-bold text-neutral-900 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-green-600" />
-                  Kapasitas Fokus
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-xs text-neutral-600 mb-1">Baseline Hari Ini</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold text-green-600">81.4</span>
-                      <span className="text-sm text-neutral-600">/100</span>
-                    </div>
+              </CardHeader>
+              <CardBody>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-text-secondary">Hari Aktif</span>
+                    <span className="text-2xl font-bold text-primary">28/30</span>
                   </div>
-                  <ProgressBar value={81.4} />
+                  <div className="h-2 bg-bg-surface rounded-full overflow-hidden">
+                    <div className="h-full w-11/12 bg-primary rounded-full"></div>
+                  </div>
+                  <p className="text-xs text-text-muted">Aktivitas kognitif 30 hari terakhir</p>
+                  
+                  <div className="pt-4 border-t border-border-color">
+                    <p className="text-xs font-semibold text-accent-success mb-2">✓ Habit Neuroplastic Terbentuk!</p>
+                    <p className="text-xs text-text-secondary">Stabilitas fokus Anda meningkat 14% di jam pagi.</p>
+                  </div>
                 </div>
               </CardBody>
             </Card>
 
-            {/* Next Optimal Window */}
-            <Card variant="outlined">
-              <CardBody className="space-y-2">
-                <p className="text-xs text-neutral-600 font-semibold">JENDELA BELAJAR OPTIMAL BERIKUTNYA</p>
-                <p className="text-sm font-semibold text-neutral-900">Besok 14:30 - 16:00 WIB</p>
-                <p className="text-xs text-neutral-600">
-                  Durasi lebih singkat, cocok untuk review dan konsolidasi memori
-                </p>
+            {/* AI Recommendations */}
+            <Card className="card-elevated border-primary/30">
+              <CardHeader>
+                <h3 className="text-h4 flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-secondary" />
+                  Wawasan Otak & Rekomendasi
+                </h3>
+                <Badge className="badge-primary mt-2">MODEL NERA-V3.4</Badge>
+              </CardHeader>
+              <CardBody className="space-y-4">
+                <div className="p-4 bg-bg-surface rounded-lg border border-border-color">
+                  <p className="text-sm font-semibold text-text-default mb-2">📍 Jam Emas Kognitif: 08:30 – 10:15 WIB</p>
+                  <p className="text-xs text-text-secondary leading-relaxed">
+                    Sensor mendeteksi gelombang Beta tertinggi Anda tercapai konsisten di interval ini dengan kapasitas memori kerja 100%.
+                  </p>
+                </div>
+
+                <div className="p-4 bg-bg-surface rounded-lg border border-accent-warning/30">
+                  <p className="text-sm font-semibold text-accent-warning mb-2">⚠️ Deteksi Kelelahan</p>
+                  <p className="text-xs text-text-secondary">Lonjakan Theta setelah 45 menit. Adopsi Pomodoro 45/10.</p>
+                </div>
+
+                <Button className="button-primary w-full button-sm">
+                  Atur Jadwal Otomatis
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </CardBody>
+            </Card>
+
+            {/* Target Progress */}
+            <Card className="card-elevated bg-gradient-dark">
+              <CardHeader>
+                <h3 className="text-h4">Target Mingguan</h3>
+              </CardHeader>
+              <CardBody>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-text-secondary mb-2">Menuju Level 6</p>
+                    <div className="h-2 bg-bg-surface rounded-full overflow-hidden">
+                      <div className="h-full w-3/4 bg-primary rounded-full"></div>
+                    </div>
+                    <p className="text-xs text-text-muted mt-2">160 XP Lagi</p>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-border-color">
+                    <p className="text-sm text-text-secondary mb-3">Langkah selanjutnya:</p>
+                    <Button className="button-primary w-full button-sm">
+                      Mulai Sesi Fokus Pagi
+                    </Button>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>
         </div>
 
-        {/* Recent Modules */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-neutral-900">Modul Terbaru Selesai</h2>
-            <button className="text-green-600 font-medium text-sm flex items-center gap-1 hover:text-green-700">
-              Lihat Semua
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Badges Section */}
+        <div className="bg-bg-elevated/50 rounded-xl p-8 border border-border-color">
+          <h3 className="text-h4 mb-6 flex items-center gap-2">
+            <Award className="w-5 h-5 text-primary" />
+            Lencana & Pencapaian Gamifikasi
+          </h3>
+          <p className="text-sm text-text-secondary mb-6">3 dari 8 Lencana Terbuka • Peringkat #3 Kelas Kognitif</p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              {
-                title: 'Fisika Kuantum: Dualitas Gelombang-Partikel',
-                category: 'SAINS & FISIKA',
-                duration: '45m',
-                completion: 100,
-                date: 'Hari ini',
-                eeg: 'Alpha Stabil',
-              },
-              {
-                title: 'Kalkulus Diferensial Lanjut',
-                category: 'MATEMATIKA TERAPAN',
-                duration: '55m',
-                completion: 100,
-                date: 'Kemarin',
-                eeg: 'Beta-rendah',
-              },
-            ].map((module, idx) => (
-              <Card key={idx} variant="outlined">
-                <CardBody className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-xs text-neutral-600 font-semibold">{module.category}</p>
-                      <h3 className="font-bold text-neutral-900 text-sm mt-1">{module.title}</h3>
-                    </div>
-                    <Badge variant="success" size="sm">
-                      ✓ Selesai
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-neutral-600">
-                    <span>{module.date}</span>
-                    <span>{module.duration}</span>
-                  </div>
-                  <p className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded w-fit">
-                    {module.eeg}
-                  </p>
-                </CardBody>
+              { icon: '🛡️', title: 'Fokus Baja', status: 'UNLOCKED', progress: '100% Selesai' },
+              { icon: '🔥', title: '7 Hari Konsisten', status: 'UNLOCKED', progress: '7 / 7 Hari' },
+              { icon: '🧘', title: 'Zen Master', status: 'LEVEL 2/3', progress: '66% - 4 / 6 Sesi' },
+              { icon: '🌊', title: 'Alpha Wave Pioneer', status: 'TERKUNCI', progress: '18.75 / 20 Jam' },
+            ].map((badge, idx) => (
+              <Card key={idx} className="card text-center">
+                <div className="text-3xl mb-2">{badge.icon}</div>
+                <p className="text-sm font-semibold text-text-default mb-1">{badge.title}</p>
+                <Badge className={badge.status === 'UNLOCKED' ? 'badge-success' : badge.status === 'TERKUNCI' ? 'badge-error' : 'badge-warning'}>
+                  {badge.status}
+                </Badge>
+                <p className="text-xs text-text-muted mt-2">{badge.progress}</p>
               </Card>
             ))}
-          </div>
-        </div>
-
-        {/* Alert Section */}
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex gap-4">
-          <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
-          <div>
-            <h3 className="font-bold text-neutral-900 mb-1">Konsistensi Belajar Menurun</h3>
-            <p className="text-sm text-neutral-700 mb-3">
-              Anda belum belajar selama 2 hari terakhir. Mulai dengan modul ringan untuk kembali konsisten.
-            </p>
-            <Button variant="primary" size="sm">
-              Mulai Belajar Sekarang
-            </Button>
           </div>
         </div>
       </main>
