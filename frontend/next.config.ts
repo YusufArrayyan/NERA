@@ -74,11 +74,12 @@ const nextConfig: NextConfig = {
     };
   },
 
-  // Static generation timeout
-  staticPageGenerationTimeout: 60,
+  // Static generation timeout - increased for Vercel
+  staticPageGenerationTimeout: 120,
 
   // Disable source maps in production for smaller bundle
   productionBrowserSourceMaps: false,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
