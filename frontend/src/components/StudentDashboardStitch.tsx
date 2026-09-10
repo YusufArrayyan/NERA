@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ApiClient } from '@/lib/api-client';
+import { RealTimeEEGPanel } from './RealTimeEEGPanel';
 
 export function StudentDashboardStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
@@ -280,6 +281,11 @@ export function StudentDashboardStitch() {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Real-Time EEG Streaming Panel */}
+          <div className="lg:col-span-1">
+            <RealTimeEEGPanel autoStart={activeSession !== null} sessionId={activeSession?.id} />
+          </div>
+
           {/* Daily Focus Distribution - 2 columns */}
           <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E5E7EB]">
             <div className="flex items-center justify-between mb-6">
