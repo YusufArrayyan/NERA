@@ -1,11 +1,29 @@
-.git
-.gitignore
-README.md
-node_modules
+# Build cache
 .next/cache
 .next/static
+
+# Git
+.git
+.gitignore
+
+# Dependencies 
+node_modules
+*.lock
+
+# Development
 .env.local
-build
-dist
-*.log
+.env.*.local
 .DS_Store
+
+# Docs
+*.md
+README*
+
+# Testing
+__tests__
+*.test.*
+*.spec.*
+
+# Backend
+backend/
+prisma/

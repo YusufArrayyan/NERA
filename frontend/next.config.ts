@@ -62,18 +62,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // API routes
-  rewrites: async () => {
-    return {
-      beforeFiles: [
-        {
-          source: "/api/v1/:path*",
-          destination: "http://backend:3001/api/v1/:path*",
-        },
-      ],
-    };
-  },
-
   // Static generation timeout - increased for Vercel
   staticPageGenerationTimeout: 120,
 
