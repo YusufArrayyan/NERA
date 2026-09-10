@@ -1,13 +1,78 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Zap, Battery, Bluetooth, Settings, AlertCircle, CheckCircle, Radio, Smartphone } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { ApiClient } from '@/lib/api-client';
 
 export function HardwareCalibrationStitchV2() {
   const [isCalibrating, setIsCalibrating] = useState(false);
+  const [deviceStatus, setDeviceStatus] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeSession, setActiveSession] = useState<any>(null);
+
+  useEffect(() => {
+    loadDeviceStatus();
+    const interval = setInterval(loadDeviceStatus, 5000); // Refresh every 5s
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadDeviceStatus = async () => {
+    try {
+      const status = await ApiClient.getEEGStatus().catch(() => mockDeviceStatus);
+      setDeviceStatus(status);
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to load device status:', error);
+      setDeviceStatus(mockDeviceStatus);
+      setLoading(false);
+    }
+  };
+
+  const handleStartCalibration = async () => {
+    setIsCalibrating(true);
+    try {
+      const session = await ApiClient.startEEGSession();
+      setActiveSession(session);
+      await loadDeviceStatus();
+    } catch (error) {
+      console.error('Failed to start calibration:', error);
+      alert('Gagal memulai kalibrasi. Pastikan headband terhubung.');
+    } finally {
+      setIsCalibrating(false);
+    }
+  };
+
+  const handleStopCalibration = async () => {
+    if (activeSession) {
+      try {
+        await ApiClient.stopEEGSession(activeSession.id);
+        setActiveSession(null);
+        await loadDeviceStatus();
+      } catch (error) {
+        console.error('Failed to stop calibration:', error);
+      }
+    }
+  };
+
+  const mockDeviceStatus = {
+    connected: true,
+    deviceId: 'NERA-HB-8829',
+    battery: 84,
+    signalStrength: -56,
+    dataPacketRate: 98,
+    impedance: {
+      Fp1: 2.8,
+      Fp2: 2.4,
+      Af7: 3.1,
+      Af8: 4.2,
+    },
+    lastSync: new Date().toISOString(),
+  };
+
+  const status = deviceStatus || mockDeviceStatus;
 
   return (
     <div className="bg-bg-default text-text-default min-h-screen pb-12">
@@ -40,31 +105,49 @@ export function HardwareCalibrationStitchV2() {
             </CardHeader>
             <CardBody className="space-y-4">
               <div className="p-4 bg-bg-surface rounded-lg border border-primary/30">
-                <p className="text-sm font-semibold text-text-default mb-1">BLE 5.2 - NERA-HB-8829</p>
-                <p className="text-xs text-text-muted">TERSAMBUNG | Latensi: 3.8ms | HQ STREAM</p>
+                <p className="text-sm font-semibold text-text-default mb-1">
+                  BLE 5.2 - {status.deviceId}
+                </p>
+                <p className="text-xs text-text-muted">
+                  {status.connected ? 'TERSAMBUNG' : 'TERPUTUS'} | Latensi: 3.8ms | HQ STREAM
+                </p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div className="p-3 bg-bg-surface rounded-lg text-center">
                   <Battery className="w-5 h-5 text-accent-success mx-auto mb-1" />
-                  <p className="text-2xl font-bold text-accent-success">84%</p>
+                  <p className="text-2xl font-bold text-accent-success">{status.battery}%</p>
                   <p className="text-xs text-text-muted">Daya</p>
                 </div>
                 <div className="p-3 bg-bg-surface rounded-lg text-center">
                   <Signal className="w-5 h-5 text-primary mx-auto mb-1" />
-                  <p className="text-2xl font-bold text-primary">-56</p>
+                  <p className="text-2xl font-bold text-primary">{status.signalStrength}</p>
                   <p className="text-xs text-text-muted">dBm RSSI</p>
                 </div>
                 <div className="p-3 bg-bg-surface rounded-lg text-center">
                   <Zap className="w-5 h-5 text-accent-warning mx-auto mb-1" />
-                  <p className="text-2xl font-bold text-accent-warning">98%</p>
+                  <p className="text-2xl font-bold text-accent-warning">{status.dataPacketRate}%</p>
                   <p className="text-xs text-text-muted">Data Paket</p>
                 </div>
               </div>
 
-              <Button className="button-primary w-full button-sm">
-                {isCalibrating ? 'Kalibrasi Berlangsung...' : 'Mulai Kalibrasi'}
-              </Button>
+              {activeSession ? (
+                <Button 
+                  className="button-secondary w-full button-sm"
+                  onClick={handleStopCalibration}
+                  disabled={isCalibrating}
+                >
+                  Stop Kalibrasi
+                </Button>
+              ) : (
+                <Button 
+                  className="button-primary w-full button-sm"
+                  onClick={handleStartCalibration}
+                  disabled={isCalibrating || !status.connected}
+                >
+                  {isCalibrating ? 'Memulai...' : 'Mulai Kalibrasi'}
+                </Button>
+              )}
             </CardBody>
           </Card>
 
@@ -79,18 +162,27 @@ export function HardwareCalibrationStitchV2() {
             </CardHeader>
             <CardBody>
               <div className="grid grid-cols-2 gap-4">
-                {[
-                  { name: 'Fp1', impedance: '2.8 kΩ', status: 'optimal' },
-                  { name: 'Fp2', impedance: '2.4 kΩ', status: 'optimal' },
-                  { name: 'Af7', impedance: '3.1 kΩ', status: 'optimal' },
-                  { name: 'Af8', impedance: '4.2 kΩ', status: 'optimal' },
-                ].map((electrode, idx) => (
-                  <div key={idx} className="p-3 bg-bg-surface rounded-lg border border-accent-success/30">
-                    <p className="text-sm font-semibold text-text-default">{electrode.name}</p>
-                    <p className="text-xs text-accent-success mt-1">{electrode.impedance}</p>
-                    <p className="text-xs text-text-muted">Kontak Optimal</p>
-                  </div>
-                ))}
+                {Object.entries(status.impedance).map(([electrode, value]: [string, any]) => {
+                  const impedanceValue = typeof value === 'number' ? value : parseFloat(value);
+                  const isOptimal = impedanceValue < 5;
+                  
+                  return (
+                    <div 
+                      key={electrode} 
+                      className={`p-3 bg-bg-surface rounded-lg border ${
+                        isOptimal ? 'border-accent-success/30' : 'border-accent-warning/30'
+                      }`}
+                    >
+                      <p className="text-sm font-semibold text-text-default">{electrode}</p>
+                      <p className={`text-xs mt-1 ${isOptimal ? 'text-accent-success' : 'text-accent-warning'}`}>
+                        {impedanceValue.toFixed(1)} kΩ
+                      </p>
+                      <p className="text-xs text-text-muted">
+                        {isOptimal ? 'Kontak Optimal' : 'Perlu Penyesuaian'}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </CardBody>
           </Card>
@@ -140,11 +232,20 @@ export function HardwareCalibrationStitchV2() {
           <Card className="card">
             <div className="flex items-start justify-between mb-4">
               <CheckCircle className="w-6 h-6 text-accent-success" />
-              <Badge className="badge-success">AKTIF</Badge>
+              <Badge className={status.connected ? 'badge-success' : 'badge-warning'}>
+                {status.connected ? 'AKTIF' : 'OFFLINE'}
+              </Badge>
             </div>
-            <p className="text-label text-text-muted mb-1">Status Singgel Perangkat IoT</p>
-            <p className="text-sm text-text-default font-semibold">Tersinkronisasi dengan Server NERA Cloud</p>
-            <p className="text-xs text-text-muted mt-4">Last Sync: 12 menit yang lalu</p>
+            <p className="text-label text-text-muted mb-1">Status Signal Perangkat IoT</p>
+            <p className="text-sm text-text-default font-semibold">
+              {status.connected ? 'Tersinkronisasi dengan Server NERA Cloud' : 'Menunggu Koneksi'}
+            </p>
+            <p className="text-xs text-text-muted mt-4">
+              Last Sync: {new Date(status.lastSync).toLocaleString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </p>
           </Card>
 
           <Card className="card">
