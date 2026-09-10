@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 export function StudentDashboardStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
@@ -13,9 +14,13 @@ export function StudentDashboardStitch() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-[#5B7B5A] rounded-2xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">N</span>
-                </div>
+                <Image 
+                  src="/nera-logo.svg" 
+                  alt="NERA Logo" 
+                  width={40} 
+                  height={40}
+                  className="w-10 h-10"
+                />
                 <div>
                   <div className="font-bold text-lg text-[#1F2937]">NERA</div>
                   <div className="text-[10px] text-[#9CA3AF] -mt-1">NEURO-ADAPTIVE LEARNING</div>
