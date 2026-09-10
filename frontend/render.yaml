@@ -15,7 +15,3 @@ services:
       - key: NEXT_PUBLIC_WS_URL
         value: wss://api.nera.local
     autoDeploy: true
-    disk:
-      name: build-cache
-      mountPath: /var/cache/npm
-      sizeGB: 5
