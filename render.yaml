@@ -2,6 +2,7 @@ services:
   - type: web
     name: headband-frontend
     runtime: node
+    rootDir: frontend
     runtimeVersion: 20
     buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
