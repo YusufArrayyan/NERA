@@ -1,14 +1,8 @@
-<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Rounded Square Background -->
-  <rect width="80" height="80" rx="20" fill="#5B7B5A"/>
-  
-  <!-- Leaf/Feather Icon -->
-  <path d="M40 20C35 20 30 25 28 35C26 45 25 55 30 58C35 61 40 60 45 55C50 50 52 40 50 30C48 25 45 20 40 20Z" fill="#E8F5E9"/>
-  <path d="M40 20C43 20 46 22 48 27C50 32 51 40 48 48C45 56 40 60 35 58C30 56 28 50 28 42C28 34 30 25 35 22C37 21 38.5 20 40 20Z" fill="#A8D5BA"/>
-  
-  <!-- Blue accent -->
-  <ellipse cx="38" cy="35" rx="4" ry="8" fill="#4FC3F7" opacity="0.8"/>
-  
-  <!-- White highlight -->
-  <path d="M37 25C38 25 39 26 39.5 28C40 30 40 33 39 36C38 39 37 40 36 39.5C35 39 34.5 37 34.5 35C34.5 32 35 26 37 25Z" fill="white" opacity="0.6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="14" fill="#5B8252" />
+  <!-- Leaf and neural pulse contour -->
+  <path d="M14 33C14 21 24 14 36 14C36 26 29 33 17 33H14Z" fill="#E8EFE5" opacity="0.95"/>
+  <path d="M17 33C22 28 29 24 34 17" stroke="#5B8252" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="34" cy="17" r="3" fill="#38BDF8"/>
+  <path d="M22 29C26 25 29 23 32 19" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-dasharray="1.5 3"/>
 </svg>
