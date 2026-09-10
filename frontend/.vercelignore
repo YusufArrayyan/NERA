@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+node_modules
+.next/cache
+.next/static
+.env.local
+build
+dist
+*.log
+.DS_Store
