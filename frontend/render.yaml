@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: headband-frontend
+    runtime: node
+    runtimeVersion: 20
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_APP_NAME
+        value: NERA
+      - key: NEXT_PUBLIC_API_URL
+        value: https://api.nera.local
+      - key: NEXT_PUBLIC_WS_URL
+        value: wss://api.nera.local
+    autoDeploy: true
+    disk:
+      name: build-cache
+      mountPath: /var/cache/npm
+      sizeGB: 5
