@@ -1,11 +1,53 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { ApiClient } from '@/lib/api-client';
 
 export function AnalyticsPageStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('month');
   const [selectedMetric, setSelectedMetric] = useState<'focus' | 'time' | 'consistency'>('focus');
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadAnalyticsData();
+  }, [timeRange]);
+
+  const loadAnalyticsData = async () => {
+    try {
+      setLoading(true);
+      const period = timeRange === 'week' ? 'WEEKLY' : timeRange === 'month' ? 'MONTHLY' : 'MONTHLY';
+      const data = await ApiClient.getUserAnalytics(period).catch(() => mockData);
+      setAnalytics(data);
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+      setAnalytics(mockData);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mockData = {
+    avgFocus: 79,
+    totalMinutes: 2880,
+    totalSessions: 23,
+    avgStress: 35,
+    focusDistribution: { LOW: 3, MODERATE: 12, HIGH: 8 },
+    dailyData: [
+      { date: '2026-01-20', focus: 75, duration: 8 },
+      { date: '2026-01-21', focus: 82, duration: 9 },
+      { date: '2026-01-22', focus: 88, duration: 7 },
+      { date: '2026-01-23', focus: 76, duration: 9 },
+      { date: '2026-01-24', focus: 85, duration: 8 },
+      { date: '2026-01-25', focus: 70, duration: 6 },
+      { date: '2026-01-26', focus: 65, duration: 4 },
+    ],
+  };
+
+  const data = analytics || mockData;
+  const completedModules = 23;
+  const totalModules = 40;
 
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
@@ -104,9 +146,9 @@ export function AnalyticsPageStitch() {
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
-            { icon: 'trending_up', label: 'Rata-rata Fokus', value: '79%', color: '#5B7B5A', change: '+8%' },
-            { icon: 'schedule', label: 'Waktu Aktif', value: '48 Jam', color: '#10dcc8', change: '+12h' },
-            { icon: 'school', label: 'Modul Selesai', value: '23/40', color: '#10b981', change: '+5' },
+            { icon: 'trending_up', label: 'Rata-rata Fokus', value: `${data.avgFocus}%`, color: '#5B7B5A', change: '+8%' },
+            { icon: 'schedule', label: 'Waktu Aktif', value: `${Math.floor(data.totalMinutes / 60)} Jam`, color: '#10dcc8', change: '+12h' },
+            { icon: 'school', label: 'Modul Selesai', value: `${completedModules}/${totalModules}`, color: '#10b981', change: '+5' },
             { icon: 'workspace_premium', label: 'Ranking Kelas', value: '#3', color: '#f59e0b', change: '↑2' },
           ].map((stat, idx) => (
             <div
@@ -139,24 +181,18 @@ export function AnalyticsPageStitch() {
             </div>
 
             <div className="space-y-4">
-              {[
-                { day: 'Sen', hours: 8 },
-                { day: 'Sel', hours: 9 },
-                { day: 'Rab', hours: 7 },
-                { day: 'Kam', hours: 9 },
-                { day: 'Jum', hours: 8 },
-                { day: 'Sab', hours: 6 },
-                { day: 'Min', hours: 4 },
-              ].map((data, idx) => (
+              {data.dailyData.map((day: any, idx: number) => (
                 <div key={idx} className="flex items-center gap-4">
-                  <div className="w-12 text-sm font-semibold text-[#4B5563]">{data.day}</div>
+                  <div className="w-12 text-sm font-semibold text-[#4B5563]">
+                    {new Date(day.date).toLocaleDateString('id-ID', { weekday: 'short' })}
+                  </div>
                   <div className="flex-1">
                     <div
                       className="bg-[#5B7B5A] h-8 rounded-lg transition-all hover:bg-[#4A6349] cursor-pointer"
-                      style={{ width: `${(data.hours / 10) * 100}%` }}
+                      style={{ width: `${(day.duration / 10) * 100}%` }}
                     ></div>
                   </div>
-                  <div className="w-16 text-sm font-bold text-[#1F2937] text-right">{data.hours}h</div>
+                  <div className="w-16 text-sm font-bold text-[#1F2937] text-right">{day.duration}h</div>
                 </div>
               ))}
             </div>
@@ -176,7 +212,7 @@ export function AnalyticsPageStitch() {
             <p className="text-xs text-[#9CA3AF] mb-6">Aktivitas kognitif 30 hari terakhir</p>
 
             <div className="text-center mb-6">
-              <div className="text-4xl font-black text-[#1F2937] mb-1">28/30</div>
+              <div className="text-4xl font-black text-[#1F2937] mb-1">{data.totalSessions}/30</div>
               <div className="text-sm text-[#4B5563]">Hari Aktif</div>
             </div>
 
@@ -184,10 +220,10 @@ export function AnalyticsPageStitch() {
               <div>
                 <div className="flex items-center justify-between mb-2 text-sm">
                   <span className="text-[#4B5563]">Hari Aktif</span>
-                  <span className="font-bold text-[#5B7B5A]">93%</span>
+                  <span className="font-bold text-[#5B7B5A]">{Math.round((data.totalSessions / 30) * 100)}%</span>
                 </div>
                 <div className="h-3 bg-[#E5E7EB] rounded-full overflow-hidden">
-                  <div className="h-full w-[93%] bg-[#5B7B5A] rounded-full"></div>
+                  <div className="h-full bg-[#5B7B5A] rounded-full" style={{ width: `${(data.totalSessions / 30) * 100}%` }}></div>
                 </div>
               </div>
 
