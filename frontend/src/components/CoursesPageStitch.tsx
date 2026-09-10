@@ -1,15 +1,116 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, BookOpen, Zap, Clock, Users, CheckCircle, Lock } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { ApiClient } from '@/lib/api-client';
 
 export function CoursesPageStitch() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  const loadCourses = async () => {
+    try {
+      setLoading(true);
+      const data = await ApiClient.getCourses().catch(() => mockCourses);
+      setCourses(data);
+    } catch (error) {
+      console.error('Failed to load courses:', error);
+      setCourses(mockCourses);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mockCourses = [
+    {
+      id: 1,
+      category: 'science',
+      categoryLabel: 'SAINS & FISIKA',
+      title: 'Fisika Kuantum: Dualitas Gelombang-Partikel',
+      description: 'Eksplor eksperimen celah ganda adaptif dengan visualisasi partikel real-time.',
+      eegState: 'Alpha Stabil',
+      duration: 45,
+      level: 3,
+      progress: 65,
+      students: 1400,
+      status: 'in-progress',
+    },
+    {
+      id: 2,
+      category: 'math',
+      categoryLabel: 'MATEMATIKA TERAPAN',
+      title: 'Kalkulus Diferensial Lanjut',
+      description: 'Optimasi turunan parsial multivariabel dengan representasi topologi 3D.',
+      eegState: 'Beta-rendah',
+      duration: 45,
+      level: 3,
+      progress: 85,
+      students: 800,
+      status: 'in-progress',
+    },
+    {
+      id: 3,
+      category: 'biology',
+      categoryLabel: 'BIOLOGI & NEUROSAINS',
+      title: 'Biologi Sel & Neurotransmiter',
+      description: 'Mekanisme transmisi vesikel sinaptik dengan simulasi mikroskopis.',
+      eegState: 'Theta Dalam',
+      duration: 28,
+      level: 2,
+      progress: 45,
+      students: 600,
+      status: 'in-progress',
+    },
+    {
+      id: 4,
+      category: 'science',
+      categoryLabel: 'SAINS TERAPAN',
+      title: 'Kimia Organik: Reaksi Nukleofilik',
+      description: 'Analisis sterik substitusi SN1 vs SN2 dengan visualisasi orbit molekul.',
+      eegState: 'Alpha Stabil',
+      duration: 40,
+      level: 3,
+      progress: 72,
+      students: 900,
+      status: 'in-progress',
+    },
+    {
+      id: 5,
+      category: 'logic',
+      categoryLabel: 'KOMPUTASI & LOGIKA',
+      title: 'Struktur Data & Graf Lanjut',
+      description: 'Traversing Dijkstra dan A* Search dengan visualisasi heuristik langsung.',
+      eegState: 'Theta Dalam',
+      duration: 50,
+      level: 4,
+      progress: 0,
+      students: 1200,
+      status: 'locked',
+    },
+    {
+      id: 6,
+      category: 'math',
+      categoryLabel: 'MATEMATIKA TERAPAN',
+      title: 'Aljabar Linear & Eigenvalue',
+      description: 'Dekomposisi matriks dan aplikasi machine learning dengan visualisasi 3D.',
+      eegState: 'Beta Stabil',
+      duration: 55,
+      level: 4,
+      progress: 0,
+      students: 700,
+      status: 'locked',
+    },
+  ];
 
   const categories = [
     { id: 'all', label: 'Semua', icon: '📚' },
@@ -19,97 +120,14 @@ export function CoursesPageStitch() {
     { id: 'logic', label: 'Logika & Kode', icon: '💻' },
   ];
 
-  const courses = [
-    {
-      id: 1,
-      category: 'science',
-      categoryLabel: 'SAINS & FISIKA',
-      title: 'Fisika Kuantum: Dualitas Gelombang-Partikel',
-      description: 'Eksplor eksperimen celah ganda adaptif dengan visualisasi partikel real-time.',
-      eegState: 'Alpha Stabil',
-      duration: '45m',
-      level: '3',
-      progress: 65,
-      students: '1.4k',
-      status: 'in-progress',
-      badge: '▶️ Lanjut',
-    },
-    {
-      id: 2,
-      category: 'math',
-      categoryLabel: 'MATEMATIKA TERAPAN',
-      title: 'Kalkulus Diferensial Lanjut',
-      description: 'Optimasi turunan parsial multivariabel dengan representasi topologi 3D.',
-      eegState: 'Beta-rendah',
-      duration: '45m',
-      level: '3',
-      progress: 85,
-      students: '0.8k',
-      status: 'in-progress',
-      badge: '▶️ Lanjut',
-    },
-    {
-      id: 3,
-      category: 'biology',
-      categoryLabel: 'BIOLOGI & NEUROSAINS',
-      title: 'Biologi Sel & Neurotransmiter',
-      description: 'Mekanisme transmisi vesikel sinaptik dengan simulasi mikroskopis.',
-      eegState: 'Theta Dalam',
-      duration: '28m',
-      level: '2',
-      progress: 45,
-      students: '0.6k',
-      status: 'in-progress',
-      badge: '▶️ Lanjut',
-    },
-    {
-      id: 4,
-      category: 'science',
-      categoryLabel: 'SAINS TERAPAN',
-      title: 'Kimia Organik: Reaksi Nukleofilik',
-      description: 'Analisis sterik substitusi SN1 vs SN2 dengan visualisasi orbit molekul.',
-      eegState: 'Alpha Stabil',
-      duration: '40m',
-      level: '3',
-      progress: 72,
-      students: '0.9k',
-      status: 'in-progress',
-      badge: '▶️ Lanjut',
-    },
-    {
-      id: 5,
-      category: 'logic',
-      categoryLabel: 'KOMPUTASI & LOGIKA',
-      title: 'Struktur Data & Graf Lanjut',
-      description: 'Traversing Dijkstra dan A* Search dengan visualisasi heuristik langsung.',
-      eegState: 'Theta Dalam',
-      duration: '50m',
-      level: '4',
-      progress: 0,
-      students: '1.2k',
-      status: 'locked',
-      badge: '🔒 Terkunci',
-    },
-    {
-      id: 6,
-      category: 'math',
-      categoryLabel: 'MATEMATIKA TERAPAN',
-      title: 'Aljabar Linear & Eigenvalue',
-      description: 'Dekomposisi matriks dan aplikasi machine learning dengan visualisasi 3D.',
-      eegState: 'Beta Stabil',
-      duration: '55m',
-      level: '4',
-      progress: 0,
-      students: '0.7k',
-      status: 'locked',
-      badge: '🔒 Terkunci',
-    },
-  ];
+  const coursesData = courses.length > 0 ? courses : mockCourses;
 
-  const filteredCourses =
-    selectedCategory === 'all'
-      ? courses
-      : courses.filter((course) => course.category === selectedCategory);
+  const filteredCourses = coursesData.filter((course) => {
+    const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;
+    const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         course.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const getEEGColor = (state: string) => {
     if (state.includes('Alpha')) return 'bg-green-100 text-green-700';
@@ -177,81 +195,95 @@ export function CoursesPageStitch() {
 
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Courses Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
-            <Card key={course.id} variant="elevated">
-              <CardBody className="space-y-4">
-                {/* Header */}
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-neutral-600 tracking-wide">
-                    {course.categoryLabel}
-                  </p>
-                  <h3 className="text-lg font-bold text-neutral-900 leading-tight">
-                    {course.title}
-                  </h3>
-                </div>
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-neutral-600">Memuat course...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course) => {
+              const studentCount = typeof course.students === 'number' 
+                ? course.students >= 1000 
+                  ? `${(course.students / 1000).toFixed(1)}k`
+                  : course.students.toString()
+                : course.students;
 
-                {/* Description */}
-                <p className="text-sm text-neutral-600 leading-relaxed">
-                  {course.description}
-                </p>
-
-                {/* EEG State Badge */}
-                <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getEEGColor(course.eegState)}`}>
-                    {course.eegState}
-                  </span>
-                </div>
-
-                {/* Progress Bar (if in progress) */}
-                {course.status === 'in-progress' && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-neutral-600">Progres Pembelajaran</span>
-                      <span className="font-semibold text-neutral-900">{course.progress}%</span>
+              return (
+                <Card key={course.id} variant="elevated">
+                  <CardBody className="space-y-4">
+                    {/* Header */}
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-neutral-600 tracking-wide">
+                        {course.categoryLabel}
+                      </p>
+                      <h3 className="text-lg font-bold text-neutral-900 leading-tight">
+                        {course.title}
+                      </h3>
                     </div>
-                    <ProgressBar value={course.progress} />
-                  </div>
-                )}
 
-                {/* Stats Row */}
-                <div className="flex items-center justify-between pt-4 border-t border-neutral-200">
-                  <div className="flex gap-4 text-xs">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4 text-neutral-500" />
-                      <span className="text-neutral-600">{course.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Zap className="w-4 h-4 text-neutral-500" />
-                      <span className="text-neutral-600">Tingkat {course.level}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4 text-neutral-500" />
-                      <span className="text-neutral-600">{course.students}</span>
-                    </div>
-                  </div>
-                </div>
+                    {/* Description */}
+                    <p className="text-sm text-neutral-600 leading-relaxed">
+                      {course.description}
+                    </p>
 
-                {/* Action Button */}
-                <Button
-                  variant={course.status === 'locked' ? 'outline' : 'primary'}
-                  className="w-full"
-                  disabled={course.status === 'locked'}
-                >
-                  {course.status === 'in-progress' ? (
-                    <>
-                      ▶️ Mulai Sesi dengan Headband
-                    </>
-                  ) : (
-                    <>
-                      🔒 Selesaikan Prerequisite
-                    </>
-                  )}
-                </Button>
-              </CardBody>
-            </Card>
-          ))}
-        </div>
+                    {/* EEG State Badge */}
+                    <div className="flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getEEGColor(course.eegState)}`}>
+                        {course.eegState}
+                      </span>
+                    </div>
+
+                    {/* Progress Bar (if in progress) */}
+                    {course.status === 'in-progress' && course.progress > 0 && (
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-neutral-600">Progres Pembelajaran</span>
+                          <span className="font-semibold text-neutral-900">{course.progress}%</span>
+                        </div>
+                        <ProgressBar value={course.progress} />
+                      </div>
+                    )}
+
+                    {/* Stats Row */}
+                    <div className="flex items-center justify-between pt-4 border-t border-neutral-200">
+                      <div className="flex gap-4 text-xs">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4 text-neutral-500" />
+                          <span className="text-neutral-600">{course.duration}m</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Zap className="w-4 h-4 text-neutral-500" />
+                          <span className="text-neutral-600">Tingkat {course.level}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Users className="w-4 h-4 text-neutral-500" />
+                          <span className="text-neutral-600">{studentCount}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <Button
+                      variant={course.status === 'locked' ? 'outline' : 'primary'}
+                      className="w-full"
+                      disabled={course.status === 'locked'}
+                    >
+                      {course.status === 'in-progress' ? (
+                        <>
+                          ▶️ Mulai Sesi dengan Headband
+                        </>
+                      ) : (
+                        <>
+                          🔒 Selesaikan Prerequisite
+                        </>
+                      )}
+                    </Button>
+                  </CardBody>
+                </Card>
+              );
+            })}
+          </div>
+        )}
 
         {/* Empty State */}
         {filteredCourses.length === 0 && (

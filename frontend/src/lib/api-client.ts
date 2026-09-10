@@ -132,4 +132,23 @@ export class ApiClient {
   static async logout() {
     return this.request('/auth/logout', { method: 'POST' });
   }
+
+  // Learning/Courses APIs
+  static async getCourses() {
+    return this.request('/learning/courses');
+  }
+
+  static async getCourseById(courseId: number) {
+    return this.request(`/learning/courses/${courseId}`);
+  }
+
+  static async getUserProgress(courseId: number) {
+    return this.request(`/learning/progress/${courseId}`);
+  }
+
+  static async enrollCourse(courseId: number) {
+    return this.request(`/learning/enroll/${courseId}`, {
+      method: 'POST',
+    });
+  }
 }
