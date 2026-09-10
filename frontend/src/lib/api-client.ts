@@ -87,8 +87,11 @@ export class ApiClient {
     return this.request(`/analytics/user?period=${period}`);
   }
 
-  static async getClassAnalytics() {
-    return this.request('/analytics/class');
+  static async getClassAnalytics(teacherId?: string) {
+    const endpoint = teacherId 
+      ? `/analytics/class?teacherId=${teacherId}` 
+      : '/analytics/class';
+    return this.request(endpoint);
   }
 
   // Gamification APIs

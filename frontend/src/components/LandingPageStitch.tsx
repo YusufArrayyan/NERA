@@ -1,12 +1,27 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Brain, Zap, BarChart3, Users, Shield, Sparkles, ChevronRight } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 export function LandingPageStitch() {
+  const router = useRouter();
+
+  const handleStartNow = () => {
+    router.push('/auth/login');
+  };
+
+  const handleDemo = () => {
+    router.push('/demo');
+  };
+
+  const handleCourses = () => {
+    router.push('/courses');
+  };
+
   return (
     <div className="bg-bg-default text-text-default min-h-screen">
       {/* Navigation */}
@@ -29,10 +44,10 @@ export function LandingPageStitch() {
             <a href="#benefits" className="text-sm text-text-secondary hover:text-primary transition-colors">
               Manfaat
             </a>
-            <a href="/courses" className="text-sm text-text-secondary hover:text-primary transition-colors">
+            <button onClick={handleCourses} className="text-sm text-text-secondary hover:text-primary transition-colors">
               Pelajaran
-            </a>
-            <Button className="button-primary button-sm">
+            </button>
+            <Button onClick={handleStartNow} className="button-primary button-sm">
               Mulai Sekarang
               <ArrowRight className="w-4 h-4" />
             </Button>
@@ -64,11 +79,11 @@ export function LandingPageStitch() {
             </p>
             
             <div className="flex flex-col md:flex-row gap-4">
-              <Button className="button-primary button-lg">
+              <Button onClick={handleStartNow} className="button-primary button-lg">
                 Coba Gratis Sekarang
                 <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button className="button-outline button-lg">
+              <Button onClick={handleDemo} className="button-outline button-lg">
                 Lihat Demo
               </Button>
             </div>
