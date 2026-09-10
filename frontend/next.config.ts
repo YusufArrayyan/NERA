@@ -13,23 +13,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // Disable ESLint during build
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  
-  // Webpack configuration to handle build errors
-  webpack: (config, { isServer }) => {
-    // Ignore specific modules that cause issues
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-    };
-    
-    return config;
-  },
+  // Empty turbopack config to silence warning
+  turbopack: {},
 };
 
 export default nextConfig;

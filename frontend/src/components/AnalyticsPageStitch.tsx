@@ -1,214 +1,324 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TrendingUp, Download, Filter, Calendar, BarChart3, LineChart as LineChartIcon, Activity, Brain, Users, Award } from 'lucide-react';
-import { Card, CardBody, CardHeader } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
 
 export function AnalyticsPageStitch() {
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('month');
-
-  const analyticsData = [
-    { label: 'Sen', value: 8 },
-    { label: 'Sel', value: 9 },
-    { label: 'Rab', value: 7 },
-    { label: 'Kam', value: 9 },
-    { label: 'Jum', value: 8 },
-    { label: 'Sab', value: 6 },
-    { label: 'Min', value: 4 },
-  ];
-
-  const maxValue = Math.max(...analyticsData.map(d => d.value));
+  const [selectedMetric, setSelectedMetric] = useState<'focus' | 'time' | 'consistency'>('focus');
 
   return (
-    <div className="bg-bg-default text-text-default min-h-screen pb-12">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-bg-elevated/95 border-b border-border-color backdrop-blur-md">
-        <div className="container-max py-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <Badge className="badge-primary mb-3">
-                <BarChart3 className="w-3 h-3" />
-                STATISTIK & ANALISIS
-              </Badge>
-              <h1 className="text-h2 mt-2">Dashboard Analitik Pembelajaran</h1>
+    <div className="min-h-screen bg-[#F5F3EE]">
+      {/* Top Navigation Bar */}
+      <nav className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2">
+                <Image 
+                  src="/nera-logo.svg" 
+                  alt="NERA Logo" 
+                  width={40} 
+                  height={40}
+                  className="w-10 h-10"
+                />
+                <div>
+                  <div className="font-bold text-lg text-[#1F2937]">NERA</div>
+                  <div className="text-[10px] text-[#9CA3AF] -mt-1">NEURO-ADAPTIVE LEARNING</div>
+                </div>
+              </div>
+              
+              <div className="hidden md:flex items-center gap-1">
+                <a href="/" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                  Beranda
+                </a>
+                <a href="/analytics" className="px-4 py-2 text-sm font-medium bg-[#5B7B5A] text-white rounded-full">
+                  Statistik & Analisis
+                </a>
+                <a href="/journal" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                  Jurnal Refleksi
+                </a>
+                <a href="/hardware/calibration" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                  Hardware Headband
+                </a>
+              </div>
             </div>
-            <Button className="button-primary button-sm">
-              <Download className="w-4 h-4" />
-              Export
-            </Button>
-          </div>
 
-          <div className="flex gap-2 flex-wrap">
-            {(['week', 'month', 'semester'] as const).map((range) => (
-              <button
-                key={range}
-                onClick={() => setTimeRange(range)}
-                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
-                  timeRange === range
-                    ? 'bg-primary text-white'
-                    : 'bg-bg-surface text-text-secondary border border-border-color hover:border-primary/50'
-                }`}
-              >
-                {range === 'week' ? '7 Hari' : range === 'month' ? '30 Hari' : 'Semester'}
+            <div className="flex items-center gap-4">
+              <button className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors">
+                <span className="material-icons text-[#4B5563] text-lg">notifications</span>
               </button>
-            ))}
+              <button className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors">
+                <span className="material-icons text-[#4B5563] text-lg">settings</span>
+              </button>
+
+              <div className="flex items-center gap-3 ml-2">
+                <div className="text-right">
+                  <div className="text-sm font-bold text-[#1F2937]">Alya Juwita Putri</div>
+                  <div className="text-xs text-[#9CA3AF]">SISWA AKTIF</div>
+                </div>
+                <div className="w-10 h-10 bg-[#5B7B5A] rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">A</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="container-max py-8">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="bg-[#5B7B5A]/10 text-[#5B7B5A] px-3 py-1 rounded-lg text-xs font-bold uppercase flex items-center gap-2">
+              <span className="material-icons text-sm">bar_chart</span>
+              STATISTIK KOGNITIF & ANALISIS
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-[#1F2937] mb-2">
+            Dashboard Analitik Pembelajaran
+          </h1>
+          <p className="text-[#4B5563]">
+            Pelacakan mendalam terhadap pola belajar, konsistensi kognitif, dan rekomendasi AI berbasis data EEG real-time
+          </p>
+        </div>
+
+        {/* Time Range Selector */}
+        <div className="flex gap-3 mb-8">
+          {(['week', 'month', 'semester'] as const).map((range) => (
+            <button
+              key={range}
+              onClick={() => setTimeRange(range)}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
+                timeRange === range
+                  ? 'bg-[#5B7B5A] text-white'
+                  : 'bg-white text-[#4B5563] border border-[#E5E7EB] hover:border-[#5B7B5A]'
+              }`}
+            >
+              {range === 'week' ? '7 Hari' : range === 'month' ? '30 Hari' : 'Semester'}
+            </button>
+          ))}
+        </div>
+
         {/* Summary Cards */}
-        <div className="grid-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
-            { icon: TrendingUp, label: 'Rata-rata Fokus', value: '79%', color: 'text-primary' },
-            { icon: Activity, label: 'Waktu Aktif', value: '48 Jam', color: 'text-secondary' },
-            { icon: Brain, label: 'Modul Selesai', value: '23/40', color: 'text-accent-success' },
-            { icon: Award, label: 'Ranking', value: '#3 Kelas', color: 'text-accent-warning' },
+            { icon: 'trending_up', label: 'Rata-rata Fokus', value: '79%', color: '#5B7B5A', change: '+8%' },
+            { icon: 'schedule', label: 'Waktu Aktif', value: '48 Jam', color: '#10dcc8', change: '+12h' },
+            { icon: 'school', label: 'Modul Selesai', value: '23/40', color: '#10b981', change: '+5' },
+            { icon: 'workspace_premium', label: 'Ranking Kelas', value: '#3', color: '#f59e0b', change: '↑2' },
           ].map((stat, idx) => (
-            <Card key={idx} className="card">
-              <stat.icon className={`w-6 h-6 ${stat.color} mb-4`} />
-              <div className="text-label text-text-muted mb-1">{stat.label}</div>
-              <div className="text-3xl font-bold text-text-default">{stat.value}</div>
-            </Card>
+            <div
+              key={idx}
+              className="bg-white rounded-2xl p-6 border border-[#E5E7EB] cursor-pointer hover:border-[#5B7B5A] transition-all"
+              onClick={() => setSelectedMetric(idx === 0 ? 'focus' : idx === 1 ? 'time' : 'consistency')}
+            >
+              <span className="material-icons text-4xl mb-4" style={{ color: stat.color }}>
+                {stat.icon}
+              </span>
+              <div className="text-xs font-bold text-[#9CA3AF] uppercase mb-2">{stat.label}</div>
+              <div className="text-3xl font-black text-[#1F2937] mb-2">{stat.value}</div>
+              <div className="text-sm font-semibold text-[#10b981]">{stat.change} minggu ini</div>
+            </div>
           ))}
         </div>
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Bar Chart */}
-          <Card className="card-elevated">
-            <CardHeader>
-              <h2 className="text-h4 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                Distribusi Jam Fokus Harian
-              </h2>
-            </CardHeader>
-            <CardBody>
-              <div className="space-y-4">
-                {analyticsData.map((data, idx) => (
-                  <div key={idx}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-text-secondary">{data.label}</span>
-                      <span className="text-sm font-bold text-primary">{data.value}h</span>
-                    </div>
-                    <div className="h-3 bg-bg-surface rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all"
-                        style={{ width: `${(data.value / maxValue) * 100}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
+          <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-[#1F2937] mb-1">Distribusi Jam Fokus Harian</h3>
+                <p className="text-xs text-[#9CA3AF]">Fluktuasi konsentrasi mendalam per hari</p>
               </div>
-            </CardBody>
-          </Card>
+              <div className="bg-[#10b981]/10 text-[#10b981] text-xs font-bold px-3 py-1 rounded-lg">
+                OPTIMAL
+              </div>
+            </div>
 
-          {/* Consistency */}
-          <Card className="card-elevated">
-            <CardHeader>
-              <h2 className="text-h4 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-secondary" />
-                Konsistensi Belajar
-              </h2>
-            </CardHeader>
-            <CardBody>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-text-secondary">Hari Aktif</span>
-                    <span className="text-2xl font-bold text-primary">28/30</span>
+            <div className="space-y-4">
+              {[
+                { day: 'Sen', hours: 8 },
+                { day: 'Sel', hours: 9 },
+                { day: 'Rab', hours: 7 },
+                { day: 'Kam', hours: 9 },
+                { day: 'Jum', hours: 8 },
+                { day: 'Sab', hours: 6 },
+                { day: 'Min', hours: 4 },
+              ].map((data, idx) => (
+                <div key={idx} className="flex items-center gap-4">
+                  <div className="w-12 text-sm font-semibold text-[#4B5563]">{data.day}</div>
+                  <div className="flex-1">
+                    <div
+                      className="bg-[#5B7B5A] h-8 rounded-lg transition-all hover:bg-[#4A6349] cursor-pointer"
+                      style={{ width: `${(data.hours / 10) * 100}%` }}
+                    ></div>
                   </div>
-                  <div className="h-3 bg-bg-surface rounded-full overflow-hidden">
-                    <div className="h-full w-11/12 bg-primary rounded-full"></div>
+                  <div className="w-16 text-sm font-bold text-[#1F2937] text-right">{data.hours}h</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-start gap-2 p-4 bg-[#F5F3EE] rounded-xl">
+              <span className="material-icons text-[#5B7B5A] text-sm">insights</span>
+              <p className="text-xs text-[#4B5563]">
+                <span className="font-bold">Kamis</span> mencatatkan fokus tertinggi minggu ini:{' '}
+                <span className="font-bold">9 Jam</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Consistency Tracker */}
+          <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+            <h3 className="text-lg font-bold text-[#1F2937] mb-1">Konsistensi Belajar</h3>
+            <p className="text-xs text-[#9CA3AF] mb-6">Aktivitas kognitif 30 hari terakhir</p>
+
+            <div className="text-center mb-6">
+              <div className="text-4xl font-black text-[#1F2937] mb-1">28/30</div>
+              <div className="text-sm text-[#4B5563]">Hari Aktif</div>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <div className="flex items-center justify-between mb-2 text-sm">
+                  <span className="text-[#4B5563]">Hari Aktif</span>
+                  <span className="font-bold text-[#5B7B5A]">93%</span>
+                </div>
+                <div className="h-3 bg-[#E5E7EB] rounded-full overflow-hidden">
+                  <div className="h-full w-[93%] bg-[#5B7B5A] rounded-full"></div>
+                </div>
+              </div>
+
+              <div className="bg-[#10b981]/10 border border-[#10b981]/30 rounded-xl p-4">
+                <div className="flex items-start gap-2">
+                  <span className="material-icons text-[#10b981] text-sm">auto_awesome</span>
+                  <div>
+                    <div className="text-xs font-bold text-[#10b981] mb-1">Habit Terbentuk!</div>
+                    <div className="text-xs text-[#4B5563]">
+                      Stabilitas fokus meningkat 14% di jam pagi
+                    </div>
                   </div>
                 </div>
-
-                <div className="p-4 bg-bg-surface rounded-lg border border-border-color">
-                  <p className="text-sm font-semibold text-accent-success mb-1">✓ Habit Terbentuk</p>
-                  <p className="text-xs text-text-secondary">Stabilitas fokus meningkat 14% di jam pagi</p>
-                </div>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        {/* Brain Waves & Recommendations */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          <Card className="card-elevated lg:col-span-2">
-            <CardHeader>
-              <h2 className="text-h4 flex items-center gap-2">
-                <Brain className="w-5 h-5 text-primary" />
-                Wawasan Otak & Rekomendasi AI
-              </h2>
-              <Badge className="badge-primary mt-2">MODEL NERA-V3.4</Badge>
-            </CardHeader>
-            <CardBody className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-bg-surface rounded-lg border border-primary/30">
-                  <p className="text-sm font-semibold text-primary mb-2">📍 Zona Beta Optimal</p>
-                  <p className="text-xs text-text-secondary">08:30 - 10:15 WIB dengan presisi 92%</p>
-                </div>
-                <div className="p-4 bg-bg-surface rounded-lg border border-accent-warning/30">
-                  <p className="text-sm font-semibold text-accent-warning mb-2">⚠️ Deteksi Kelelahan</p>
-                  <p className="text-xs text-text-secondary">Theta shift setelah 45 menit belajar</p>
-                </div>
+        {/* AI Insights & Recommendations */}
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="material-icons text-[#5B7B5A] text-2xl">psychology</span>
+            <div>
+              <h3 className="text-lg font-bold text-[#1F2937]">Wawasan Otak & Rekomendasi AI</h3>
+              <div className="bg-[#5B7B5A]/10 text-[#5B7B5A] text-[10px] font-bold px-2 py-0.5 rounded inline-block mt-1">
+                MODEL NERA-V3.4
               </div>
-              <Button className="button-primary w-full button-sm">
-                Terapkan Rekomendasi
-              </Button>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="card-elevated">
-            <CardHeader>
-              <h2 className="text-h4">Progress Target</h2>
-            </CardHeader>
-            <CardBody className="space-y-4">
-              <div>
-                <p className="text-sm text-text-secondary mb-2">Level 6</p>
-                <div className="h-2 bg-bg-surface rounded-full overflow-hidden">
-                  <div className="h-full w-3/4 bg-primary"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button className="border-2 border-[#5B7B5A]/30 rounded-xl p-5 text-left hover:border-[#5B7B5A] transition-all">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-xs font-bold text-[#5B7B5A] uppercase">Zona Beta Optimal</div>
+                <div className="bg-[#5B7B5A]/10 text-[#5B7B5A] text-xs font-bold px-2 py-1 rounded">
+                  92% Precision
                 </div>
-                <p className="text-xs text-text-muted mt-2">160 XP Lagi</p>
               </div>
-            </CardBody>
-          </Card>
+              <div className="flex items-start gap-2 mb-3">
+                <span className="material-icons text-[#f59e0b]">lightbulb</span>
+                <div className="text-sm font-bold text-[#1F2937]">Jam Emas: 08:30 – 10:15 WIB</div>
+              </div>
+              <p className="text-xs text-[#4B5563] leading-relaxed">
+                Jadwalkan materi eksakt pada interval ini untuk retensi maksimal
+              </p>
+            </button>
+
+            <button className="border-2 border-[#ef4444]/30 rounded-xl p-5 text-left hover:border-[#ef4444] transition-all">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-xs font-bold text-[#ef4444] uppercase">Deteksi Kelelahan</div>
+                <div className="bg-[#ef4444]/10 text-[#ef4444] text-xs font-bold px-2 py-1 rounded">
+                  Theta Shift
+                </div>
+              </div>
+              <div className="flex items-start gap-2 mb-3">
+                <span className="material-icons text-[#ef4444]">warning</span>
+                <div className="text-sm font-bold text-[#1F2937]">Theta spike setelah 45 menit</div>
+              </div>
+              <p className="text-xs text-[#4B5563] leading-relaxed">
+                Adopsi Pomodoro 45/10 dengan audio binaural
+              </p>
+            </button>
+          </div>
         </div>
 
         {/* Badges & Achievements */}
-        <Card className="card-elevated">
-          <CardHeader>
-            <h2 className="text-h4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-primary" />
-              Lencana & Pencapaian
-            </h2>
-          </CardHeader>
-          <CardBody>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { icon: '🛡️', title: 'Fokus Baja', status: 'UNLOCKED' },
-                { icon: '🔥', title: 'Konsisten 7 Hari', status: 'UNLOCKED' },
-                { icon: '🧘', title: 'Zen Master', status: 'LEVEL 2' },
-                { icon: '🌊', title: 'Alpha Pioneer', status: 'TERKUNCI' },
-              ].map((badge, idx) => (
-                <Card key={idx} className="card text-center p-4">
-                  <div className="text-3xl mb-2">{badge.icon}</div>
-                  <p className="text-xs font-semibold text-text-default mb-2">{badge.title}</p>
-                  <Badge className={
-                    badge.status === 'UNLOCKED' ? 'badge-success' :
-                    badge.status === 'TERKUNCI' ? 'badge-error' :
-                    'badge-warning'
-                  }>
-                    {badge.status}
-                  </Badge>
-                </Card>
-              ))}
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="material-icons text-[#5B7B5A] text-2xl">workspace_premium</span>
+            <div>
+              <h3 className="text-lg font-bold text-[#1F2937]">Lencana & Pencapaian</h3>
+              <p className="text-xs text-[#9CA3AF]">3 dari 8 Terbuka • Peringkat #3 Kelas</p>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: '🛡️', title: 'Fokus Baja', status: 'UNLOCKED', progress: 100 },
+              { icon: '🔥', title: 'Konsisten 7 Hari', status: 'UNLOCKED', progress: 100 },
+              { icon: '🧘', title: 'Zen Master', status: 'LEVEL 2', progress: 66 },
+              { icon: '🌊', title: 'Alpha Pioneer', status: 'TERKUNCI', progress: 93 },
+            ].map((badge, idx) => (
+              <div
+                key={idx}
+                className="bg-white border-2 border-[#E5E7EB] rounded-xl p-4 text-center hover:border-[#5B7B5A] transition-all cursor-pointer"
+              >
+                <div className="text-3xl mb-2">{badge.icon}</div>
+                <div className="text-sm font-bold text-[#1F2937] mb-1">{badge.title}</div>
+                <div
+                  className={`text-[10px] font-bold px-2 py-1 rounded mb-3 ${
+                    badge.status === 'UNLOCKED'
+                      ? 'bg-[#10b981]/10 text-[#10b981]'
+                      : badge.status === 'TERKUNCI'
+                        ? 'bg-[#E5E7EB] text-[#9CA3AF]'
+                        : 'bg-[#f59e0b]/10 text-[#f59e0b]'
+                  }`}
+                >
+                  {badge.status}
+                </div>
+                <div className="h-1.5 bg-[#E5E7EB] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#5B7B5A] rounded-full"
+                    style={{ width: `${badge.progress}%` }}
+                  ></div>
+                </div>
+                <div className="text-xs font-semibold text-[#4B5563] mt-2">{badge.progress}%</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-[#E5E7EB] mt-16 py-8">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="text-sm text-[#9CA3AF] mb-2">
+            <span className="font-bold text-[#1F2937]">NERA</span> © 2024 NERA Neuro-Adaptive Platform.
+          </div>
+          <div className="flex items-center justify-center gap-6 text-xs text-[#4B5563]">
+            <a href="#" className="hover:text-[#5B7B5A]">
+              Headband IoT
+            </a>
+            <a href="#" className="hover:text-[#5B7B5A]">
+              Privasi
+            </a>
+            <a href="#" className="hover:text-[#5B7B5A]">
+              Bantuan
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
