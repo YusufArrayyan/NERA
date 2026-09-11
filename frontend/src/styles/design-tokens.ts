@@ -24,10 +24,10 @@ export const designTokens = {
       50: '#f0fdfa',
       100: '#cffaf2',
       200: '#a0f3e8',
-      300: '#70ecde',
-      400: '#40e5d4',
-      500: '#10dcc8', // Secondary brand
-      600: '#0ca99a',
+      300: '#8FAD8E',
+      400: '#7A9B79',
+      500: '#5B7B5A', // Secondary brand - Forest Green
+      600: '#4A6349',
       700: '#08766c',
       800: '#04433e',
       900: '#021010',
@@ -54,7 +54,7 @@ export const designTokens = {
 
     // Gradients
     gradients: {
-      primary: 'linear-gradient(135deg, #2db87f 0%, #10dcc8 100%)',
+      primary: 'linear-gradient(135deg, #5B7B5A 0%, #7A9B79 100%)',
       dark: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
       success: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
     },

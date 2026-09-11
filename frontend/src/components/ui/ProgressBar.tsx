@@ -14,7 +14,7 @@ interface ProgressBarProps {
 
 const variantClasses = {
   default: 'bg-gradient-to-r from-neutral-300 to-neutral-400',
-  gradient: 'bg-gradient-to-r from-green-400 to-teal-500',
+  gradient: 'bg-gradient-to-r from-green-400 to-green-500',
   success: 'bg-green-500',
   warning: 'bg-yellow-500',
   error: 'bg-red-500',

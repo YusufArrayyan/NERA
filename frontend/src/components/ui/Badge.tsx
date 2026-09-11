@@ -16,7 +16,7 @@ const badgeVariants: Record<string, string> = {
   error: 'bg-red-100 text-red-800',
   info: 'bg-blue-100 text-blue-800',
   primary: 'bg-green-100 text-green-700',
-  secondary: 'bg-teal-100 text-teal-700',
+  secondary: 'bg-green-100 text-green-700',
 };
 
 const badgeSizes: Record<string, string> = {

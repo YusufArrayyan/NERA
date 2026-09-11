@@ -14,17 +14,17 @@
     --primary-dark: #4A6349;
     --primary-fg: #ffffff;
     
-    /* Secondary Colors - Teal Accent */
-    --secondary: #10dcc8;
-    --secondary-light: #2fe5d0;
-    --secondary-dark: #08aa9a;
+    /* Secondary Colors - Lighter Green for accents */
+    --secondary: #7A9B79;
+    --secondary-light: #8FAD8E;
+    --secondary-dark: #5B7B5A;
     --secondary-fg: #ffffff;
     
     /* Accent Colors */
     --accent-success: #10b981;
     --accent-warning: #f59e0b;
     --accent-error: #ef4444;
-    --accent-info: #3b82f6;
+    --accent-info: #5B7B5A;  /* Changed from blue to green */
     
     /* Light Theme - Background */
     --bg-default: #F5F3EE;         /* Cream background */

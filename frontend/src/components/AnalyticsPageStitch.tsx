@@ -147,7 +147,7 @@ export function AnalyticsPageStitch() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
             { icon: 'trending_up', label: 'Rata-rata Fokus', value: `${data.avgFocus}%`, color: '#5B7B5A', change: '+8%' },
-            { icon: 'schedule', label: 'Waktu Aktif', value: `${Math.floor(data.totalMinutes / 60)} Jam`, color: '#10dcc8', change: '+12h' },
+            { icon: 'schedule', label: 'Waktu Aktif', value: `${Math.floor(data.totalMinutes / 60)} Jam`, color: '#7A9B79', change: '+12h' },
             { icon: 'school', label: 'Modul Selesai', value: `${completedModules}/${totalModules}`, color: '#10b981', change: '+5' },
             { icon: 'workspace_premium', label: 'Ranking Kelas', value: '#3', color: '#f59e0b', change: '↑2' },
           ].map((stat, idx) => (

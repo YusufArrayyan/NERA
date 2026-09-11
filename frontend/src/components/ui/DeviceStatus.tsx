@@ -56,13 +56,13 @@ export function DeviceStatus({
   const signalQuality = getSignalQuality(signalStrength);
 
   return (
-    <Card variant="elevated" className="border-l-4 border-teal-500">
+    <Card variant="elevated" className="border-l-4 border-green-500">
       <CardBody className="space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <Bluetooth className="w-4 h-4 text-teal-600" />
+              <Bluetooth className="w-4 h-4 text-green-600" />
               <h3 className="font-bold text-neutral-900">{name}</h3>
             </div>
             <p className="text-sm text-neutral-600">{model}</p>

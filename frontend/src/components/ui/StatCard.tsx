@@ -32,7 +32,7 @@ export function StatCard({
       variant="elevated"
       className={`${
         variant === 'highlight'
-          ? 'bg-gradient-to-br from-green-50 to-teal-50 border-green-200'
+          ? 'bg-gradient-to-br from-green-50 to-green-100 border-green-200'
           : ''
       }`}
     >

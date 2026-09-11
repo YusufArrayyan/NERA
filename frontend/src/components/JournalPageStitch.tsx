@@ -240,7 +240,7 @@ export function JournalPageStitch() {
         {/* Emotion Selector */}
         <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] mb-8">
           <div className="flex items-center gap-3 mb-6">
-            <span className="material-icons text-[#10dcc8] text-2xl">mood</span>
+            <span className="material-icons text-[#5B7B5A] text-2xl">mood</span>
             <h3 className="text-lg font-bold text-[#1F2937]">Emosi Saat Belajar</h3>
           </div>
 

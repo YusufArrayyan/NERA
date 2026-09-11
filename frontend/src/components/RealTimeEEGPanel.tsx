@@ -109,7 +109,7 @@ export function RealTimeEEGPanel({ sessionId, autoStart = false }: RealTimeEEGPa
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-[#F5F3EE] rounded-xl">
               <p className="text-xs text-[#4B5563] mb-2">Attention</p>
-              <span className="text-2xl font-black text-[#10dcc8]">
+              <span className="text-2xl font-black text-[#5B7B5A]">
                 {Math.round(attentionScore)}%
               </span>
             </div>
@@ -146,7 +146,7 @@ export function RealTimeEEGPanel({ sessionId, autoStart = false }: RealTimeEEGPa
                 </div>
                 <div className="h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#5B7B5A] to-[#10dcc8] rounded-full transition-all duration-300"
+                    className="h-full bg-gradient-to-r from-[#5B7B5A] to-[#7A9B79] rounded-full transition-all duration-300"
                     style={{ width: getWaveBarWidth(normalized) }}
                   ></div>
                 </div>

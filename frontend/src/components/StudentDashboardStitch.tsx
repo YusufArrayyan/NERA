@@ -254,7 +254,7 @@ export function StudentDashboardStitch() {
           <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
             <div className="text-xs font-bold text-[#9CA3AF] uppercase mb-4">Rerata Fokus</div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="material-icons text-[#10dcc8] text-4xl">psychology_alt</span>
+              <span className="material-icons text-[#5B7B5A] text-4xl">psychology_alt</span>
             </div>
             <div className="flex items-baseline gap-2 mb-1">
               <div className="text-3xl font-black text-[#1F2937]">{data.avgFocus}</div>
