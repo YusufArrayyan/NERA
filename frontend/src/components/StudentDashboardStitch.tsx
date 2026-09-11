@@ -270,7 +270,7 @@ export function StudentDashboardStitch() {
           <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
             <div className="text-xs font-bold text-[#9CA3AF] uppercase mb-4">Waktu Flow Kognitif</div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="material-icons text-[#3b82f6] text-4xl">timelapse</span>
+              <span className="material-icons text-[#5B7B5A] text-4xl">timelapse</span>
             </div>
             <div className="flex items-baseline gap-2 mb-1">
               <div className="text-3xl font-black text-[#1F2937]">{Math.floor(data.totalMinutes / 60)}</div>
@@ -482,7 +482,7 @@ export function StudentDashboardStitch() {
                 desc: 'Menstabilkan ritme pernapasan & rasio Alpha/Beta saat jeda mikro.',
                 status: 'LEVEL 2/3',
                 progress: 66,
-                color: '#3b82f6',
+                color: '#5B7B5A',
               },
               {
                 icon: 'waves',
@@ -514,13 +514,13 @@ export function StudentDashboardStitch() {
                           ? '#10b98120'
                           : badge.status === 'TERKUNCI'
                             ? '#E5E7EB'
-                            : '#3b82f620',
+                            : '#5B7B5A20',
                       color:
                         badge.status === 'UNLOCKED'
                           ? '#059669'
                           : badge.status === 'TERKUNCI'
                             ? '#6B7280'
-                            : '#2563eb',
+                            : '#5B7B5A',
                     }}
                   >
                     {badge.status}

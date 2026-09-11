@@ -132,7 +132,7 @@ export default function EEGChart({ sessionId, onMetricsUpdate }: { sessionId?: s
         <div className="organic-card p-4 flex flex-col">
           <div className="flex justify-between items-start mb-2">
             <span className="text-sm font-medium text-muted-foreground">F-Ratio</span>
-            <Activity className="w-5 h-5 text-blue-500" />
+            <Activity className="w-5 h-5 text-green-500" />
           </div>
           <span className="text-2xl font-bold">{currentMetrics?.fRatio?.toFixed(2) || '0.00'}</span>
           <span className="text-xs text-muted-foreground mt-1">β / (α + θ)</span>
@@ -198,7 +198,7 @@ export default function EEGChart({ sessionId, onMetricsUpdate }: { sessionId?: s
               />
               <Legend wrapperStyle={{ fontSize: '12px' }} />
               
-              <Line type="monotone" dataKey="alpha" stroke="#3b82f6" dot={false} strokeWidth={2} isAnimationActive={false} name="Alpha (8-13Hz)" />
+              <Line type="monotone" dataKey="alpha" stroke="#5B7B5A" dot={false} strokeWidth={2} isAnimationActive={false} name="Alpha (8-13Hz)" />
               <Line type="monotone" dataKey="beta" stroke="#8b5cf6" dot={false} strokeWidth={2} isAnimationActive={false} name="Beta (14-30Hz)" />
               <Line type="monotone" dataKey="theta" stroke="#10b981" dot={false} strokeWidth={1} isAnimationActive={false} name="Theta (4-7Hz)" opacity={0.5} />
             </LineChart>

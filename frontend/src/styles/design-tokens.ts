@@ -50,7 +50,7 @@ export const designTokens = {
     success: '#10b981',
     warning: '#f59e0b',
     error: '#ef4444',
-    info: '#3b82f6',
+    info: '#5B7B5A',  // Changed from blue to green
 
     // Gradients
     gradients: {
