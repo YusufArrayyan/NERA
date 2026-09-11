@@ -15,8 +15,14 @@ export function StudentDashboardStitch() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if user is authenticated
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
     loadDashboardData();
-  }, [timeRange]);
+  }, [timeRange, router]);
 
   const loadDashboardData = async () => {
     try {
@@ -84,7 +90,10 @@ export function StudentDashboardStitch() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
+              <button 
+                onClick={() => router.push('/')}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
                 <Image 
                   src="/nera-logo.svg" 
                   alt="NERA Logo" 
@@ -96,7 +105,7 @@ export function StudentDashboardStitch() {
                   <div className="font-bold text-lg text-[#1F2937]">NERA</div>
                   <div className="text-[10px] text-[#9CA3AF] -mt-1">NEURO-ADAPTIVE LEARNING</div>
                 </div>
-              </div>
+              </button>
               
               <div className="hidden md:flex items-center gap-1">
                 <button onClick={() => router.push('/dashboard/student')} className="px-4 py-2 text-sm font-medium bg-[#5B7B5A] text-white rounded-full">
@@ -129,14 +138,23 @@ export function StudentDashboardStitch() {
                 <span className="text-xs font-bold text-[#10b981]">84%</span>
               </div>
 
-              <button className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors">
+              <button 
+                onClick={() => router.push('/notifications')}
+                className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors"
+              >
                 <span className="material-icons text-[#4B5563] text-lg">notifications</span>
               </button>
-              <button className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors">
+              <button 
+                onClick={() => router.push('/settings')}
+                className="w-8 h-8 flex items-center justify-center hover:bg-[#F5F3EE] rounded-lg transition-colors"
+              >
                 <span className="material-icons text-[#4B5563] text-lg">settings</span>
               </button>
 
-              <div className="flex items-center gap-3 ml-2">
+              <button 
+                onClick={() => router.push('/dashboard/student/profile')}
+                className="flex items-center gap-3 ml-2 hover:opacity-80 transition-opacity"
+              >
                 <div className="text-right">
                   <div className="text-sm font-bold text-[#1F2937]">Alya Juwita Putri</div>
                   <div className="text-xs text-[#9CA3AF]">SISWA AKTIF</div>
@@ -144,7 +162,7 @@ export function StudentDashboardStitch() {
                 <div className="w-10 h-10 bg-[#5B7B5A] rounded-full flex items-center justify-center">
                   <span className="text-white font-bold">A</span>
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
