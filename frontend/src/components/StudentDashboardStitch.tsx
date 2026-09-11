@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ApiClient } from '@/lib/api-client';
 import { RealTimeEEGPanel } from './RealTimeEEGPanel';
 
 export function StudentDashboardStitch() {
+  const router = useRouter();
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'semester'>('week');
   const [analytics, setAnalytics] = useState<any>(null);
   const [gamification, setGamification] = useState<any>(null);
@@ -97,18 +99,18 @@ export function StudentDashboardStitch() {
               </div>
               
               <div className="hidden md:flex items-center gap-1">
-                <a href="/" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                <button onClick={() => router.push('/dashboard/student')} className="px-4 py-2 text-sm font-medium bg-[#5B7B5A] text-white rounded-full">
                   Beranda
-                </a>
-                <a href="/analytics" className="px-4 py-2 text-sm font-medium bg-[#5B7B5A] text-white rounded-full">
+                </button>
+                <button onClick={() => router.push('/analytics')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
                   Statistik & Analisis
-                </a>
-                <a href="/journal" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                </button>
+                <button onClick={() => router.push('/journal')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
                   Jurnal Refleksi
-                </a>
-                <a href="/hardware/calibration" className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
+                </button>
+                <button onClick={() => router.push('/hardware/calibration')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
                   Hardware Headband
-                </a>
+                </button>
               </div>
             </div>
 
@@ -571,15 +573,15 @@ export function StudentDashboardStitch() {
             Hak Cipta Dilindungi.
           </div>
           <div className="flex items-center justify-center gap-6 text-xs text-[#4B5563]">
-            <a href="#" className="hover:text-[#5B7B5A]">
-              Headband IoT Sinkron
-            </a>
-            <a href="#" className="hover:text-[#5B7B5A]">
+            <button onClick={() => router.push('/hardware/setup')} className="hover:text-[#5B7B5A]">
+              Setup Headband IoT
+            </button>
+            <button onClick={() => router.push('/privacy')} className="hover:text-[#5B7B5A]">
               Privasi Kognitif
-            </a>
-            <a href="#" className="hover:text-[#5B7B5A]">
+            </button>
+            <button onClick={() => router.push('/hardware/calibration')} className="hover:text-[#5B7B5A]">
               Bantuan & Kalibrasi
-            </a>
+            </button>
           </div>
         </div>
       </footer>

@@ -114,10 +114,15 @@ export default function LoginPage() {
               Belum punya akun?{' '}
               <a href="/auth/register" className="text-primary hover:underline font-bold">Daftar dengan Lisensi</a>
             </p>
-            <p className="text-muted-foreground text-xs mt-4">
-              Atau gunakan akun demo: <br/>
-              <span className="text-secondary">siswa@neuroadaptive.com</span> (Password: Demo1234!)
-            </p>
+            <div className="text-muted-foreground text-xs mt-4 space-y-2">
+              <p className="font-bold text-secondary">Atau gunakan akun demo:</p>
+              <div className="bg-muted/40 p-3 rounded-lg space-y-1 text-left">
+                <p><strong>Siswa:</strong> siswa@nera.demo</p>
+                <p><strong>Guru:</strong> guru@nera.demo</p>
+                <p><strong>Admin:</strong> admin@nera.demo</p>
+                <p className="text-[10px] text-muted-foreground mt-2">Password: Demo1234!</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

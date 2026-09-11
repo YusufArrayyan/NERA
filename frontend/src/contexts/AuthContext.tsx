@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { fetchApi } from '@/lib/api';
+import { ApiClient } from '@/lib/api-client';
 
 type UserRole = 'STUDENT' | 'TEACHER' | 'COUNSELOR' | 'PARENT' | 'ADMIN';
 
@@ -99,14 +99,76 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      // MOCK MODE: Skip backend API, direct login
-      const mockUser: User = {
-        id: 'demo-student-001',
-        name: 'Alya Juwita Putri',
-        email: email,
-        role: 'STUDENT',
-        locale: 'id',
-      };
+      // Try backend API first
+      const response = await ApiClient.login(email, password).catch(() => null);
+      
+      if (response && response.user) {
+        // Real backend login successful
+        const user: User = {
+          id: response.user.id,
+          name: response.user.name,
+          email: response.user.email,
+          role: response.user.role,
+          avatar: response.user.avatar,
+          locale: response.user.locale || 'id',
+        };
+        
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('refreshToken', response.refreshToken);
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+        
+        setUser(user);
+        if (router) router.push(`/dashboard/${user.role.toLowerCase()}`);
+        return;
+      }
+      
+      // Fallback: DEMO MODE - Support multiple demo accounts
+      let mockUser: User;
+      
+      if (email.includes('teacher') || email.includes('guru')) {
+        mockUser = {
+          id: 'demo-teacher-001',
+          name: 'Pak Budi Santoso',
+          email: email,
+          role: 'TEACHER',
+          locale: 'id',
+        };
+      } else if (email.includes('admin')) {
+        mockUser = {
+          id: 'demo-admin-001',
+          name: 'Admin NERA',
+          email: email,
+          role: 'ADMIN',
+          locale: 'id',
+        };
+      } else if (email.includes('counselor')) {
+        mockUser = {
+          id: 'demo-counselor-001',
+          name: 'Bu Ratna',
+          email: email,
+          role: 'COUNSELOR',
+          locale: 'id',
+        };
+      } else if (email.includes('parent') || email.includes('orangtua')) {
+        mockUser = {
+          id: 'demo-parent-001',
+          name: 'Bapak/Ibu Alya',
+          email: email,
+          role: 'PARENT',
+          locale: 'id',
+        };
+      } else {
+        // Default to student
+        mockUser = {
+          id: 'demo-student-001',
+          name: 'Alya Juwita Putri',
+          email: email,
+          role: 'STUDENT',
+          locale: 'id',
+        };
+      }
       
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', 'demo-token');
