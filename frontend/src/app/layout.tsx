@@ -33,6 +33,9 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#5B7B5A" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons&display=swap" rel="stylesheet" />
       </head>
       <body className={`${font.className} min-h-screen bg-background antialiased selection:bg-primary selection:text-white`}>
         <ServiceWorkerProvider>
