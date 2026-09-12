@@ -29,13 +29,12 @@ export function StudentDashboardStitch() {
     try {
       setLoading(true);
       
-      // Fetch analytics data based on time range
       const period = timeRange === 'week' ? 'WEEKLY' : timeRange === 'month' ? 'MONTHLY' : 'MONTHLY';
       const [analyticsData, badgesData, levelData, streakData] = await Promise.all([
-        ApiClient.getUserAnalytics(period).catch(() => mockAnalytics),
-        ApiClient.getUserBadges().catch(() => mockBadges),
-        ApiClient.getUserLevel().catch(() => mockLevel),
-        ApiClient.getUserStreak().catch(() => mockStreak),
+        ApiClient.getUserAnalytics(period),
+        ApiClient.getUserBadges(),
+        ApiClient.getUserLevel(),
+        ApiClient.getUserStreak(),
       ]);
 
       setAnalytics(analyticsData);
@@ -46,43 +45,26 @@ export function StudentDashboardStitch() {
       });
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
-      // Fall back to mock data
-      setAnalytics(mockAnalytics);
-      setGamification({ badges: mockBadges, level: mockLevel, streak: mockStreak });
+      setAnalytics(null);
+      setGamification(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // Mock data fallback
-  const mockAnalytics = {
-    avgFocus: 79,
-    totalMinutes: 1125,
-    totalSessions: 28,
-    avgStress: 35,
-    dailyData: [
-      { date: '2026-01-20', focus: 75, duration: 2.5 },
-      { date: '2026-01-21', focus: 82, duration: 3.2 },
-      { date: '2026-01-22', focus: 88, duration: 4.2 },
-      { date: '2026-01-23', focus: 76, duration: 2.8 },
-      { date: '2026-01-24', focus: 85, duration: 3.5 },
-      { date: '2026-01-25', focus: 70, duration: 1.8 },
-      { date: '2026-01-26', focus: 65, duration: 1.0 },
-    ],
+  const data = analytics || {
+    avgFocus: 0,
+    totalMinutes: 0,
+    totalSessions: 0,
+    avgStress: 0,
+    dailyData: [],
   };
 
-  const mockBadges = [
-    { id: 1, name: 'Fokus Baja', unlocked: true, progress: 100 },
-    { id: 2, name: '7 Hari Konsisten', unlocked: true, progress: 100 },
-    { id: 3, name: 'Zen Master', unlocked: false, progress: 66 },
-    { id: 4, name: 'Alpha Pioneer', unlocked: false, progress: 93 },
-  ];
-
-  const mockLevel = { level: 5, xp: 2840, xpToNext: 3000 };
-  const mockStreak = { days: 7, isActive: true };
-
-  const data = analytics || mockAnalytics;
-  const gamif = gamification || { badges: mockBadges, level: mockLevel, streak: mockStreak };
+  const gamif = gamification || {
+    badges: [],
+    level: { level: 1, xp: 0, xpToNext: 1000 },
+    streak: { days: 0, isActive: false },
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F3EE] overflow-x-hidden">
