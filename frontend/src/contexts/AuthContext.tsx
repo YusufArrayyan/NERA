@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem('accessToken');
     
     if (storedUser && token) {
-      // Verify token with backend
+      // Try to verify token with backend (but don't fail if unavailable)
       ApiClient.getCurrentUser()
         .then((userData) => {
           // Update user data from backend
@@ -75,8 +75,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           localStorage.setItem('user', JSON.stringify(user));
         })
         .catch(() => {
-          // Token invalid or backend unavailable, keep stored user
+          // Backend unavailable or token invalid
+          // Keep stored user for offline functionality
           setUser(JSON.parse(storedUser));
+          console.warn('Backend unavailable - using cached user data');
         })
         .finally(() => {
           setLoading(false);

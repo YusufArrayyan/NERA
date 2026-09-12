@@ -132,6 +132,10 @@ export class ApiClient {
     });
   }
 
+  static async getCurrentUser() {
+    return this.request('/auth/me');
+  }
+
   static async logout() {
     return this.request('/auth/logout', { method: 'POST' });
   }
