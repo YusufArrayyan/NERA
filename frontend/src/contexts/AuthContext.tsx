@@ -59,22 +59,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem('accessToken');
     
     if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
+      // Verify token with backend
+      ApiClient.getCurrentUser()
+        .then((userData) => {
+          // Update user data from backend
+          const user: User = {
+            id: userData.id,
+            name: userData.name,
+            email: userData.email,
+            role: userData.role,
+            avatar: userData.avatar,
+            locale: userData.locale || 'id',
+          };
+          setUser(user);
+          localStorage.setItem('user', JSON.stringify(user));
+        })
+        .catch(() => {
+          // Token invalid or backend unavailable, keep stored user
+          setUser(JSON.parse(storedUser));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
-      // MOCK MODE: Auto-login as demo student for preview
-      const mockUser: User = {
-        id: 'demo-student-001',
-        name: 'Alya Juwita Putri',
-        email: 'alya@nera.demo',
-        role: 'STUDENT',
-        locale: 'id',
-      };
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      localStorage.setItem('accessToken', 'demo-token');
+      // No stored credentials - user must login
+      setUser(null);
+      setLoading(false);
     }
-    
-    setLoading(false);
   }, []);
 
   // Role-based routing protection - only client side
@@ -99,99 +110,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      // Try backend API first
-      const response = await ApiClient.login(email, password).catch(() => null);
+      // Call backend API
+      const response = await ApiClient.login(email, password);
       
-      if (response && response.user) {
-        // Real backend login successful
-        const user: User = {
-          id: response.user.id,
-          name: response.user.name,
-          email: response.user.email,
-          role: response.user.role,
-          avatar: response.user.avatar,
-          locale: response.user.locale || 'id',
-        };
-        
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('refreshToken', response.refreshToken);
-          localStorage.setItem('user', JSON.stringify(user));
-        }
-        
-        setUser(user);
-        if (router) router.push(`/dashboard/${user.role.toLowerCase()}`);
-        return;
-      }
-      
-      // Fallback: DEMO MODE - Support multiple demo accounts
-      let mockUser: User;
-      
-      if (email.includes('teacher') || email.includes('guru')) {
-        mockUser = {
-          id: 'demo-teacher-001',
-          name: 'Pak Budi Santoso',
-          email: email,
-          role: 'TEACHER',
-          locale: 'id',
-        };
-      } else if (email.includes('admin')) {
-        mockUser = {
-          id: 'demo-admin-001',
-          name: 'Admin NERA',
-          email: email,
-          role: 'ADMIN',
-          locale: 'id',
-        };
-      } else if (email.includes('counselor')) {
-        mockUser = {
-          id: 'demo-counselor-001',
-          name: 'Bu Ratna',
-          email: email,
-          role: 'COUNSELOR',
-          locale: 'id',
-        };
-      } else if (email.includes('parent') || email.includes('orangtua')) {
-        mockUser = {
-          id: 'demo-parent-001',
-          name: 'Bapak/Ibu Alya',
-          email: email,
-          role: 'PARENT',
-          locale: 'id',
-        };
-      } else {
-        // Default to student
-        mockUser = {
-          id: 'demo-student-001',
-          name: 'Alya Juwita Putri',
-          email: email,
-          role: 'STUDENT',
-          locale: 'id',
-        };
-      }
+      // Backend login successful
+      const user: User = {
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email,
+        role: response.user.role,
+        avatar: response.user.avatar,
+        locale: response.user.locale || 'id',
+      };
       
       if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', 'demo-token');
-        localStorage.setItem('refreshToken', 'demo-refresh-token');
-        localStorage.setItem('user', JSON.stringify(mockUser));
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken || '');
+        localStorage.setItem('user', JSON.stringify(user));
       }
       
-      setUser(mockUser);
-      if (router) router.push(`/dashboard/${mockUser.role.toLowerCase()}`);
+      setUser(user);
+      if (router) router.push(`/dashboard/${user.role.toLowerCase()}`);
     } catch (error) {
+      console.error('Login failed:', error);
       throw error;
     }
   };
 
   const logout = async () => {
-    // MOCK MODE: Skip backend, just clear local storage
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+    try {
+      // Call backend logout API
+      await ApiClient.logout().catch(() => {
+        // If backend unavailable, just clear local storage
+        console.warn('Backend logout failed, clearing local storage');
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Always clear local storage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+      }
+      setUser(null);
+      if (router) router.push('/');
     }
-    setUser(null);
-    if (router) router.push('/');
   };
 
   return (
