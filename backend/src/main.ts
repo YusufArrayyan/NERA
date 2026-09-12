@@ -15,8 +15,9 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CORS
+  const corsOrigin = process.env.CORS_ORIGIN || 'https://nera-learning.vercel.app';
   app.enableCors({
-    origin: true,
+    origin: corsOrigin,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
