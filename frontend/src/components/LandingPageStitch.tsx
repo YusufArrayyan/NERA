@@ -276,11 +276,11 @@ export function LandingPageStitch() {
           </p>
           
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button className="button-primary button-lg">
+            <Button onClick={handleStartNow} className="button-primary button-lg">
               Mulai Gratis 30 Hari
               <ArrowRight className="w-5 h-5" />
             </Button>
-            <Button className="button-outline button-lg">
+            <Button onClick={() => router.push('/contact')} className="button-outline button-lg">
               Hubungi Sales
             </Button>
           </div>
@@ -306,27 +306,27 @@ export function LandingPageStitch() {
             <div>
               <h4 className="text-sm font-semibold text-text-default mb-4">Produk</h4>
               <ul className="space-y-2 text-sm text-text-muted">
-                <li><a href="#" className="hover:text-primary transition-colors">Fitur</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Security</a></li>
+                <li><button onClick={() => router.push('/#features')} className="hover:text-primary transition-colors">Fitur</button></li>
+                <li><button onClick={() => router.push('/pricing')} className="hover:text-primary transition-colors">Pricing</button></li>
+                <li><button onClick={() => router.push('/security')} className="hover:text-primary transition-colors">Security</button></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-text-default mb-4">Perusahaan</h4>
               <ul className="space-y-2 text-sm text-text-muted">
-                <li><a href="#" className="hover:text-primary transition-colors">Tentang</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Karir</a></li>
+                <li><button onClick={() => router.push('/about')} className="hover:text-primary transition-colors">Tentang</button></li>
+                <li><button onClick={() => router.push('/blog')} className="hover:text-primary transition-colors">Blog</button></li>
+                <li><button onClick={() => router.push('/careers')} className="hover:text-primary transition-colors">Karir</button></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-text-default mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-text-muted">
-                <li><a href="#" className="hover:text-primary transition-colors">Privasi</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
+                <li><button onClick={() => router.push('/privacy')} className="hover:text-primary transition-colors">Privasi</button></li>
+                <li><button onClick={() => router.push('/terms')} className="hover:text-primary transition-colors">Terms</button></li>
+                <li><button onClick={() => router.push('/contact')} className="hover:text-primary transition-colors">Contact</button></li>
               </ul>
             </div>
           </div>
