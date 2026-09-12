@@ -4,6 +4,7 @@ import { ChevronLeft, BarChart2, Flame, Award, Target } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/api";
+import { BottomNav } from "@/components/BottomNav";
 
 export default function StudentStats() {
   const router = useRouter();
@@ -88,6 +89,9 @@ export default function StudentStats() {
           <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 }

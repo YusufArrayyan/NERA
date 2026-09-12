@@ -3,6 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { User, Mail, Shield, LogOut, ChevronLeft, Award } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { BottomNav } from "@/components/BottomNav";
 
 export default function StudentProfile() {
   const { user, logout } = useAuth();
@@ -63,6 +64,9 @@ export default function StudentProfile() {
         <LogOut className="w-5 h-5 mr-2" />
         Keluar Akun
       </button>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 }

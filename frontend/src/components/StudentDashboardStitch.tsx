@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ApiClient } from '@/lib/api-client';
 import { RealTimeEEGPanel } from './RealTimeEEGPanel';
+import { BottomNav } from './BottomNav';
 
 export function StudentDashboardStitch() {
   const router = useRouter();
@@ -84,57 +85,53 @@ export function StudentDashboardStitch() {
   const gamif = gamification || { badges: mockBadges, level: mockLevel, streak: mockStreak };
 
   return (
-    <div className="min-h-screen bg-[#F5F3EE]">
+    <div className="min-h-screen bg-[#F5F3EE] overflow-x-hidden">
       {/* Top Navigation Bar */}
-      <nav className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
+      <nav className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50 w-full">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 overflow-x-hidden">
+          <div className="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+            <div className="flex items-center gap-4 sm:gap-8 min-w-0">
               <button 
                 onClick={() => router.push('/')}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0"
               >
                 <Image 
                   src="/nera-logo.svg" 
                   alt="NERA Logo" 
                   width={40} 
                   height={40}
-                  className="w-10 h-10"
+                  className="w-8 h-8 sm:w-10 sm:h-10"
                 />
-                <div>
-                  <div className="font-bold text-lg text-[#1F2937]">NERA</div>
+                <div className="hidden sm:block">
+                  <div className="font-bold text-base sm:text-lg text-[#1F2937]">NERA</div>
                   <div className="text-[10px] text-[#9CA3AF] -mt-1">NEURO-ADAPTIVE LEARNING</div>
                 </div>
               </button>
               
-              <div className="hidden md:flex items-center gap-1">
-                <button onClick={() => router.push('/dashboard/student')} className="px-4 py-2 text-sm font-medium bg-[#5B7B5A] text-white rounded-full">
+              <div className="hidden lg:flex items-center gap-1">
+                <button onClick={() => router.push('/dashboard/student')} className="px-3 py-1.5 text-sm font-medium bg-[#5B7B5A] text-white rounded-full whitespace-nowrap">
                   Beranda
                 </button>
-                <button onClick={() => router.push('/analytics')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
-                  Statistik & Analisis
+                <button onClick={() => router.push('/analytics')} className="px-3 py-1.5 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors whitespace-nowrap">
+                  Statistik
                 </button>
-                <button onClick={() => router.push('/journal')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
-                  Jurnal Refleksi
+                <button onClick={() => router.push('/journal')} className="px-3 py-1.5 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors whitespace-nowrap">
+                  Jurnal
                 </button>
-                <button onClick={() => router.push('/hardware/calibration')} className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors">
-                  Hardware Headband
+                <button onClick={() => router.push('/hardware/calibration')} className="px-3 py-1.5 text-sm font-medium text-[#4B5563] hover:text-[#5B7B5A] transition-colors whitespace-nowrap">
+                  Hardware
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="material-icons text-[#5B7B5A] text-lg">bluetooth_connected</span>
-              </div>
-              
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F5F3EE] rounded-lg">
-                <span className="material-icons text-[#5B7B5A] text-base">sensors</span>
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+              <div className="hidden sm:flex items-center gap-2 px-2 py-1 bg-[#F5F3EE] rounded-lg">
+                <span className="material-icons text-[#5B7B5A] text-sm">sensors</span>
                 <span className="text-xs font-bold text-[#5B7B5A]">98%</span>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F5F3EE] rounded-lg">
-                <span className="material-icons text-[#10b981] text-base">battery_charging_full</span>
+              <div className="hidden sm:flex items-center gap-2 px-2 py-1 bg-[#F5F3EE] rounded-lg">
+                <span className="material-icons text-[#10b981] text-sm">battery_charging_full</span>
                 <span className="text-xs font-bold text-[#10b981]">84%</span>
               </div>
 
@@ -153,14 +150,14 @@ export function StudentDashboardStitch() {
 
               <button 
                 onClick={() => router.push('/dashboard/student/profile')}
-                className="flex items-center gap-3 ml-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                <div className="text-right">
-                  <div className="text-sm font-bold text-[#1F2937]">Alya Juwita Putri</div>
-                  <div className="text-xs text-[#9CA3AF]">SISWA AKTIF</div>
+                <div className="hidden sm:block text-right">
+                  <div className="text-xs sm:text-sm font-bold text-[#1F2937] truncate max-w-[120px]">Alya Juwita Putri</div>
+                  <div className="text-[10px] text-[#9CA3AF]">SISWA AKTIF</div>
                 </div>
-                <div className="w-10 h-10 bg-[#5B7B5A] rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">A</span>
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#5B7B5A] rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm sm:text-base">A</span>
                 </div>
               </button>
             </div>
@@ -169,7 +166,7 @@ export function StudentDashboardStitch() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 overflow-x-hidden">
         {/* EEG Status Banner */}
         <div className="bg-white rounded-2xl p-6 mb-6 border border-[#E5E7EB]">
           <div className="flex items-center justify-between">
@@ -603,6 +600,9 @@ export function StudentDashboardStitch() {
           </div>
         </div>
       </footer>
+
+      {/* Bottom Navigation - Mobile */}
+      <BottomNav />
     </div>
   );
 }
