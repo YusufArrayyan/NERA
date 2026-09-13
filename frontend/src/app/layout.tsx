@@ -20,6 +20,20 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
+    apple: '/apple-icon',
+  },
+  openGraph: {
+    title: 'NERA - Neuro-Adaptive Cloud Learning',
+    description: 'Platform pembelajaran berbasis EEG untuk meningkatkan fokus dan performa belajar',
+    url: 'https://nera-learning.vercel.app',
+    siteName: 'NERA',
+    locale: 'id_ID',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NERA - Neuro-Adaptive Cloud Learning',
+    description: 'Platform pembelajaran berbasis EEG untuk meningkatkan fokus dan performa belajar',
   },
 };
 
