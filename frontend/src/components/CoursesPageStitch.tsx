@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Filter, BookOpen, Zap, Clock, Users, CheckCircle, Lock } from 'lucide-react';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -9,6 +10,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ApiClient } from '@/lib/api-client';
 
 export function CoursesPageStitch() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [courses, setCourses] = useState<any[]>([]);
@@ -209,7 +211,16 @@ export function CoursesPageStitch() {
                 : course.students;
 
               return (
-                <Card key={course.id} variant="elevated">
+                <Card 
+                  key={course.id} 
+                  variant="elevated"
+                  className="cursor-pointer transition-all hover:shadow-lg"
+                  onClick={() => {
+                    if (course.status !== 'locked') {
+                      router.push(`/courses/${course.id}`);
+                    }
+                  }}
+                >
                   <CardBody className="space-y-4">
                     {/* Header */}
                     <div className="space-y-2">
@@ -267,6 +278,12 @@ export function CoursesPageStitch() {
                       variant={course.status === 'locked' ? 'outline' : 'primary'}
                       className="w-full"
                       disabled={course.status === 'locked'}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (course.status !== 'locked') {
+                          router.push(`/courses/${course.id}/session`);
+                        }
+                      }}
                     >
                       {course.status === 'in-progress' ? (
                         <>

@@ -87,9 +87,10 @@ export default function BlogPage() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
-              <article
+              <Link
                 key={post.id}
-                className="bg-white rounded-2xl shadow-sm border border-sage-100 overflow-hidden hover:shadow-md transition-shadow"
+                href={`/blog/${post.id}`}
+                className="block bg-white rounded-2xl shadow-sm border border-sage-100 overflow-hidden hover:shadow-md transition-all hover:scale-[1.02]"
               >
                 <div className="p-6">
                   <div className="text-6xl mb-4 text-center">{post.image}</div>
@@ -104,12 +105,12 @@ export default function BlogPage() {
                   </p>
                   <div className="flex items-center justify-between text-sm text-sage-600">
                     <span>{post.date}</span>
-                    <button className="text-sage-700 font-semibold hover:text-sage-900">
+                    <span className="text-sage-700 font-semibold hover:text-sage-900">
                       Baca Selengkapnya →
-                    </button>
+                    </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

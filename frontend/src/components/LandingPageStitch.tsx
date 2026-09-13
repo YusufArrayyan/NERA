@@ -109,30 +109,86 @@ export function LandingPageStitch() {
                   <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
                 </div>
 
-                <div className="relative z-10 flex flex-col items-center gap-6">
-                  <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center animate-pulse-glow">
-                    <Brain className="w-12 h-12 text-primary" />
+                <div className="relative z-10 flex flex-col items-center gap-6 w-full">
+                  {/* Circular Progress with Brain Icon */}
+                  <div className="relative w-40 h-40">
+                    {/* Background Circle */}
+                    <svg className="w-full h-full transform -rotate-90">
+                      <circle
+                        cx="80"
+                        cy="80"
+                        r="70"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="none"
+                        className="text-neutral-700/30"
+                      />
+                      {/* Animated Progress Circle */}
+                      <circle
+                        cx="80"
+                        cy="80"
+                        r="70"
+                        stroke="url(#gradient)"
+                        strokeWidth="8"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeDasharray="440"
+                        strokeDashoffset="22"
+                        className="transition-all duration-1000 ease-out"
+                        style={{
+                          animation: 'draw-circle 2s ease-out forwards'
+                        }}
+                      />
+                      <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#22c55e" />
+                          <stop offset="100%" stopColor="#16a34a" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    {/* Center Content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <Brain className="w-10 h-10 text-primary mb-2 animate-pulse" />
+                      <div className="text-3xl font-bold text-primary">98%</div>
+                    </div>
                   </div>
                   
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-primary mb-2">98%</div>
-                    <div className="text-sm text-text-secondary">Akurasi Deteksi Fokus</div>
+                    <div className="text-lg font-semibold text-text-default mb-1">Akurasi Deteksi Fokus</div>
+                    <div className="text-sm text-text-muted">Berdasarkan 10,000+ sesi pembelajaran</div>
                   </div>
 
-                  <div className="flex gap-4 pt-4 border-t border-border-color">
+                  <div className="flex gap-6 pt-4 border-t border-border-color w-full justify-center">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-secondary">15+</div>
+                      <div className="text-2xl font-bold text-secondary flex items-center justify-center gap-1">
+                        <Zap className="w-5 h-5" />
+                        15+
+                      </div>
                       <div className="text-xs text-text-muted">Parameter EEG</div>
                     </div>
                     <div className="w-px bg-border-color"></div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-accent-success">24/7</div>
+                      <div className="text-2xl font-bold text-accent-success flex items-center justify-center gap-1">
+                        <BarChart3 className="w-5 h-5" />
+                        24/7
+                      </div>
                       <div className="text-xs text-text-muted">Real-time Monitoring</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            
+            <style jsx>{`
+              @keyframes draw-circle {
+                from {
+                  strokeDashoffset: 440;
+                }
+                to {
+                  strokeDashoffset: 22;
+                }
+              }
+            `}</style>
           </div>
         </div>
       </section>
