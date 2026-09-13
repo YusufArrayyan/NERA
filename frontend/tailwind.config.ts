@@ -9,6 +9,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Sage color palette
+        sage: {
+          50: '#f6f7f6',
+          100: '#e3e7e3',
+          200: '#c7cfc7',
+          300: '#a3afa3',
+          400: '#7d8e7d',
+          500: '#5f7360',
+          600: '#4a5a4a',
+          700: '#3d493d',
+          800: '#333d33',
+          900: '#2b342b',
+        },
+        
         primary: 'var(--primary)',
         'primary-light': 'var(--primary-light)',
         'primary-dark': 'var(--primary-dark)',
