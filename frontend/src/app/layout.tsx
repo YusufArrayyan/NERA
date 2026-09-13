@@ -20,10 +20,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/logo.svg', type: 'image/svg+xml' },
-      { url: '/icon', type: 'image/png', sizes: '32x32' },
+      { url: '/nera-logo.svg', type: 'image/svg+xml' },
+      { url: '/nera-logo.svg', sizes: '32x32' },
     ],
-    apple: '/apple-icon',
+    apple: '/nera-logo.svg',
   },
   openGraph: {
     title: 'NERA - Neuro-Adaptive Cloud Learning',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: 'NERA',
     images: [
       {
-        url: '/opengraph-image',
+        url: 'https://nera-learning.vercel.app/nera-logo.svg',
         width: 1200,
         height: 630,
         alt: 'NERA - Neuro-Adaptive Cloud Learning',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'NERA - Neuro-Adaptive Cloud Learning',
     description: 'Platform pembelajaran berbasis EEG untuk meningkatkan fokus dan performa belajar',
-    images: ['/opengraph-image'],
+    images: ['https://nera-learning.vercel.app/nera-logo.svg'],
   },
 };
 
