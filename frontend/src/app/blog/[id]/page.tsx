@@ -171,35 +171,6 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
           />
         </div>
       </article>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        .blog-content {
-          font-size: 1.125rem;
-          line-height: 1.75;
-          color: #374151;
-        }
-        .blog-content h2 {
-          font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
-          margin-top: 3rem;
-          margin-bottom: 1.5rem;
-        }
-        .blog-content p {
-          margin-bottom: 1.5rem;
-        }
-        .blog-content ul {
-          margin: 1.5rem 0;
-          padding-left: 1.5rem;
-        }
-        .blog-content li {
-          margin-bottom: 0.75rem;
-        }
-        .blog-content strong {
-          color: #1f2937;
-          font-weight: 600;
-        }
-      `}} />
 
       {/* CTA */}
       <section className="py-20 bg-sage-800 text-white text-center">
