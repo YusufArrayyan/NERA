@@ -74,9 +74,9 @@ export class AuthService {
 
     // Log activity
     await this.db.execute(
-      `INSERT INTO activity_logs ("userId", action, resource, "createdAt")
-       VALUES ($1, $2, $3, NOW())`,
-      [userId, 'register', 'auth'],
+      `INSERT INTO activity_logs (id, "userId", action, resource, "createdAt")
+       VALUES ($1, $2, $3, $4, NOW())`,
+      [uuidv4(), userId, 'register', 'auth'],
     );
 
     return {
@@ -123,9 +123,9 @@ export class AuthService {
 
     // Log activity
     await this.db.execute(
-      `INSERT INTO activity_logs ("userId", action, resource, "createdAt")
-       VALUES ($1, $2, $3, NOW())`,
-      [user.id, 'login', 'auth'],
+      `INSERT INTO activity_logs (id, "userId", action, resource, "createdAt")
+       VALUES ($1, $2, $3, $4, NOW())`,
+      [uuidv4(), user.id, 'login', 'auth'],
     );
 
     return {
@@ -176,9 +176,9 @@ export class AuthService {
     );
 
     await this.db.execute(
-      `INSERT INTO activity_logs ("userId", action, resource, "createdAt")
-       VALUES ($1, $2, $3, NOW())`,
-      [userId, 'logout', 'auth'],
+      `INSERT INTO activity_logs (id, "userId", action, resource, "createdAt")
+       VALUES ($1, $2, $3, $4, NOW())`,
+      [uuidv4(), userId, 'logout', 'auth'],
     );
 
     return { message: 'Logged out successfully' };
