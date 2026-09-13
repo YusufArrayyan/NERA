@@ -233,7 +233,9 @@ export function LandingPageStitch() {
               <Sparkles className="w-3 h-3" />
               Fitur Unggulan
             </Badge>
-            <h2 className="text-2xl md:text-3xl lg:text-h2 mb-4 md:mb-6 px-4">Teknologi yang Mengubah Pembelajaran</h2>
+            <h2 className="text-2xl md:text-3xl lg:text-h2 mb-4 md:mb-6 px-4">
+              Teknologi yang Mengubah Pembelajaran
+            </h2>
             <p className="text-base md:text-lg text-text-secondary max-w-2xl mx-auto px-4">
               Menggunakan sensor EEG terbaru untuk memahami pola kognitif siswa secara real-time.
             </p>
