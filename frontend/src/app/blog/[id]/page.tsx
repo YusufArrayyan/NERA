@@ -166,40 +166,40 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
       <article className="py-16">
         <div className="container mx-auto px-4 max-w-3xl">
           <div
-            className="prose prose-sage prose-lg max-w-none"
+            className="blog-content"
             dangerouslySetInnerHTML={{ __html: post.content }}
-            style={{
-              fontSize: '1.125rem',
-              lineHeight: '1.75',
-              color: '#374151',
-            }}
           />
-          
-          <style jsx global>{`
-            .prose h2 {
-              font-size: 1.875rem;
-              font-weight: 700;
-              color: #1f2937;
-              margin-top: 3rem;
-              margin-bottom: 1.5rem;
-            }
-            .prose p {
-              margin-bottom: 1.5rem;
-            }
-            .prose ul {
-              margin: 1.5rem 0;
-              padding-left: 1.5rem;
-            }
-            .prose li {
-              margin-bottom: 0.75rem;
-            }
-            .prose strong {
-              color: #1f2937;
-              font-weight: 600;
-            }
-          `}</style>
         </div>
       </article>
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        .blog-content {
+          font-size: 1.125rem;
+          line-height: 1.75;
+          color: #374151;
+        }
+        .blog-content h2 {
+          font-size: 1.875rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-top: 3rem;
+          margin-bottom: 1.5rem;
+        }
+        .blog-content p {
+          margin-bottom: 1.5rem;
+        }
+        .blog-content ul {
+          margin: 1.5rem 0;
+          padding-left: 1.5rem;
+        }
+        .blog-content li {
+          margin-bottom: 0.75rem;
+        }
+        .blog-content strong {
+          color: #1f2937;
+          font-weight: 600;
+        }
+      `}} />
 
       {/* CTA */}
       <section className="py-20 bg-sage-800 text-white text-center">

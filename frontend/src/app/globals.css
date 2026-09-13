@@ -358,3 +358,13 @@
 .shadow-lg {
   box-shadow: var(--shadow-lg);
 }
+
+/* Circular Progress Animation for Landing Page */
+@keyframes draw-circle {
+  from {
+    stroke-dashoffset: 440;
+  }
+  to {
+    stroke-dashoffset: 22;
+  }
+}

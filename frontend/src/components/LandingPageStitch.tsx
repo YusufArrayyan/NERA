@@ -178,17 +178,6 @@ export function LandingPageStitch() {
                 </div>
               </div>
             </div>
-            
-            <style jsx>{`
-              @keyframes draw-circle {
-                from {
-                  strokeDashoffset: 440;
-                }
-                to {
-                  strokeDashoffset: 22;
-                }
-              }
-            `}</style>
           </div>
         </div>
       </section>
