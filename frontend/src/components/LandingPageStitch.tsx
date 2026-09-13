@@ -228,7 +228,7 @@ export function LandingPageStitch() {
 
       {/* Features Section */}
       <section id="features" className="bg-bg-elevated/50 py-12 md:py-20 lg:py-32 border-y border-border-color">
-        <div className="container-max">{
+        <div className="container-max">
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
             <Badge className="badge-primary mb-3 md:mb-4 text-xs">
               <Sparkles className="w-3 h-3" />
