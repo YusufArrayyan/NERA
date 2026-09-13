@@ -146,7 +146,8 @@ export function LandingPageStitch() {
           {/* Hero Visual */}
           <div className="relative animate-slide-up order-1 md:order-2">
             <div className="card-elevated p-4 md:p-8">
-              <div className="aspect-square bg-gradient-dark rounded-xl flex flex-col items-center justify-center gap-4 md:gap-6 relative overflow-hidden">{/* Animated Background Elements */}
+              <div className="aspect-square bg-gradient-dark rounded-xl flex flex-col items-center justify-center gap-4 md:gap-6 relative overflow-hidden">
+                {/* Animated Background Elements */}
                 <div className="absolute inset-0 opacity-30">
                   <div className="absolute top-0 left-1/4 w-32 h-32 bg-primary/50 rounded-full blur-3xl animate-pulse"></div>
                   <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
